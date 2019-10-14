@@ -1,0 +1,25 @@
+@import '~antd/lib/style/themes/default';
+
+.b-sider {
+  padding-top: @layout-header-height - 4;
+
+  .c-svg {
+    width: @padding-md;
+    height: @padding-md;
+    line-height: @padding-md;
+    margin-right: @padding-md/2;
+
+    &.z-m {
+      position: relative;
+      top: -3px;
+      left: -3px;
+      width: @layout-header-height - (2*@padding-md)+6;
+      height: @layout-header-height - (2*@padding-md)+6;
+      margin-right: @padding-md;
+    }
+
+    svg {
+      fill: @heading-color-dark
+    }
+  }
+}

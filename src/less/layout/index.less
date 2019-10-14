@@ -1,0 +1,91 @@
+@import '~antd/lib/style/themes/default';
+
+html, body, #root, #page, #l-full, #l-left-sider {
+  height: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    min-width: 1200px;
+  }
+}
+
+
+#l-full .b-content-wp {
+  height: 100%;
+  overflow: scroll;
+  padding-top: @layout-header-height;
+  margin-top: -@layout-header-height;
+
+  .b-content {
+    padding-bottom: @layout-footer-height;
+    margin-bottom: -@layout-footer-height;
+    min-height: 100%;
+    position: relative;
+  }
+}
+
+#l-left-sider .b-content {
+  height: 100%;
+  padding: @layout-header-height 0 0 @layout-sider-width;
+  margin: -@layout-header-height 0 0 0;
+  box-sizing: border-box;
+  position: relative;
+
+  .b-sider {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: @layout-sider-width;
+    background: @layout-sider-background;
+  }
+
+  .b-right-content-wp {
+    height: 100%;
+    overflow: scroll;
+
+    .b-right-content {
+      min-height: 100%;
+      position: relative;
+      padding: @padding-md @padding-md @layout-footer-height+@padding-md @padding-md;
+    }
+  }
+
+
+}
+
+#b-footer {
+  height: @layout-footer-height;
+  line-height: @layout-footer-height;
+  background: rgba(@layout-footer-background, 0.5);
+  margin-top: -@layout-footer-height;
+  overflow: hidden;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#p-auth {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    min-width: 320px;
+  }
+
+  #l-left-sider .b-content {
+    padding-left: @layout-header-height;
+
+    .b-sider {
+      width: @layout-header-height;
+    }
+  }
+}
+
+.ant-btn-sm {
+  font-weight: 300;
+}

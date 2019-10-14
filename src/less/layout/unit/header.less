@@ -1,0 +1,76 @@
+@import '~antd/lib/style/themes/default';
+
+@w-account: 140px;
+#b-header {
+  position: relative;
+  height: @layout-header-height;
+  //background: rgba(@layout-header-background, 0.8);
+  z-index: 99;
+  padding: 0 @w-account 0 @layout-sider-width;
+  background: @menu-dark-bg;
+
+  .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: @layout-sider-width;
+    //width: @layout-header-height;
+    height: @layout-header-height;
+    line-height: @layout-header-height;
+    font-size: @font-size-lg;
+    color: @heading-color;
+    text-indent: @layout-header-height + @padding-md;
+    //border: @border-width-base @border-style-base @layout-header-background;
+    //background: @background-color-base url("../../assets/img/logo.png") no-repeat;
+    background-size: contain;
+    overflow: hidden;
+  }
+
+  .m-account {
+    position: absolute;
+    height: @layout-header-height;
+    line-height: @layout-header-height;
+    top: 0;
+    right: 0;
+    padding-right: 20px;
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: @w-account;
+
+    &:hover {
+      > .u-drop-menu {
+        display: block;
+      }
+    }
+
+    > .avatar {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .m-top-menu {
+
+    .c-svg {
+      line-height: @font-size-lg;
+      margin-right: 4px;
+
+      svg {
+        fill: @text-color-dark;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #b-header {
+    padding: 0 @w-account 0 @layout-header-height;
+
+    .logo {
+      width: @layout-header-height;
+    }
+  }
+}

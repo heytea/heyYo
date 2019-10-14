@@ -1,0 +1,34 @@
+@import '../theme';
+
+#l-full.l-reset {
+  background: url("./../assets/img/bg.jpg") @background-color-base no-repeat center;
+  background-size: cover;
+}
+
+#p-reset {
+  position: absolute;
+  padding: @padding-md;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: @border-radius-base;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 360px;
+  //height: 260px;
+
+  .u-title {
+    color: @text-color-dark;
+    text-align: center;
+    font-weight: 300;
+  }
+
+  .u-link-box {
+    margin-top: @padding-md;
+    padding-right: @padding-md/2;
+    text-align: right;
+
+    .reset {
+      color: @text-color-dark;
+    }
+  }
+}

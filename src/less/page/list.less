@@ -1,0 +1,75 @@
+@import '~antd/lib/style/themes/default';
+
+.m-list {
+  .ant-divider-horizontal {
+    margin: @padding-md 0;
+  }
+
+  .m-edit-form {
+    .ant-form-explain-holder {
+      display: none;
+    }
+
+    &.ant-form-vertical .ant-form-item {
+      padding: 0 @padding-md/2 0 0;
+      margin-bottom: @padding-md;
+    }
+
+    &.ant-form-inline {
+      .ant-select {
+        min-width: 120px;
+      }
+    }
+  }
+}
+
+.m-list-paging {
+  .ant-pagination-options {
+    .ant-pagination-options-quick-jumper {
+      margin-left: @padding-md/2;
+    }
+  }
+}
+
+.m-list-operate {
+  > a, > button {
+    margin-left: @padding-md/2;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.m-list-table {
+  position: relative;
+}
+
+.u-page-tips {
+  margin-bottom: @padding-md;
+}
+
+.u-table-row-selection-btn {
+  position: absolute;
+  right: 0;
+  top: -8px;
+
+  button {
+    margin-right: 8px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.m-list-title {
+  display: block;
+  position: relative;
+
+  .add-link {
+    position: absolute;
+    top: -5px;
+    right: 0
+  }
+}

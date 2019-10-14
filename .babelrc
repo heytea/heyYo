@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "es2015",
+      {
+        "loose": true
+      }
+    ],
+    "stage-1",
+    "minify",
+    "react"
+  ],
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": true
+      }
+    ],
+    "transform-decorators-legacy"
+  ],
+  "sourceMaps": true
+}
