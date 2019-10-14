@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Full, Content, Link, Svg } from 'heyyo'
+import { Full, Content, Link, Svg } from '@heytea/heyyo'
 import { inject, observer } from 'mobx-react'
 import UI, { IUI } from '../store/ui'
 import './index.less'

@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import { Curd, Form, Input, Select, Link } from 'heyyo'
+import { Curd, Form, Input, Select, Link } from '@heytea/heyyo'
 import IStore, {
   IFormStatus,
   IAddFormConf,
   IListOperateStatus,
   IListOperateConf,
   IListOperateActionOpt
-} from 'heyyo/dist/store/_i'
+} from '@heytea/heyyo/dist/store/_i'
 import { observable, action, reaction } from 'mobx'
 import { list, add, detail, edit, freeze, unfreeze, del } from '../../api/system/api'
 import { rows as dbRows, tableRows } from '../../api/system/db'

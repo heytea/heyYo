@@ -1,5 +1,5 @@
-import { Config } from 'heyyo'
-import { IConfig } from 'heyyo/dist/config'
+import { Config } from '@heytea/heyyo'
+import { IConfig } from '@heytea/heyyo/dist/config'
 
 const config: IConfig = {
   ...Config,

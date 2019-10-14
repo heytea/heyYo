@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { LeftSider, JumpToOne, RenderRoute, Detail } from 'heyyo'
+import { LeftSider, JumpToOne, RenderRoute, Detail } from '@heytea/heyyo'
 import Privilege from '../store/account/admin/privilege'
 import P404 from '../page/p404'
 

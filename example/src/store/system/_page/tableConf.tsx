@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { Button, Col, Form as FormC, InputNumber, Row, Checkbox } from "antd";
-import { Input, Select, displayTypeProps, formTypeProps } from 'heyyo'
+import { Input, Select, displayTypeProps, formTypeProps } from '@heytea/heyyo'
 import PropsEdit from './propsEdit'
 
 const typeData = Object.keys(displayTypeProps)

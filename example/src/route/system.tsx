@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { LeftSider, JumpToOne, RenderRoute } from 'heyyo'
+import { LeftSider, JumpToOne, RenderRoute } from '@heytea/heyyo'
 import Table from '../store/system/table'
 import Dict from '../store/system/dict'
 import Api from '../store/system/api'

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { Button, Col, Form as FormC, Row } from 'antd'
-import { Input } from 'heyyo'
+import { Input } from '@heytea/heyyo'
 import WhereConf from './whereConf'
 
 @observer

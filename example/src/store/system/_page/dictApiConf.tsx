@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { Button, Col, Form as FormC, Row, } from 'antd'
-import { Input, SelectRemote } from 'heyyo'
+import { Input, SelectRemote } from '@heytea/heyyo'
 
 @observer
 export default class DictApiConf extends Component<any> {

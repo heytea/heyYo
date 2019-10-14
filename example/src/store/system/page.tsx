@@ -1,6 +1,6 @@
 import React from 'react'
-import { Curd, Form, Link } from 'heyyo'
-import IStore, { IFormStatus } from 'heyyo/dist/store/_i'
+import { Curd, Form, Link } from '@heytea/heyyo'
+import IStore, { IFormStatus } from '@heytea/heyyo/dist/store/_i'
 import { observable, action, reaction, computed } from 'mobx'
 import { list, add, detail, edit } from '../../api/system/page'
 import { rows as apiRows, detail as apiDetail } from '../../api/system/api'

@@ -1,10 +1,10 @@
-import { Curd, Form, formTypeProps } from 'heyyo'
+import { Curd, Form, formTypeProps } from '@heytea/heyyo'
 import IStore, {
   IAddFormConf, IDetailShowConf,
   IFormStatus,
   IListOperateActionOpt,
   IListOperateStatus
-} from 'heyyo/dist/store/_i'
+} from '@heytea/heyyo/dist/store/_i'
 import { observable, action } from 'mobx'
 import Http, { HttpMap } from '../../../api/http'
 import { getMap as getApiMap } from '../../../api/system/dict'

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, Svg, Loading, AutoPage } from 'heyyo'
+import { Link, Svg, Loading, AutoPage } from '@heytea/heyyo'
 import { detail } from '../api/system/page'
 import { withRouter } from 'react-router-dom'
 import AutoStore from '../store/system/_page/autoStore'

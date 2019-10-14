@@ -1,7 +1,7 @@
-import { HTTP } from 'heyyo'
+import { HTTP } from '@heytea/heyyo'
 import Store from 'store'
 import Config from '../config'
-import { IBeforeFn, IBeforeFnOpt } from 'heyyo/dist/unit/http'
+import { IBeforeFn, IBeforeFnOpt } from '@heytea/heyyo/dist/unit/http'
 
 export interface ITokenObj {
   time: number,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { Button, Col, Form as FormC, Row } from 'antd'
-import { Input, Select, displayTypeProps as typeProps } from 'heyyo'
+import { Input, Select, displayTypeProps as typeProps } from '@heytea/heyyo'
 import PropsEdit from './propsEdit'
 
 // import { typeProps } from './displayMap'

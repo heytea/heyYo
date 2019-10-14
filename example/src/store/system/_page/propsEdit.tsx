@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import React, { Component } from 'react'
 import { Button, Col, Form as FormC, InputNumber, Radio, Row } from 'antd'
-import { Input, Select, displayTypeProps, formTypeProps } from 'heyyo'
+import { Input, Select, displayTypeProps, formTypeProps } from '@heytea/heyyo'
 import Analyze from './analyzeVal'
 
 // import

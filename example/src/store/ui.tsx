@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx'
 import { getPrivilege } from '../api/admin'
 import Config from '../config'
-import { IResult } from 'heyyo/dist/unit/http'
+import { IResult } from '@heytea/heyyo/dist/unit/http'
 
 const { codeSuccess, apiFormat: { code, data } } = Config
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { DisplayMap, displayTypeProps as typeProps } from 'heyyo'
+import { DisplayMap, displayTypeProps as typeProps } from '@heytea/heyyo'
 import Analyze from './analyzeVal'
 
 export default function (conf: any) {

@@ -2,12 +2,12 @@ import React from 'react'
 import { observable, action, computed } from 'mobx'
 import { Modal, Spin, notification } from 'antd'
 import { tree as getTree, add, edit, del, detail, IAdd } from '../../../api/account/admin/privilege'
-import { Curd, Form, Tree, EditForm, ItemMapPlus as itemMapPlus } from 'heyyo'
-import IStore, { IAddFormConf, IFormStatus, IDetailShowConf, } from 'heyyo/dist/store/_i'
+import { Curd, Form, Tree, EditForm, ItemMapPlus as itemMapPlus } from '@heytea/heyyo'
+import IStore, { IAddFormConf, IFormStatus, IDetailShowConf, } from '@heytea/heyyo/dist/store/_i'
 import Http from '../../../api/http'
 import Config from '../../../config'
-import { ICURD } from 'heyyo/dist/store/curd'
-import { IForm } from 'heyyo/dist/store/form'
+import { ICURD } from '@heytea/heyyo/dist/store/curd'
+import { IForm } from '@heytea/heyyo/dist/store/form'
 import { getMap } from "../../../api/system/dict";
 
 const { codeSuccess, apiFormat: { code, msg } } = Config

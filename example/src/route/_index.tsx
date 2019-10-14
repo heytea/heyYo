@@ -1,5 +1,5 @@
 import React, { ComponentClass, FunctionComponent } from 'react'
-import { Loading } from 'heyyo'
+import { Loading } from '@heytea/heyyo'
 import Loadable from 'react-loadable'
 import IndexPage from '../page/index'
 import P404 from '../page/p404'

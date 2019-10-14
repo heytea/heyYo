@@ -4,7 +4,7 @@ import { observer, inject } from 'mobx-react'
 import { Button } from 'antd'
 import Auth, { IAuth } from '../store/auth'
 import { IUI } from '../store/ui'
-import { Full, EditForm, Link } from 'heyyo'
+import { Full, EditForm, Link } from '@heytea/heyyo'
 import Config from '../config'
 import './login.less'
 
