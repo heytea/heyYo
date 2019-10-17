@@ -10,6 +10,7 @@ const router: Array<{ exact?: boolean | undefined, path: string, component: Comp
   { exact: true, path: '/', component: IndexPage },
   { path: '/system', component: Loadable({ loader: () => import('./system'), loading }) },
   { path: '/account', component: Loadable({ loader: () => import('./account'), loading }) },
+  { path: '/my', component: Loadable({ loader: () => import('./my'), loading }) },
   { path: '*', component: P404 }
 ]
 export default router

@@ -4,7 +4,7 @@ import { IFormStatus } from '@heytea/heyyo/dist/store/_i'
 import { IResult } from '@heytea/heyyo/dist/unit/http'
 import { ICURD } from '@heytea/heyyo/dist/store/curd'
 import { IForm } from '@heytea/heyyo/dist/store/form'
-import { getInfo, login, reset, logout, getCode, getImgCaptcha } from '../api/admin'
+import { getInfo, login, reset, logout, getCode, getImgCaptcha, passwordReset } from '../api/admin'
 import { Form } from '@heytea/heyyo'
 import Config from '../config'
 import { setToken } from '../api/http'
@@ -46,12 +46,19 @@ export interface IAuth {
   resetFormConf: any,
 
   reset(): Promise<IResult>,
+
+  passwordResetStatus: IFormStatus,
+  passwordResetForm: { oldPassword: string, newPassword: string, rePassword: string },
+  passwordResetErrs: { oldPassword: string, newPassword: string, rePassword: string },
+  passwordResetFormConf: any,
+
+  passwordReset(): Promise<IResult>,
 }
 
 @Form
 class Auth implements IAuth {
   @observable dict = { loginImgCaptcha: { uuid: '', img: '' }, resetImgCaptcha: { uuid: '', img: '' } }
-  dataFn = { login, getInfo, reset, logout, getImgCaptcha, getCode }
+  dataFn = { login, getInfo, reset, logout, getImgCaptcha, getCode, passwordReset }
   dfUser = { id: 0, name: '' }
   @observable user: IUser = { ...this.dfUser, ...(Store.get('user') || {}) }
   @observable referrer: string = ''
@@ -244,6 +251,54 @@ class Auth implements IAuth {
       this.setUser(this.dfUser)
     }
     return outData
+  }
+
+  // 初始密码
+  dfPasswordResetForm = { oldPassword: '', newPassword: '', rePassword: '' }
+  @observable passwordResetStatus: IFormStatus = { submit: false, loading: false }
+  @observable passwordResetForm = { ...this.dfPasswordResetForm }
+  @observable passwordResetErrs = { ...this.dfPasswordResetForm }
+  passwordResetFormConf = {
+    props: { layout: 'inline' },
+    fields: [
+      {
+        title: '当前密码',
+        field: 'oldPassword',
+        type: 'input',
+        span: 24,
+        rules: 'required|password',
+        props: { type: 'password', placeholder: '当前密码' },
+      },
+      {
+        field: 'newPassword',
+        type: 'input',
+        span: 24,
+        rules: 'required|password',
+        title: '新密码',
+        props: { type: 'password', placeholder: '新密码', autoComplete: 'new-password' },
+      },
+      {
+        field: 'rePassword',
+        type: 'input',
+        span: 24,
+        rules: { required: '', password: '', equals: { field: 'newPassword', original: '确认密码', equal: '密码' } },
+        title: '确认密码',
+        props: { type: 'password', placeholder: '确认密码', autoComplete: 'new-password' },
+      }
+    ]
+  }
+
+  @action
+  passwordReset = async (): Promise<IResult> => {
+    this.passwordResetStatus.loading = true
+    const resetData = await this.dataFn.passwordReset(this.passwordResetForm)
+    if (resetData[code] === codeValidated) {
+      this.resetErrs = Object.assign(this.resetErrs, resetData.data)
+    } else if (resetData[code] === codeSuccess) {
+      this.passwordResetForm = { ...this.dfPasswordResetForm }
+    }
+    this.passwordResetStatus.loading = false
+    return resetData
   }
 }
 

@@ -14,6 +14,12 @@ interface IReset {
   password: string,
 }
 
+interface IPasswordReset {
+  oldPassword: string,
+  newPassword: string,
+  rePassword: string
+}
+
 export function getInfo() {
   return httpGet('/api/index', '', false)
 }
@@ -57,4 +63,8 @@ export async function reset(data: IReset, tips: boolean | string = false) {
 
 export async function logout(data?: IReset, tips: boolean | string = false) {
   return httpPost('/api/logout', data, tips)
+}
+
+export async function passwordReset(data: IPasswordReset, tips: boolean | string = true) {
+  return httpPost('/api/my/password/reset', data, tips)
 }
