@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { Full, EditForm, Link } from '@heytea/heyyo'
+import { Full } from '@heytea/heyyo'
 import PasswordReset from '../page/my/password_reset'
 
 const routes = [
