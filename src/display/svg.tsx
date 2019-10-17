@@ -30,7 +30,7 @@ export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & {
   setSvgXml = async () => {
     const { src = '' } = this.props
     let svgXml = svgXmlObj[src] || svgDataMap[src] || ''
-    if (!svgXml) {
+    if (!svgXml && process.browser) {
       svgXml = await this.fetchData()
     }
     this.setState({ svgXml })
