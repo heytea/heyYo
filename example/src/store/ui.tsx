@@ -95,7 +95,7 @@ class UI implements IUI {
               itemChild && menuChild.push(itemChild)
             } else if (item.type === 'api') {
               privilegeMap[item.apiUrl] = true
-            } else if (item.type === 'page' && item.pageUrl && path === item.pageUrl) {
+            } else if (item.type === 'page' && item.pageUrl && (path || pageUrl) === item.pageUrl) {
               isMenu = true
             }
           }

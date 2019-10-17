@@ -60,11 +60,10 @@ class IndexPage extends Component<IProps & RouteComponentProps> {
 
   handleUIInit(data: IResult) {
     if (data.code === codeUnauthorized) {
-      const { Auth: { setReferrer } = Auth, location } = this.props
+      const { Auth: { setReferrer } = Auth, location, history } = this.props
       const { pathname, search } = location
       setReferrer(pathname + search)
-      // TODO
-      // location.replace('/login')
+      history.replace('/login')
     }
   }
 
