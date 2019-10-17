@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Menu, Dropdown, Avatar } from 'antd'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Link from '../../display/link'
-import UI, { IUI } from "../../store/ui";
-import { inject, observer } from "mobx-react";
-import Auth, { IAuth } from "../../store/auth";
+import UI, { IUI } from '../../store/ui'
+import { inject, observer } from 'mobx-react'
+import Auth, { IAuth } from '../../store/auth'
 import Svg from '../../display/svg'
 import { ConfigContext } from '../../config'
 
