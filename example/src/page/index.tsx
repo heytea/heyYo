@@ -16,6 +16,12 @@ class App extends Component<{ UI?: IUI }> {
     return (
       <Full className='l-index'>
         <Content code={0} loading={initDataLoading}>
+          <Svg src="admin"/>
+          <Svg src="admin"/>
+          <Svg src="admin"/>
+          <Svg src="admin"/>
+          <Svg src="admin"/>
+          <Svg src="admin"/>
           <div id="p-index">
             {!initDataLoading ? (myMenu && myMenu.length > 0) ?
               <div className="m-menu-box">

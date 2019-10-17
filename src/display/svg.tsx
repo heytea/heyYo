@@ -1,16 +1,24 @@
 import React, { Component, HTMLAttributes } from 'react'
 import svgXmlObj from '../assets/svgIcon'
 import { ConfigContext } from '../config'
-// TODO 请求单例
-// TODO map 长度限制
+
 const svgDataMap = {}
+const fnMap = {}
+
 export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & { src: string }> {
   static contextType = ConfigContext
 
   state = { svgXml: '' }
-  fetchData = async (): Promise<string> => {
+  setData = (src: string, xml: string) => {
+    const { config: { svgMapLength = 20 } } = this.context
+    svgDataMap[src] = xml
+    const keys = Object.keys(svgDataMap)
+    if (keys.length >= svgMapLength) {
+      delete svgDataMap[keys[0]]
+    }
+  }
+  fetchData = async (src: string): Promise<string> => {
     const { Http, config: { svgUrl = '', apiFormat: { code = '' }, codeSuccess } } = this.context
-    const { src = '' } = this.props
     if (svgUrl && src) {
       const data = await Http.httpGet(svgUrl + src + '.svg', {}, false, { responseType: 'text', })
       if (data[code] === codeSuccess) {
@@ -18,7 +26,7 @@ export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & {
         if (typeof xml === 'string') {
           xml = xml.replace(/(<\?xml.*?\?>|<\!--.*?-->[\n\r]*|<!DOCTYPE.*?>)*([\n\r])*/g, '')
           if (xml.indexOf('<svg') === 0) {
-            svgDataMap[src] = xml
+            this.setData(src, xml)
             return xml
           }
         }
@@ -27,11 +35,21 @@ export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & {
     return ''
   }
 
+  fetchDataSingle(src: string) {
+    const self = this
+    return fnMap[src] || (fnMap[src] = new Promise(function (resolve) {
+      self.fetchData(src).then((xml: string) => {
+        resolve(xml)
+        fnMap[src] && delete fnMap[src]
+      })
+    }))
+  }
+
   setSvgXml = async () => {
     const { src = '' } = this.props
     let svgXml = svgXmlObj[src] || svgDataMap[src] || ''
     if (!svgXml && process.browser) {
-      svgXml = await this.fetchData()
+      svgXml = await this.fetchDataSingle(src)
     }
     this.setState({ svgXml })
   }

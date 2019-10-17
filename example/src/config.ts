@@ -4,6 +4,7 @@ import { IConfig } from '@heytea/heyyo/dist/config'
 const config: IConfig = {
   ...Config,
   svgUrl: 'https://ishuhui.oss-cn-hangzhou.aliyuncs.com/svg/',
+  svgMapLength: 30,
   hosts: { api: '' },
 }
 

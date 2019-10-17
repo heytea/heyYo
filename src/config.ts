@@ -18,6 +18,7 @@ export interface IConfig {
   },
   hosts?: { [key: string]: string },
   svgUrl?: string,
+  svgMapLength?: number,
 }
 
 const Config: IConfig = {
