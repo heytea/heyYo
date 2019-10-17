@@ -19,6 +19,7 @@ export interface IConfig {
   hosts?: { [key: string]: string },
   svgUrl?: string,
   svgMapLength?: number,
+  topAccountMenu?: Array<{ key: string, name: string }>
 }
 
 const Config: IConfig = {
@@ -37,6 +38,7 @@ const Config: IConfig = {
     totalPages: 'totalPages'
   },
   svgUrl: '',
+  topAccountMenu: [{ key: '/my/reset-password', name: '重置密码' }]
 }
 
 export default Config

@@ -6,6 +6,7 @@ const config: IConfig = {
   svgUrl: 'https://ishuhui.oss-cn-hangzhou.aliyuncs.com/svg/',
   svgMapLength: 30,
   hosts: { api: '' },
+  topAccountMenu: [{ key: '/my/reset-password', name: '重置密码' }]
 }
 
 if (process.env.REACT_APP_API_ENV === 'local') {

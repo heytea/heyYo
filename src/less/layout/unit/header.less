@@ -7,7 +7,7 @@
   //background: rgba(@layout-header-background, 0.8);
   z-index: 99;
   padding: 0 @w-account 0 @layout-sider-width;
-  background: @menu-dark-bg;
+  background: @layout-header-background;
 
   .logo {
     position: absolute;
@@ -21,7 +21,8 @@
     font-size: @font-size-lg;
     color: @heading-color;
     text-indent: @layout-header-height + @padding-md;
-    //border: @border-width-base @border-style-base @layout-header-background;
+    border-bottom: @border-width-base @border-style-base @layout-header-background;
+    background: @background-color-base no-repeat;
     //background: @background-color-base url("../../assets/img/logo.png") no-repeat;
     background-size: contain;
     overflow: hidden;
