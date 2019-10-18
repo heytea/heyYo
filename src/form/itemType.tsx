@@ -43,7 +43,7 @@ export default class ItemType extends Component<IProps> {
     if (itemData) {
       newProps.data = itemData
     }
-    if (!Render.prototype.isReactComponent) {
+    if (!(Render.prototype && Render.prototype.isReactComponent)) {
       newProps = { ...newProps, conf, field, onChangeForm: onChange, loading, values, dict: data }
       return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)}/>
     }
