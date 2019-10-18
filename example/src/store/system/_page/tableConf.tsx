@@ -47,7 +47,7 @@ export default class TableConf extends Component<any> {
           </Col>
           <Col span={8}>
             <FormC.Item label="isRowSelection">
-              <Checkbox value={value.isRowSelection}
+              <Checkbox checked={value.isRowSelection}
                         onChange={(e: any) => this.change(e.target.checked, 'isRowSelection')}/>
             </FormC.Item>
           </Col>
@@ -239,7 +239,7 @@ class TableRowSelection extends Component<any> {
           </Col>
           <Col span={8}>
             <FormC.Item label="fixed">
-              <Checkbox value={value.fixed} onChange={(e: any) => this.change(e.target.checked, 'fixed')}/>
+              <Checkbox checked={value.fixed} onChange={(e: any) => this.change(e.target.checked, 'fixed')}/>
             </FormC.Item>
           </Col>
           <Col span={24}>
