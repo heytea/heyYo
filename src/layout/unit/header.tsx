@@ -8,13 +8,13 @@ import Auth, { IAuth } from '../../store/auth'
 import Svg from '../../display/svg'
 import { ConfigContext } from '../../config'
 
-export interface IPorps {
+export interface IProps {
   UI?: IUI
   Auth?: IAuth
 }
 
 @inject('UI', 'Auth') @observer
-class Header extends Component<IPorps & RouteComponentProps> {
+class Header extends Component<IProps & RouteComponentProps> {
   static contextType = ConfigContext
 
   state = { isShowPasswordReset: false }
