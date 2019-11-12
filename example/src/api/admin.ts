@@ -68,3 +68,7 @@ export async function logout(data?: IReset, tips: boolean | string = false) {
 export async function passwordReset(data: IPasswordReset, tips: boolean | string = true) {
   return httpPost('/api/my/password/reset', data, tips)
 }
+
+export async function getRemoteC() {
+  return httpGet('http://local-example.heytea.com/api_simulation/test.js', {}, false, { responseType: 'text', })
+}

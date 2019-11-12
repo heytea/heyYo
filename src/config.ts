@@ -17,6 +17,7 @@ export interface IConfig {
     totalPages: string
   },
   hosts?: { [key: string]: string },
+  remoteJsUrl?: string,
   svgUrl?: string,
   svgMapLength?: number,
   topAccountMenu?: Array<{ key: string, name: string }>
@@ -37,6 +38,7 @@ const Config: IConfig = {
     count: 'count',
     totalPages: 'totalPages'
   },
+  remoteJsUrl: '',
   svgUrl: '',
   topAccountMenu: [{ key: '/my/reset-password', name: '重置密码' }]
 }

@@ -8,16 +8,15 @@ const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, './src/them
 function changeConfig(config) {
   // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
   // config.plugins.push(new BundleAnalyzerPlugin())
-  if (!config.externals) {
-    config.externals = {}
-  }
-  config.externals.react = 'React'
-  config.externals['react-dom'] = 'ReactDOM'
-  config.externals['react-router-dom'] = 'ReactRouterDOM'
-  config.externals['mobx'] = 'mobx'
-  config.externals['mobx-react'] = 'mobxReact'
-  config.externals['axios'] = 'axios'
-
+  // if (!config.externals) {
+  //   config.externals = {}
+  // }
+  // config.externals.react = 'React'
+  // config.externals['react-dom'] = 'ReactDOM'
+  // config.externals['react-router-dom'] = 'ReactRouterDOM'
+  // config.externals['mobx'] = 'mobx'
+  // config.externals['mobx-react'] = 'mobxReact'
+  // config.externals['axios'] = 'axios'
   config.resolve.alias['@ant-design/icons/lib/dist$'] = path.resolve(__dirname, 'src/assets/antdIcon.ts')
   config.resolve.alias['react-router-dom'] = path.resolve(__dirname, 'node_modules/react-router-dom')
   config.resolve.alias['antd'] = path.resolve(__dirname, 'node_modules/antd')
@@ -31,11 +30,11 @@ function changeConfig(config) {
       maxInitialRequests: 8,
       name: true,
       cacheGroups: {
-        // react: {
-        //   test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
-        //   name: 'react',
-        //   chunks: 'all', // all, async, and initial
-        // },
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+          name: 'react',
+          chunks: 'all', // all, async, and initial
+        },
         antd: {
           test: /[\\/]node_modules[\\/](antd|@ant-design)[\\/]/,
           name: 'antd',
@@ -71,6 +70,32 @@ function changeConfig(config) {
   //     use: ["raw-loader"],
   //   }
   // )
+  config.module.rules.push(
+    {
+      test: require.resolve('react'),
+      use: [{ loader: 'expose-loader', options: 'React' }]
+    },
+    {
+      test: require.resolve('react-dom'),
+      use: [{ loader: 'expose-loader', options: 'ReactDom' }]
+    },
+    {
+      test: require.resolve('react-router-dom'),
+      use: [{ loader: 'expose-loader', options: 'ReactRouterDOM' }]
+    },
+    {
+      test: require.resolve('mobx'),
+      use: [{ loader: 'expose-loader', options: 'mobx' }]
+    },
+    {
+      test: require.resolve('mobx-react'),
+      use: [{ loader: 'expose-loader', options: 'mobxReact' }]
+    },
+    {
+      test: require.resolve('axios'),
+      use: [{ loader: 'expose-loader', options: 'axios' }]
+    }
+  )
   return config
 }
 

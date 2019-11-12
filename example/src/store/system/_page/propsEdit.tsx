@@ -33,28 +33,28 @@ export default class PropsEdit extends Component<any> {
         <Row>
           <Col span={8}>
             <FormC.Item label="key">
-              <Select value={item.key} data={Object.keys(data)} onChange={(v) => this.change(v, index, 'key')}/>
+              <Select value={item.key} data={Object.keys(data)} onChange={(v) => this.change(v, index, 'key')} />
             </FormC.Item>
           </Col>
           {item.key &&
           <>
-              <Col span={12}>
-                  <FormC.Item label="val">
-                      <PropVal value={item.val} type={data[item.key] || ''}
-                               onChange={(v: any) => this.change(v, index, 'val')}/>
-                  </FormC.Item>
-              </Col>
-              <Col span={8}>
-                  <FormC.Item label="rule">
-                      <Select value={item.rule} data={['template', 'arithmetic']}
-                              onChange={(v) => this.change(v, index, 'rule')}/>
-                  </FormC.Item>
-              </Col>
+            <Col span={12}>
+              <FormC.Item label="val">
+                <PropVal value={item.val} type={data[item.key] || ''}
+                         onChange={(v: any) => this.change(v, index, 'val')} />
+              </FormC.Item>
+            </Col>
+            <Col span={8}>
+              <FormC.Item label="rule">
+                <Select value={item.rule} data={['template', 'arithmetic']}
+                        onChange={(v) => this.change(v, index, 'rule')} />
+              </FormC.Item>
+            </Col>
             {item.rule &&
             <Col span={8}>
-                <FormC.Item label="表达式">
-                    <Input value={item.expression} onChange={(v: any) => this.change(v, index, 'expression')}/>
-                </FormC.Item>
+              <FormC.Item label="表达式">
+                <Input value={item.expression} onChange={(v: any) => this.change(v, index, 'expression')} />
+              </FormC.Item>
             </Col>
             }
           </>
@@ -81,10 +81,10 @@ class PropVal extends Component<any> {
     const { type, value, onChange } = this.props
     const typeArr = type.split('|')
     if (type === 'string') {
-      return <Input value={value} onChange={onChange}/>
+      return <Input value={value} onChange={onChange} />
     }
     if (type === 'number') {
-      return <InputNumber value={value} onChange={onChange}/>
+      return <InputNumber value={value} onChange={onChange} />
     }
     if (type === 'boolean') {
       return <Radio.Group onChange={this.change} value={value}>
@@ -93,7 +93,7 @@ class PropVal extends Component<any> {
       </Radio.Group>
     }
     if (typeArr.length > 1) {
-      return <Select value={value} data={typeArr} onChange={onChange}/>
+      return <Select value={value} data={typeArr} onChange={onChange} />
     }
     return null
   }
@@ -102,7 +102,7 @@ class PropVal extends Component<any> {
 export function handleProps(props: any[], data: { [key: string]: any } = {}, name: string) {
   const obj: { [key: string]: any } = {}
   const propsMap = displayTypeProps[name] || formTypeProps[name] || {}
-  props.forEach((propCnf: any) => {
+  props && props.forEach((propCnf: any) => {
     const { key, val, rule, expression } = propCnf
     const keyType = propsMap[key]
     if (keyType) {
