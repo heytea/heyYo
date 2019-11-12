@@ -18,6 +18,8 @@ function changeConfig(config) {
   // config.externals['mobx-react'] = 'mobxReact'
   // config.externals['axios'] = 'axios'
   config.resolve.alias['@ant-design/icons/lib/dist$'] = path.resolve(__dirname, 'src/assets/antdIcon.ts')
+  config.resolve.alias['react'] = path.resolve(__dirname, 'node_modules/react')
+  config.resolve.alias['react-dom'] = path.resolve(__dirname, 'node_modules/react-dom')
   config.resolve.alias['react-router-dom'] = path.resolve(__dirname, 'node_modules/react-router-dom')
   config.resolve.alias['antd'] = path.resolve(__dirname, 'node_modules/antd')
   config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),)
