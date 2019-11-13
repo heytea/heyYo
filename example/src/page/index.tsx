@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Full, Content, Link, Svg, RemoteComponent } from '@heytea/heyyo'
+import { Full, Content, Link, Svg } from '@heytea/heyyo'
 import { inject, observer } from 'mobx-react'
 import UI, { IUI } from '../store/ui'
 import './index.less'
@@ -35,17 +35,6 @@ class App extends Component<{ UI?: IUI }> {
             }
           </div>
         </Content>
-        <RemoteComponent name="test" props={{ a: 1 }} />
-        <RemoteComponent name="test" props={{ a: 2 }} />
-        <RemoteComponent name="test" props={{ a: 3 }} />
-        <RemoteComponent name="test" props={{ a: 4 }} />
-        <RemoteComponent name="test" props={{ a: 5 }} />
-        <RemoteComponent name="test" props={{ a: 6 }} />
-        <RemoteComponent name="test" props={{ a: 7 }} />
-        <RemoteComponent name="test" props={{ a: 8 }} />
-        <RemoteComponent name="test" props={{ a: 9 }} />
-        <RemoteComponent name="test" props={{ a: 10 }} />
-        <RemoteComponent name="test" props={{ a: 111 }} />
       </Full>
     )
   }

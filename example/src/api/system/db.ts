@@ -7,5 +7,5 @@ export function rows() {
 }
 
 export function tableRows(db: string) {
-  return httpGet('/api/system/db/tableRows', { db })
+  return httpGet('/api/system/db/table_rows', { db })
 }

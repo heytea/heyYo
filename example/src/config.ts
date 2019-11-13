@@ -4,6 +4,7 @@ import { IConfig } from '@heytea/heyyo/dist/config'
 const config: IConfig = {
   ...Config,
   svgUrl: 'https://ishuhui.oss-cn-hangzhou.aliyuncs.com/svg/',
+  remoteJsUrl: '/api/system/components/get_build',
   svgMapLength: 30,
   hosts: { api: '' },
   topAccountMenu: [{ key: '/my/reset-password', name: '重置密码' }]

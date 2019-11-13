@@ -7,7 +7,7 @@ export function list(data: any) {
 }
 
 export function getFields({ db, name }: { db: string, name: string }) {
-  return httpGet('/api/system/table/getFields', { db, name })
+  return httpGet('/api/system/table/get_fields', { db, name })
 }
 
 export function detail(data: any) {

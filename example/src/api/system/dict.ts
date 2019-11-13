@@ -23,7 +23,7 @@ export function edit(data: any) {
 }
 
 export function getMap(name: string) {
-  return httpGet('/api/system/dict/getMap', { name })
+  return httpGet('/api/system/dict/get_map', { name })
 }
 
 
