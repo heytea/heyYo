@@ -11,6 +11,9 @@ export interface IProps {
 
 export default class RenderRoute extends Component<IProps> {
   router: any = null
+  componentDidMount(): void {
+    console.log('setTitle');
+  }
 
   constructor(props: any) {
     super(props)
