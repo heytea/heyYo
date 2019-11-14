@@ -228,9 +228,9 @@ class List extends Component<IProps> {
           </Button>
           }
         </EditForm>
-        {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode/> : ListPageFormAfterNode}
+        {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}
         {(isSearch || isExport) && <Divider/>}
-        {typeof ListPageTableBeforeNode === 'function' ? <ListPageTableBeforeNode/> : ListPageTableBeforeNode}
+        {typeof ListPageTableBeforeNode === 'function' ? <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
         {errno !== '' && errno !== codeSuccess ?
           <Content code={errno} msg={errmsg} loading={loading}/>
           :
