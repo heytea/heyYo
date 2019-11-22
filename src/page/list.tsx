@@ -182,8 +182,8 @@ class List extends Component<IProps> {
     }
     const { isExport = false, isSearch = true, tabs, tabField } = listFormConf
     const listPageFormBeforeNode = Store[`${name}PageFormBeforeNode`] || null
-    const listPageFormAfterNode = Store[`${name}PageFormAfterNode`] || null
-    const listPageTableBeforeNode = Store[`${name}PageTableBeforeNode`] || null
+    const ListPageFormAfterNode = Store[`${name}PageFormAfterNode`] || null
+    const ListPageTableBeforeNode = Store[`${name}PageTableBeforeNode`] || null
     const listPageTableAfterNode = Store[`${name}PageTableAfterNode`] || null
     const pagination = {
       showQuickJumper: true,
@@ -228,9 +228,9 @@ class List extends Component<IProps> {
           </Button>
           }
         </EditForm>
-        {listPageFormAfterNode}
+        {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}
         {(isSearch || isExport) && <Divider/>}
-        {listPageTableBeforeNode}
+        {typeof ListPageTableBeforeNode === 'function' ? <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
         {errno !== '' && errno !== codeSuccess ?
           <Content code={errno} msg={errmsg} loading={loading}/>
           :

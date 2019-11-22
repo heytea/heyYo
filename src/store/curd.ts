@@ -88,10 +88,14 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
         return check
       }
       const { form = {} } = check
-      this[`${formName}Status`].loading = true
-      const addData = await this.executeDataFn({ fn: dataFn, form, formName })
-      this[`${formName}Status`].loading = false
-      return addData
+      try {
+        this[`${formName}Status`].loading = true
+        const addData = await this.executeDataFn({fn: dataFn, form, formName})
+        this[`${formName}Status`].loading = false
+        return addData
+      } catch (e) {
+        this[`${formName}Status`].loading = false
+      }
     })
 
     getDetail = action(async ({ formName = 'detail', dataFn = this.dataFn[formName] }: ICURDOpt = {}) => {
@@ -113,9 +117,13 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
       }
       const { form = {} } = check
       this[`${formName}Status`].loading = true
-      const editData = await this.executeDataFn({ fn: dataFn, form, formName })
-      this[`${formName}Status`].loading = false
-      return editData
+      try {
+        const editData = await this.executeDataFn({fn: dataFn, form, formName})
+        this[`${formName}Status`].loading = false
+        return editData
+      } catch (e) {
+        this[`${formName}Status`].loading = false
+      }
     })
 
     resetListTable = action(({ formName = 'list' }: ICURDOpt = {}) => {
@@ -141,8 +149,12 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
         delete opt._sorterField
         delete opt._sorterVal
         this[`${formName}Loading`] = true
-        this[`${formName}Data`] = await this.executeDataFn({ fn: dataFn, form, formName })
-        this[`${formName}Loading`] = false
+        try {
+          this[`${formName}Data`] = await this.executeDataFn({fn: dataFn, form, formName})
+          this[`${formName}Loading`] = false
+        } catch (e) {
+          this[`${formName}Loading`] = false
+        }
       }
       return this[`${formName}Data`]
     })
