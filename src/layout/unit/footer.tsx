@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
+import { ConfigContext } from "../../config";
 
 export default class Footer extends Component {
+  static contextType = ConfigContext;
+
   render() {
-    return <div id="b-footer">©2019 console.heytea.com</div>
+    const { footerText } = this.context
+    return <div id="b-footer">{footerText}</div>
   }
 }
