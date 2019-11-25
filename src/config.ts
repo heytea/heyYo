@@ -21,6 +21,7 @@ export interface IConfig {
   svgUrl?: string,
   svgMapLength?: number,
   topAccountMenu?: Array<{ key: string, name: string }>
+  footerText?: string
 }
 
 const Config: IConfig = {
@@ -40,7 +41,8 @@ const Config: IConfig = {
   },
   remoteJsUrl: '',
   svgUrl: '',
-  topAccountMenu: [{ key: '/my/reset-password', name: '重置密码' }]
+  topAccountMenu: [{ key: '/my/reset-password', name: '重置密码' }],
+  footerText: ''
 }
 
 export default Config
