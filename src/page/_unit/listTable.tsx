@@ -58,6 +58,13 @@ export default class extends Component<IProps, IState> {
     //   this.setState({ tableEl })
     // }
   }
+  getColumns = () => {
+    const props = this.props;
+    const {columns = []} = props;
+    return columns.filter((item: any) => {
+      return item.hasOwnProperty('show') ? (typeof item.show === 'function' ? item.show() : item.show) : true;
+    });
+  };
 
   getDataSource = () => {
     const props = this.props;
@@ -95,6 +102,7 @@ export default class extends Component<IProps, IState> {
           loading={props.loading || operate.loading || false}
           pagination={pagination}
           onChange={this.change}
+          columns={this.getColumns()}
           dataSource={this.getDataSource()}
         />
         {/*<TableHeadFixed tableEl={tableEl} tableScroll={tableScroll}/>*/}

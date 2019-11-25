@@ -71,7 +71,7 @@ class List extends Component<IProps> {
   }
   exportList = () => {
     const { Store, name = 'list' } = this.props
-    Store.exportList({ formName: name })
+    Store.exportList({ formName: name });
   }
   pageSizeChange = (_cur: number, size: number) => {
     const { config: { apiFormat } } = this.context
