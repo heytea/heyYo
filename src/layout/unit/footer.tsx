@@ -5,7 +5,7 @@ export default class Footer extends Component {
   static contextType = ConfigContext;
 
   render() {
-    const { footerText } = this.context
+    const { config: { footerText } } = this.context
     return <div id="b-footer">{footerText}</div>
   }
 }
