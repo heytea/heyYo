@@ -133,7 +133,13 @@ const typeProps: { [key: string]: any } = {
     value: 'string|number',
     format: 'string',
   },
-  selectRemote: {},
+  selectRemote: {
+    url: 'string',
+    method: 'string',
+    apiKey: 'string',
+    dataKey: 'string',
+    valInKey: 'string',
+  },
   tree: {
     value: 'string|array',
     data: 'string',
