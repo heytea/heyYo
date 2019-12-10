@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 import { Input } from 'antd'
 import PropTypes from 'prop-types'
+import { TextAreaProps } from 'antd/lib/input/TextArea'
 
-export default class ReInput extends Component {
+export interface IProps extends TextAreaProps {
+  icon?: string,
+  onChange?: any,
+}
+
+export default class ReInput extends Component<IProps> {
   static propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     onChange: PropTypes.func,
@@ -12,7 +18,13 @@ export default class ReInput extends Component {
     onChange: () => ''
   }
 
+  change = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { onChange } = this.props
+    const value = e.target.value
+    onChange && onChange(value)
+  }
+
   render() {
-    return <Input.TextArea {...this.props}/>
+    return <Input.TextArea {...this.props} onChange={this.change} />
   }
 }
