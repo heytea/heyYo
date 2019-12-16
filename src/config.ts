@@ -21,7 +21,9 @@ export interface IConfig {
   svgUrl?: string,
   svgMapLength?: number,
   topAccountMenu?: Array<{ key: string, name: string }>
-  footerText?: string
+  footerText?: string,
+
+  [key: string]: any
 }
 
 const Config: IConfig = {
