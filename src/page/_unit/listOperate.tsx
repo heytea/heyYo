@@ -101,8 +101,10 @@ class Operate extends Component<{ Store?: any, name: string, btnProps?: object, 
     if (type === 'batch') {
       const listTable = Store[`${name}Table`] || {}
       const selectedRowKeys = listTable.rowSelection && listTable.rowSelection.selectedRowKeys || []
-      // @ts-ignore
-      btnProps.disabled = !(selectedRowKeys.length > 0)
+      if (!btnProps.hasOwnProperty('disabled')) {
+        // @ts-ignore
+        btnProps.disabled = !(selectedRowKeys.length > 0)
+      }
     }
     return (
       <Button
