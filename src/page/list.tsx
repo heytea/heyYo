@@ -45,6 +45,9 @@ class List extends Component<IProps> {
   componentDidMount(): void {
     this.fetchData()
     this.setTitle()
+    const { Store, location, name = 'list', Auth } = this.props
+    const didMount = Store[`${name}DidMount`];
+    typeof didMount === 'function' && didMount.call(Store, { location, Auth })
   }
 
   // UNSAFE_componentWillReceiveProps(nextProps: IProps) {
