@@ -5,6 +5,7 @@ import { SelectProps } from 'antd/lib/select'
 
 const Option = Select.Option
 
+// @ts-ignore
 export interface IProps extends SelectProps<any> {
   value?: string | string[] | number | number[]
   data?: Object | Array<any>,
@@ -15,7 +16,6 @@ export interface IProps extends SelectProps<any> {
   valKey?: string,
   showSearch?: boolean,
   placeholder?: string,
-  mode?: string,
   onChange?: (value: any, option?: React.ReactElement<any> | React.ReactElement<any>[]) => void,
 
 }
@@ -44,7 +44,7 @@ export default class extends Component<IProps> {
 
   render() {
     const { data, labelKey = 'name', valKey = 'id', showSearch = false, isNull = true, placeholder = '请选择', splitKey = ',', value = '', vToString = true, mode, ...args } = this.props
-    const dfProps: { optionFilterProp?: string, filterOption?: (input: any, option: any) => any, mode?: string } = {}
+    const dfProps: { optionFilterProp?: string, filterOption?: (input: any, option: any) => any, [key: string]: any } = {}
     if (showSearch) {
       dfProps.optionFilterProp = labelKey
       dfProps.filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0

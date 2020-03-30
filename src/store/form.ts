@@ -120,7 +120,8 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
       return { __html: xss.process(content) }
     }
 
-    setErrs = action(({ name = '', data = {} }) => {
+    // @ts-ignore
+    setErrs = action(({ name = '', data = {} }: any) => {
 
       this[`${name}Errs`] && (this[`${name}Errs`] = { ...this[`${name}Errs`], ...data })
     })

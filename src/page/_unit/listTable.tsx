@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 // import ReactDOM from 'react-dom'
-import {Table} from 'antd'
-import {TableProps} from 'antd/lib/table/interface'
-import {observer} from 'mobx-react'
+import { Table } from 'antd'
+import { TableProps } from 'antd/lib/table/Table'
+import { observer } from 'mobx-react'
 import ListOperate from '../_unit/listOperate'
 
 
@@ -33,14 +33,14 @@ interface IState {
 export default class extends Component<IProps, IState> {
   // state = { tableEl: '', tableScroll: { top: 0, left: 0 } }
   // tableNode: any = ''
-  OrderMap = {ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend'}
+  OrderMap = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend' }
   change = (_pagination: any, _filters: any, sorter: any) => {
-    const {field, order} = sorter
+    const { field, order } = sorter
     if (field) {
-      const {onSorter, sorter: {field: oldField = '', val: OldVal = ''} = {}} = this.props
+      const { onSorter, sorter: { field: oldField = '', val: OldVal = '' } = {} } = this.props
       const orderVal = this.OrderMap[order]
       if (onSorter && (oldField !== field || OldVal !== orderVal)) {
-        onSorter({field, order})
+        onSorter({ field, order })
       }
     }
   }
@@ -58,9 +58,10 @@ export default class extends Component<IProps, IState> {
     //   this.setState({ tableEl })
     // }
   }
+
   getColumns = () => {
     const props = this.props;
-    const {columns = []} = props;
+    const { columns = [] } = props;
     return columns.filter((item: any) => {
       return item.hasOwnProperty('show') ? (typeof item.show === 'function' ? item.show() : item.show) : true;
     });
@@ -68,14 +69,14 @@ export default class extends Component<IProps, IState> {
 
   getDataSource = () => {
     const props = this.props;
-    const {data = {}, dataKey = 'data'} = props;
+    const { data = {}, dataKey = 'data' } = props;
     return data[dataKey] && data[dataKey].slice ? data[dataKey].slice() : (Array.isArray(data) ? data : [])
   };
 
   render() {
     const props = this.props
     // const { tableEl, tableScroll } = this.state
-    const {operate = {}, Store, rowKey = 'id', scroll, name, pagination, showPaginationTotal = true, rowSelection} = props
+    const { operate = {}, Store, rowKey = 'id', scroll, name, pagination, showPaginationTotal = true, rowSelection } = props
     return (
       <div
         className='m-list-table'
@@ -86,7 +87,7 @@ export default class extends Component<IProps, IState> {
           <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(pagination.total / pagination.pageSize)} 页</p> :
           <p>暂无数据</p>
         }
-        <ListOperate Store={Store} name={name} type="batch"/>
+        <ListOperate Store={Store} name={name} type="batch" />
         {/*<div className='u-table-row-selection-btn'>*/}
         {/*  {listTableActions && listTableActions.map && listTableActions.map((item, index) =>*/}
         {/*    <Button key={index}  {...item} >{item.children || '操作'}</Button>*/}

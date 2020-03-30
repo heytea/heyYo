@@ -22,7 +22,7 @@ export default class listOperate extends Component<{ Store?: object, type?: 'row
     if (type === 'batch') {
       items = Store[`${name}TableActions`] || []
       className = 'u-table-row-selection-btn'
-      btnSize = 'default'
+      btnSize = 'middle'
     }
 
     return (
@@ -109,7 +109,7 @@ class Operate extends Component<{ Store?: any, name: string, btnProps?: object, 
     return (
       <Button
         htmlType="button"
-        size={type === 'row' ? 'small' : 'default'}
+        size={type === 'row' ? 'small' : 'middle'}
         loading={operateStatus && operateStatus[`${actionName}-${type === 'row' ? index : type}`]}
         onClick={this.click}
         {...btnProps}

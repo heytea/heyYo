@@ -26,8 +26,8 @@ export default class EditForm extends Component<IProps> {
 
   submit = (e: React.FormEvent<any>) => {
     const { onSubmit } = this.props
-    e.preventDefault()
-    e.stopPropagation()
+    // e.preventDefault()
+    // e.stopPropagation()
     onSubmit && onSubmit(e)
   }
   getRowArr = () => {
@@ -103,7 +103,7 @@ export default class EditForm extends Component<IProps> {
       itemProps.itemMap = itemMap
     }
     return (
-      <Form className="m-edit-form" {...formProps} onSubmit={this.submit}>
+      <Form className="m-edit-form" {...formProps} onFinish={this.submit}>
         {rowArr.map((row, index) => (
           <Row key={index} style={{ paddingBottom: layout === 'inline' ? '10px' : 0 }}>
             {row.map((item: any, cI: number) => (

@@ -36,7 +36,8 @@ export default class RangeDate extends Component<IProps> {
       }
     }
     return (
-      <RangePicker format={format} showTime={showTime} value={value} onChange={this.change}/>
+      // @ts-ignore
+      <RangePicker format={format} showTime={showTime} value={value} onChange={this.change} />
     )
   }
 }

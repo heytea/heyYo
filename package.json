@@ -22,7 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "antd": "^3.16.2",
+    "antd": "^4.1.0",
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "mobx": "^5.9.4",
@@ -44,7 +44,7 @@
     "@types/react-dom": "16.9.1",
     "@types/react-loadable": "^5.5.0",
     "@types/react-router-dom": "^4.3.1",
-    "antd": "^3.18.2",
+    "antd": "^4.1.0",
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
@@ -69,7 +69,7 @@
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-typescript2": "^0.24.3",
     "rollup-plugin-url": "^3.0.0",
-    "typescript": "3.6.4",
+    "typescript": "3.7.5",
     "xss": "^1.0.6"
   },
   "files": [
