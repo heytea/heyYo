@@ -7,7 +7,7 @@
       "esnext"
     ],
     "declaration": true,
-    "declarationDir": "build/types",
+    "declarationDir": "dist/types",
     "declarationMap": true,
     "allowJs": true,
     "skipLibCheck": true,
