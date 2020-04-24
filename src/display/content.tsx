@@ -17,7 +17,6 @@ interface IProps {
 @inject('Auth') @observer
 class Content extends Component<IProps & RouteComponentProps> {
   render() {
-    console.log('1234567890')
     const errArr: string[] = []
     const { code = '', msg = '', loading = false, children = null, Auth, location: { pathname, search } } = this.props
     if (typeof msg === 'object') {

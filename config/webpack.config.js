@@ -138,6 +138,9 @@ module.exports = function (webpackEnv) {
       'mobx': 'mobx',
       'mobx-react': 'mobxReact',
       'axios': 'axios',
+      'antd': 'antd',
+      'lodash': 'lodash',
+      'xss': 'xss',
     },
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
