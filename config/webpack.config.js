@@ -140,6 +140,8 @@ module.exports = function (webpackEnv) {
       'axios': 'axios',
       'antd': 'antd',
       'lodash': 'lodash',
+      'moment': 'moment',
+      'moment/locale/zh-cn': 'moment.locale',
       'xss': 'xss',
     },
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
@@ -178,8 +180,8 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: 'micro_account.js',
-      library: 'micro_account',
+      filename: 'index.js',
+      library: 'heyyo',
       libraryTarget: 'umd',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,

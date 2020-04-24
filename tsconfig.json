@@ -6,6 +6,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "outDir": "./build/lib",
+    "declaration": true,
+    "declarationDir": "./build/types",
+    "declarationMap": true,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
