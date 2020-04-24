@@ -14,13 +14,13 @@ function ADC(C: ReactNode, opt: { valProp?: string, dataProp?: string } = {}) {
   const { valProp = 'children', dataProp = '' } = opt
   return (props: any) => {
     const { value, data, ...oldProps } = props
-    const newProps = {}
+    const newProps: { [key: string]: any } = {}
     newProps[valProp || 'children'] = value
     if (dataProp) {
       newProps[dataProp] = data
     }
     // @ts-ignore
-    return <C  {...oldProps} {...newProps}/>
+    return <C  {...oldProps} {...newProps} />
   }
 
 }

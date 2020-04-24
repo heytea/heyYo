@@ -24,7 +24,7 @@ export default class ItemType extends Component<IProps> {
 
   change = (val: any, key: string) => {
     const { onChange } = this.props
-    const formObj = {}
+    const formObj: { [key: string]: any } = {}
     formObj[key] = typeof val === 'undefined' ? '' : val
     onChange && onChange(formObj)
   }
@@ -45,11 +45,11 @@ export default class ItemType extends Component<IProps> {
     }
     if (!(Render.prototype && Render.prototype.isReactComponent)) {
       newProps = { ...newProps, conf, field, onChangeForm: onChange, loading, values, dict: data }
-      return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)}/>
+      return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)} />
     }
     // if (type === 'input' || type === 'captcha' || type === 'select') {
     newProps.name = field
     // }
-    return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)}/>
+    return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)} />
   }
 }

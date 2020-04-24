@@ -8,7 +8,7 @@ const Option = Select.Option
 // @ts-ignore
 export interface IProps extends SelectProps<any> {
   value?: string | string[] | number | number[]
-  data?: Object | Array<any>,
+  data?: { [key: string]: any } | Array<any>,
   isNull?: boolean,
   vToString?: boolean,
   splitKey?: string,

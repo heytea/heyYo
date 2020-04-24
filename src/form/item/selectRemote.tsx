@@ -47,7 +47,7 @@ export default class SelectRemote extends Component<IProps> {
       const dataData = await fn(url, opt)
       if (fetchId === this.lastFetchId && dataData[apiFormat.code] === codeSuccess) {
         const data = dataData[dataKey || apiFormat.data]
-        const idMap = {}
+        const idMap: { [key: string]: any } = {}
         data.forEach && data.forEach((item: any) => {
           idMap[item[valKey]] = true
         })
@@ -71,7 +71,7 @@ export default class SelectRemote extends Component<IProps> {
 
   searchData = async (value: any) => {
     const { apiKey, labelKey = 'name' } = this.props
-    const opt = {}
+    const opt: { [key: string]: any } = {}
     opt[apiKey || labelKey] = value
     this.fetchData(opt)
   }
@@ -106,7 +106,7 @@ export default class SelectRemote extends Component<IProps> {
       <Select
         {...this.props}
         data={data}
-        notFoundContent={fetching ? <Spin size="small"/> : null}
+        notFoundContent={fetching ? <Spin size="small" /> : null}
         filterOption={false}
         showSearch={true}
         onSearch={this.searchData}

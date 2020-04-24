@@ -80,7 +80,7 @@ class List extends Component<IProps> {
     const { config: { apiFormat } } = this.context
     const { Store, name = 'list', location } = this.props
     Store.urlSetForm({ name, url: location.search })
-    const valObj = {}
+    const valObj: { [key: string]: any } = {}
     valObj[apiFormat.page] = 1
     valObj[apiFormat.currentPage] = 1
     valObj[apiFormat.pageSize] = size
@@ -92,7 +92,7 @@ class List extends Component<IProps> {
     const { config: { apiFormat } } = this.context
     const { Store, name = 'list', location } = this.props
     Store.urlSetForm({ name, url: location.search })
-    const valObj = {}
+    const valObj: { [key: string]: any } = {}
     valObj[apiFormat.page] = page
     valObj[apiFormat.currentPage] = page
     Store.setForm({ name, valObj })
@@ -118,13 +118,13 @@ class List extends Component<IProps> {
   getListAddConfInner = (conf: any) => {
     if (!conf) return null;
     let isArray = Object.prototype.toString.call(conf).includes('Array');
-    let maps = isArray ? Array.from(conf) : [conf];
+    let maps: Array<{ [key: string]: any }> = isArray ? Array.from(conf) : [conf];
     return <div className="add-link"><Row> {
-      maps.map(listAddConf => {
+      maps.map((listAddConf) => {
         return listAddConf.name && <Col key={listAddConf.name} span={24 / maps.length}>
-            <Link className=""
-                  href={listAddConf.url ? (typeof listAddConf.url === 'function' ? listAddConf.url() : listAddConf.url) : 'javascript:;'}>
-                <Button type="primary" {...listAddConf.props}>{listAddConf.name}</Button></Link></Col>
+          <Link className=""
+                href={listAddConf.url ? (typeof listAddConf.url === 'function' ? listAddConf.url() : listAddConf.url) : 'javascript:;'}>
+            <Button type="primary" {...listAddConf.props}>{listAddConf.name}</Button></Link></Col>
       })
     }
     </Row>
@@ -180,7 +180,7 @@ class List extends Component<IProps> {
         title: '操作',
         dataIndex: listOperateConf.dataIndex || '',
         render: (v: any, r: object, i: number) => <ListOperateC value={v} record={r} index={i} Store={Store}
-                                                                name={name}/>
+                                                                name={name} />
       }]
     }
     const { isExport = false, isSearch = true, tabs, tabField } = listFormConf
@@ -204,15 +204,15 @@ class List extends Component<IProps> {
     return (
       <div className="m-list" data-url={location.pathname + location.search}>
         <div className="m-list-title">
-          <Breadcrumb data={breadcrumb} dfTitle={title && title.split('-') && title.split('-')[0]}/>
+          <Breadcrumb data={breadcrumb} dfTitle={title && title.split('-') && title.split('-')[0]} />
           {this.getListAddConfInner(listAddConf)}
         </div>
-        <Divider/>
-        {listTips && <PageTips {...listTips}/>}
+        <Divider />
+        {listTips && <PageTips {...listTips} />}
         {listPageFormBeforeNode}
         {tabs && tabs.map &&
         <Tabs activeKey={listForm[tabField] + ''} onChange={this.tagChange}>
-          {tabs.map((item: any) => <Tabs.TabPane tab={item.name} key={item.value + ''}/>)}
+          {tabs.map((item: any) => <Tabs.TabPane tab={item.name} key={item.value + ''} />)}
         </Tabs>
         }
         <EditForm conf={{ layout: clientWidth > 768 ? 'inline' : 'vertical' }}
@@ -227,15 +227,16 @@ class List extends Component<IProps> {
                   icon={exportLoading ? '' : 'download'}
                   style={{ marginLeft: '10px' }}
                   onClick={this.exportList}>
-              导出
+            导出
           </Button>
           }
         </EditForm>
-        {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}
-        {(isSearch || isExport) && <Divider/>}
-        {typeof ListPageTableBeforeNode === 'function' ? <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
+        {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store} /> : ListPageFormAfterNode}
+        {(isSearch || isExport) && <Divider />}
+        {typeof ListPageTableBeforeNode === 'function' ?
+          <ListPageTableBeforeNode {...Store} /> : ListPageTableBeforeNode}
         {errno !== '' && errno !== codeSuccess ?
-          <Content code={errno} msg={errmsg} loading={loading}/>
+          <Content code={errno} msg={errmsg} loading={loading} />
           :
           <Table
             name={name}

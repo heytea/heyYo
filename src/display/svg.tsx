@@ -1,9 +1,8 @@
 import React, { Component, HTMLAttributes } from 'react'
-import svgXmlObj from '../assets/svgIcon'
 import { ConfigContext } from '../config'
 
-const svgDataMap = {}
-const fnMap = {}
+const svgDataMap: { [key: string]: string } = {}
+const fnMap: { [key: string]: any } = {}
 
 export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & { src: string }> {
   static contextType = ConfigContext
@@ -47,7 +46,7 @@ export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & {
 
   setSvgXml = async () => {
     const { src = '' } = this.props
-    let svgXml = svgXmlObj[src] || svgDataMap[src] || ''
+    let svgXml = svgDataMap[src] || ''
     if (!svgXml && process.browser) {
       svgXml = await this.fetchDataSingle(src)
     }
@@ -70,6 +69,6 @@ export default class Svg extends Component<HTMLAttributes<HTMLAnchorElement> & {
     }
     const { src = '', className = '', ...args } = this.props
     const { svgXml } = this.state
-    return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }}/>)
+    return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }} />)
   }
 }

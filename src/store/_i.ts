@@ -1,4 +1,5 @@
-import { TableProps, ColumnProps } from 'antd/lib/table/interface'
+import { TableProps } from 'antd/lib/table/Table'
+import { ColumnProps } from 'antd/lib/table/Column'
 import { ButtonProps } from 'antd/lib/button'
 import { ReactNode } from 'react'
 import { IResult } from '../unit/http'

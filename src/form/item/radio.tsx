@@ -9,8 +9,8 @@ const OptionComponents = {
 interface IProps {
   value?: string | number,
   isAll?: boolean,
-  data?: Object | Array<any>,
-  type?: string,
+  data?: { [key: string]: any } | Array<any>,
+  type?: 'radio' | 'button',
   valKey?: string,
   labelKey?: string,
   onChange?: Function

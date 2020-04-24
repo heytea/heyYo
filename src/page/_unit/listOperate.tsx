@@ -6,7 +6,7 @@ import { Button, Modal } from 'antd'
 const confirm = Modal.confirm
 
 @observer
-export default class listOperate extends Component<{ Store?: object, type?: 'row' | 'batch', record?: any, index?: number, name?: string, value?: any }> {
+export default class listOperate extends Component<{ Store?: { [key: string]: any }, type?: 'row' | 'batch', record?: any, index?: number, name?: string, value?: any }> {
   render() {
     const { Store = {}, record, index = 0, name = 'list', value, type = 'row' } = this.props
     let items: any[] = []
@@ -60,7 +60,7 @@ export default class listOperate extends Component<{ Store?: object, type?: 'row
           } else {
             opeProps.fn = () => action.call(Store)
           }
-          return <Operate key={itemIndex}{...opeProps}/>
+          return <Operate key={itemIndex}{...opeProps} />
         })}
       </div>
     )
@@ -68,7 +68,7 @@ export default class listOperate extends Component<{ Store?: object, type?: 'row
 }
 
 @observer
-class Operate extends Component<{ Store?: any, name: string, btnProps?: object, type: 'row' | 'batch', fn?: Function, isConfirm?: boolean, actionName?: string, whom?: string, index?: number, operateStatus: object }> {
+class Operate extends Component<{ Store?: any, name: string, btnProps?: object, type: 'row' | 'batch', fn?: Function, isConfirm?: boolean, actionName?: string, whom?: string, index?: number, operateStatus: { [key: string]: any } }> {
   execute = async () => {
     const { fn = () => '', Store, name, index, actionName, type = 'row' } = this.props
     const setListOperateStatus = Store && Store.setListOperateStatus

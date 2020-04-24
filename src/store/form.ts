@@ -41,9 +41,11 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
   return class Form extends target implements IForm {
     xss = xss
     setForm = action(({ name = '', valObj = {}, isXss = true, trimType, isVerify = true }: ISetFormOpt = {}) => {
+      // @ts-ignore
       const form = this[`${name}Form`]
-      const rules = {} // 校验规则
-      const htmlFieldMap = {} // html 字段
+      const rules: { [key: string]: any } = {} // 校验规则
+      const htmlFieldMap: { [key: string]: any } = {} // html 字段
+      // @ts-ignore
       const formConf = this[`${name}FormConf`] || {}
       const { fields, blocks } = formConf
       if (fields) {
@@ -71,6 +73,7 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
           })
         })
       }
+      // @ts-ignore
       const errs = this[`${name}Errs`]
       Object.keys(valObj).forEach((key) => {
         let tmpValue = valObj[key]
@@ -93,6 +96,7 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
       })
       // isSubmit
       let isSubmit = true
+      // @ts-ignore
       const status = this[`${name}Status`]
       if (typeof status === 'object' && typeof form === 'object') {
         const errKeys = typeof errs === 'object' ? Object.keys(errs) : []
@@ -123,12 +127,15 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
     // @ts-ignore
     setErrs = action(({ name = '', data = {} }: any) => {
 
+      // @ts-ignore
       this[`${name}Errs`] && (this[`${name}Errs`] = { ...this[`${name}Errs`], ...data })
     })
 
     // 获取表单配置的字段
     getUrlParamsFieldArr = action(({ page = false, formName = 'list' }: { page?: boolean, formName?: string } = {}) => {
+      // @ts-ignore
       const listForm = this[`${formName}Form`]
+      // @ts-ignore
       const listFormConf = this[`${formName}FormConf`]
       if (typeof listForm !== 'object') {
         return []
@@ -162,11 +169,13 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
     })
 
     getUrlParamsStr = ({ formName = 'list', page = false, sorter = false } = {}) => {
+      // @ts-ignore
       if (typeof this[`${formName}Form`] !== 'object') {
         return ''
       }
       const searchParams = new URLSearchParams()
       const fieldArr = this.getUrlParamsFieldArr({ formName })
+      // @ts-ignore
       const listFormConf = this[`${formName}FormConf`]
       const { emptyValSetUrl = [] } = listFormConf || {};
       if (page) {
@@ -177,6 +186,7 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
       }
       for (let j = 0; j < fieldArr.length; j += 1) {
         const field = fieldArr[j]
+        // @ts-ignore
         const value = this[`${formName}Form`][field]
         if (!(typeof value === 'undefined' || (value === '' && emptyValSetUrl.indexOf(field) < 0))) {
           searchParams.set(field, value);
@@ -193,13 +203,16 @@ export default function <T extends { new(...args: any[]): {} }>(target: T, { whi
 
     urlSetForm = ({ name = 'list', url = '', isVerify = true } = {}) => {
       const dfFormName = `df${name.replace(/^\S/, s => s.toUpperCase())}Form`
+      // @ts-ignore
       const dfFormObj = this[dfFormName] || {}
+      // @ts-ignore
       const formObj = this[`${name}Form`]
       const newForm = {}
       if (typeof formObj === 'object') {
         const searchParams = new URLSearchParams(url.replace(/$\?/, ''))
         Object.keys(formObj).forEach((key) => {
           if (searchParams.has(key)) {
+            // @ts-ignore
             newForm[key] = xss.process(searchParams.get(key) || '')
           }
         })

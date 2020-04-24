@@ -4,7 +4,7 @@ import { Tag } from 'antd'
 
 export interface IProps {
   value?: string | string[] | number | number[]
-  data?: Object | Array<any>,
+  data?: { [key: string]: any } | Array<any>,
   vToString?: boolean,
   splitKey?: string,
   labelKey?: string,
@@ -21,7 +21,7 @@ export interface IProps {
 export default class extends Component<IProps> {
   render() {
     const { data, labelKey = 'name', valKey = 'id', splitKey = ',', value = '', vToString = true } = this.props
-    const valMap = {}
+    const valMap: { [key: string]: any } = {}
     const keyArr = value instanceof Array ? value : (vToString && typeof value === 'string' ? value.split(splitKey) : [value])
     if (keyArr.length < 1) {
       return null

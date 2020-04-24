@@ -52,6 +52,7 @@ export function datetime(date: string | number | Date, format = 'YYYY-MM-DD HH:m
     }
   }
   Object.keys(tempObj).forEach((key: string) => {
+    // @ts-ignore
     dateText = dateText.replace(key, tempObj[key])
   })
   return dateText

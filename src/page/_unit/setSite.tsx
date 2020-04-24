@@ -11,29 +11,32 @@ export interface IProps {
   site?: ISite
 }
 
-export default class  extends Component<IProps> {
+export default class extends Component<IProps> {
   setInfo(nextProps: IProps, oldProps: IProps) {
     if (process.browser) {
       const newSite: ISite = nextProps.site || {}
       const oldSite: ISite = oldProps.site || {}
       const newPageTitle = nextProps.pageTitle
       const oldPageTitle = oldProps.pageTitle
-
+      const metaEls = window.document.getElementsByTagName('meta') || []
       if ((newSite.name && newSite.name !== oldSite.name) || newPageTitle !== oldPageTitle) {
         window.document.title = newPageTitle ? `${newPageTitle} - ${newSite.name}` : newSite.name || ''
-        const appMateEl = window.document.getElementsByTagName('meta')['apple-mobile-web-app-title']
+        // @ts-ignore
+        const appMateEl = metaEls['apple-mobile-web-app-title']
         if (appMateEl) {
           appMateEl.content = newSite.name
         }
       }
       if (newSite.keywords && newSite.keywords !== oldSite.keywords) {
-        const keyEl = window.document.getElementsByTagName('meta')['keywords']
+        // @ts-ignore
+        const keyEl = metaEls['keywords']
         if (keyEl) {
           keyEl.content = newSite.keywords
         }
       }
       if (newSite.description && newSite.description !== oldSite.description) {
-        const descEl = window.document.getElementsByTagName('meta')['description']
+        // @ts-ignore
+        const descEl = metaEls['description']
         if (descEl) {
           descEl.content = newSite.description
         }

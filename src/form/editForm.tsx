@@ -42,7 +42,7 @@ export default class EditForm extends Component<IProps> {
       formFields = fields
     }
     const rowArr: Array<any> = [[]]
-    const lengthMap = {}
+    const lengthMap: { [key: string]: any } = {}
     let lengthMapKey = 0
     let spanLength = 0
     for (let i = 0; i < formFields.length; i += 1) {
@@ -82,8 +82,8 @@ export default class EditForm extends Component<IProps> {
 
   render() {
     const { values = {}, errs = {}, data, loading, inlineChild = false, children, itemMap, Store, name, conf } = this.props
-    let formErrs = {}
-    let formValues = {}
+    let formErrs: { [key: string]: any } = {}
+    let formValues: { [key: string]: any } = {}
     let formConf: { [key: string]: any } = {} = {}
     if (Store && name) {
       formErrs = Store[`${name}Errs`]
@@ -111,11 +111,11 @@ export default class EditForm extends Component<IProps> {
                 <FormItem
                   help={formErrs ? formErrs[item.field] || null : null}
                   validateStatus={formErrs && formErrs[item.field] ? 'error' : ''}
-                  label={item.title ? <ItemLabel length={lengthMap[cI + 1]} label={item.title}/> : ''}
+                  label={item.title ? <ItemLabel length={lengthMap[cI + 1]} label={item.title} /> : ''}
                   required={item.rules && ((typeof item.rules === 'string' && item.rules.indexOf('required') >= 0) || (typeof item.rules === 'object' && item.rules.hasOwnProperty('required')))}
                   colon={item.hasOwnProperty('colon') ? item.colon : true}
                 >
-                  <ItemType conf={item} {...itemProps} onChange={this.change}/>
+                  <ItemType conf={item} {...itemProps} onChange={this.change} />
                 </FormItem>
               </Col>
             ))}

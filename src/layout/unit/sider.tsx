@@ -28,7 +28,7 @@ class Sider extends Component<IProps & RouteComponentProps> {
       selectedKeys.push(`${selectedKeys[i - 1]}/${tmpArr[i]}`)
     }
     const tmpKeys = selectedKeys.concat(openKeys)
-    const tmpMap = {}
+    const tmpMap: { [key: string]: any } = {}
     tmpKeys.forEach((item) => tmpMap[item] = 1)
     this.setState({ selectedKeys, openKeys: Object.keys(tmpMap) })
   }
@@ -68,13 +68,13 @@ function displayMenu(item: any, isMobile: boolean) {
   if (child.length > 0) {
     return (
       <Menu.SubMenu key={path}
-                    title={<span><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'}/>{name}</span>}>
+                    title={<span><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'} />{name}</span>}>
         {child.map((item: any) => displayMenu(item, isMobile))}
       </Menu.SubMenu>
     )
   }
   return <Menu.Item key={path}>
-    <Link href={path}><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'}/>{name}</Link>
+    <Link href={path}><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'} />{name}</Link>
   </Menu.Item>
 }
 

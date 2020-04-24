@@ -38,6 +38,7 @@ export default class extends Component<IProps, IState> {
     const { field, order } = sorter
     if (field) {
       const { onSorter, sorter: { field: oldField = '', val: OldVal = '' } = {} } = this.props
+      // @ts-ignore
       const orderVal = this.OrderMap[order]
       if (onSorter && (oldField !== field || OldVal !== orderVal)) {
         onSorter({ field, order })

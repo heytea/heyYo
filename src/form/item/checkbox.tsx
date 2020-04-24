@@ -10,7 +10,7 @@ const CheckboxGroup = Checkbox.Group
 // data = [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }] // valKey = 'id' labelKey = 'name'
 interface IProps {
   value?: string | string[],
-  data?: Object | Array<any>,
+  data?: { [key: string]: any } | Array<any>,
   labelKey?: string,
   valKey?: string,
   split?: string,
@@ -50,6 +50,6 @@ export default class ReCheckbox extends Component<IProps> {
     const optArr = checkData.length > 0 ? checkData : undefined
     let val: Array<string> = (typeof value === 'string' ? value.split(split) : value) || []
 
-    return <CheckboxGroup {...args} options={optArr} value={val} onChange={this.change}/>
+    return <CheckboxGroup {...args} options={optArr} value={val} onChange={this.change} />
   }
 }

@@ -17,10 +17,12 @@ interface IProps {
 @inject('Auth') @observer
 class Content extends Component<IProps & RouteComponentProps> {
   render() {
-    const errArr = []
+    console.log('1234567890')
+    const errArr: string[] = []
     const { code = '', msg = '', loading = false, children = null, Auth, location: { pathname, search } } = this.props
     if (typeof msg === 'object') {
       Object.keys(msg).forEach((key) => {
+        // @ts-ignore
         errArr.push(msg[key])
       })
     } else {
@@ -33,7 +35,7 @@ class Content extends Component<IProps & RouteComponentProps> {
           Auth.setUser()
         }, 100)
       }
-      return (<Redirect to="/login"/>)
+      return (<Redirect to="/login" />)
     }
     return (
       <Spin spinning={loading} delay={400} tip="loading……">

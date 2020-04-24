@@ -15,13 +15,14 @@ export interface ICURD<T> {
 }
 
 const { apiFormat, codeNotConf } = Conf
-const OrderMap = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend' }
+const OrderMap: { [key: string]: string } = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend' }
 
 export default function <T extends { new(...args: any[]): { dataFn: { [key: string]: Function } } }>(target: T, { codeSuccess = Conf.codeSuccess, format = apiFormat } = {}) {
 
   return class Curd extends target implements ICURD<any> {
     getSortOrder = (field: string, formName = 'list') => {
       let order = ''
+      // @ts-ignore
       const listForm = this[`${formName}Form`]
       const sorter = { field: listForm._sorterField, val: listForm._sorterVal }
       if (sorter.field === field) {
@@ -31,7 +32,9 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
     }
     getErrData = (code: number, msg: string | { [key: string]: any }) => {
       const tmpObj = { form: {}, data: {} }
+      // @ts-ignore
       tmpObj[format.code] = code
+      // @ts-ignore
       tmpObj[format.msg] = msg
       code !== codeSuccess && console.error(tmpObj)
       return tmpObj
@@ -41,15 +44,19 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
       if (typeof dataFn !== 'function') {
         return this.getErrData(codeNotConf, `this.dataFn.${formName} 必须是一个方法`)
       }
+      // @ts-ignore
       const form = this[`${formName}Form`]
       if (!form) {
         return this.getErrData(codeNotConf, `Store 里的 ${formName}Form 未定义`)
       }
+      // @ts-ignore
       const data = this[`${formName}Data`]
       if (!data) {
         return this.getErrData(codeNotConf, `Store 里的 ${formName}Data 未定义`)
       }
+      // @ts-ignore
       const status = this[`${formName}Status`]
+      // @ts-ignore
       const loading = this[`${formName}Loading`]
       if (/([dD]etail|[lL]ist)$/.test(formName) && typeof loading === 'undefined') {
         return this.getErrData(codeNotConf, `Store 里的 ${formName}Loading 未定义`)
@@ -63,10 +70,11 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
     // @ts-ignore
     executeDataFn = action(async ({ fn, form = {}, formName = '' }) => {
 
+      // @ts-ignore
       const requestBeforeFn = this[`${formName}RequestBeforeFn`] // 在向服务器发送前，修改请求数据的钩子
 
       const tmpForm = typeof requestBeforeFn === 'function' ? await requestBeforeFn.call(this, form) : form
-      const reqForm = {}
+      const reqForm: { [key: string]: any } = {}
       const isQuery = /[Dd]etail|[Ll]ist|[Tt]ree$/.test(formName)
       Object.keys(tmpForm).forEach((key: any) => {
         const val = tmpForm[key]
@@ -75,6 +83,7 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
         }
       })
       const data = await fn(reqForm)
+      // @ts-ignore
       const requestAfterFn = this[`${formName}RequestAfterFn`] // 服务端返回数据后，传递给store前，修改数据的钩子
       if (typeof requestAfterFn === 'function') {
         const afterObj = await requestAfterFn.call(this, { data, form })
@@ -85,49 +94,64 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
     add = action(async ({ formName = 'add', dataFn = this.dataFn[formName] }: ICURDOpt = {}) => {
 
       const check = this.checkStoreNorm({ formName, dataFn })
+      // @ts-ignore
       if (check[format.code] !== codeSuccess) {
         return check
       }
       const { form = {} } = check
       try {
+        // @ts-ignore
         this[`${formName}Status`].loading = true
-        const addData = await this.executeDataFn({fn: dataFn, form, formName})
+        const addData = await this.executeDataFn({ fn: dataFn, form, formName })
+        // @ts-ignore
         this[`${formName}Status`].loading = false
         return addData
       } catch (e) {
+        // @ts-ignore
         this[`${formName}Status`].loading = false
       }
     })
 
     getDetail = action(async ({ formName = 'detail', dataFn = this.dataFn[formName] }: ICURDOpt = {}) => {
       const check = this.checkStoreNorm({ formName, dataFn })
+      // @ts-ignore
       if (check[format.code] !== codeSuccess) {
+        // @ts-ignore
         this[`${formName}Data`] = Object.assign({}, check)
       } else {
+        // @ts-ignore
         this[`${formName}Loading`] = true
+        // @ts-ignore
         this[`${formName}Data`] = await this.executeDataFn({ fn: dataFn, form: check.form, formName })
+        // @ts-ignore
         this[`${formName}Loading`] = false
       }
+      // @ts-ignore
       return this[`${formName}Data`]
     })
 
     edit = action(async ({ formName = 'edit', dataFn = this.dataFn[formName] }: ICURDOpt = {}) => {
       const check = this.checkStoreNorm({ formName, dataFn })
+      // @ts-ignore
       if (check[format.code] !== codeSuccess) {
         return check
       }
       const { form = {} } = check
+      // @ts-ignore
       this[`${formName}Status`].loading = true
       try {
-        const editData = await this.executeDataFn({fn: dataFn, form, formName})
+        const editData = await this.executeDataFn({ fn: dataFn, form, formName })
+        // @ts-ignore
         this[`${formName}Status`].loading = false
         return editData
       } catch (e) {
+        // @ts-ignore
         this[`${formName}Status`].loading = false
       }
     })
 
     resetListTable = action(({ formName = 'list' }: ICURDOpt = {}) => {
+      // @ts-ignore
       const listTable = this[`${formName}Table`]
       if (listTable && listTable.rowSelection)
         listTable.rowSelection.selectedRowKeys = []
@@ -136,32 +160,42 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
     getList = action(async ({ formName = 'list', dataFn = this.dataFn[formName] }: ICURDOpt = {}) => {
       this.resetListTable({ formName })
       const check = this.checkStoreNorm({ formName, dataFn })
+      // @ts-ignore
       if (check[format.code] !== codeSuccess) {
+        // @ts-ignore
         this[`${formName}Data`] = check
       } else {
         const { form = {} } = check
         const opt = Object.assign({}, form)
         // 获取排序
+        // @ts-ignore
         const sorterField = this[`${formName}Form`]._sorterField
+        // @ts-ignore
         const sorterVal = this[`${formName}Form`]._sorterVal
         if (sorterField && sorterVal) {
           opt[`${sorterField}Order`] = sorterVal
         }
         delete opt._sorterField
         delete opt._sorterVal
+        // @ts-ignore
         this[`${formName}Loading`] = true
         try {
-          this[`${formName}Data`] = await this.executeDataFn({fn: dataFn, form, formName})
+          // @ts-ignore
+          this[`${formName}Data`] = await this.executeDataFn({ fn: dataFn, form, formName })
+          // @ts-ignore
           this[`${formName}Loading`] = false
         } catch (e) {
+          // @ts-ignore
           this[`${formName}Loading`] = false
         }
       }
+      // @ts-ignore
       return this[`${formName}Data`]
     })
 
     // @ts-ignore
     setListOperateStatus = action(({ name = 'list', type = 'row', status: { index, actionName, loading } }) => {
+      // @ts-ignore
       const listOperateStatus = this[`${name}OperateStatus`]
       listOperateStatus && (listOperateStatus[`${actionName}-${type === 'row' ? index : type}`] = loading)
     })

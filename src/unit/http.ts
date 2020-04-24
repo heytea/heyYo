@@ -50,6 +50,7 @@ export default function HTTP(opt?: IHttp) {
       } else {
         let errmsg = ''
         if (result.msg && typeof result.msg === 'object') {
+          // @ts-ignore
           Object.keys(result.msg).forEach((key: string) => errmsg += ` ${key}: ${result.msg[key]}`)
         } else {
           errmsg = result.msg
@@ -79,8 +80,10 @@ export default function HTTP(opt?: IHttp) {
 
     try {
       if (['get', 'delete', 'head', 'options'].indexOf(method) >= 0) {
+        // @ts-ignore
         ajaxResult = await fn(newUrl, { ...newConf, params: newData })
       } else {
+        // @ts-ignore
         ajaxResult = await fn(newUrl, newData, newConf)
       }
     } catch (e) {
