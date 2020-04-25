@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Tag } from 'antd'
 
 export interface IPros {
@@ -9,14 +9,12 @@ export interface IPros {
   isTag?: boolean
 }
 
-export default class KeyToValue extends Component<IPros> {
-  render() {
-    const { value = '', data = {}, colors = {}, isTag = false, color = '' } = this.props
-    const text = data[value] || value
-    if (!isTag) {
-      return text
-    }
-    const newColor = color || colors[value] || 'blue'
-    return (<Tag color={newColor}>{text}</Tag>)
+export default function KeyToValue(props: IPros) {
+  const { value = '', data = {}, colors = {}, isTag = false, color = '' } = props
+  const text = data[value] || value
+  if (!isTag) {
+    return text
   }
+  const newColor = color || colors[value] || 'blue'
+  return (<Tag color={newColor}>{text}</Tag>)
 }

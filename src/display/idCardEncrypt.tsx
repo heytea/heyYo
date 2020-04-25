@@ -1,5 +1,3 @@
-import { Component } from 'react'
-
 interface IProps {
   value?: string | number,
   startLen?: number,
@@ -7,10 +5,8 @@ interface IProps {
   sign?: string,
 }
 
-export default class IdCardEncrypt extends Component<IProps> {
-  render() {
-    const { value = '', startLen = 6, endLen = 6, sign = '******' } = this.props
-    const newValue = value + ''
-    return newValue ? newValue.substr(0, startLen) + sign + newValue.substr(-endLen) : ''
-  }
+export default function IdCardEncrypt(props: IProps) {
+  const { value = '', startLen = 6, endLen = 6, sign = '******' } = props
+  const newValue = value + ''
+  return newValue ? newValue.substr(0, startLen) + sign + newValue.substr(-endLen) : ''
 }

@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, HTMLAttributes } from 'react'
+import React, { ReactNode, HTMLAttributes } from 'react'
 import { Link } from 'react-router-dom'
 
 interface IProps {
@@ -6,14 +6,10 @@ interface IProps {
   children?: ReactNode
 }
 
-export default class extends Component<IProps & HTMLAttributes<HTMLAnchorElement>> {
-
-  render() {
-    const { props: { href = '', children = null } } = this
-    if (/^[./]+/.test(href)) {
-      return (<Link {...this.props} to={href}>{children}</Link>)
-    }
-    return <a target="_blank" rel="noopener noreferrer" {...this.props} href={href}>{children}</a>
-
+export default function (props: IProps & HTMLAttributes<HTMLAnchorElement>) {
+  const { href = '', children = null, ...args } = props
+  if (/^[./]+/.test(href)) {
+    return (<Link {...args} to={href}>{children}</Link>)
   }
+  return <a target="_blank" rel="noopener noreferrer" {...args} href={href}>{children}</a>
 }
