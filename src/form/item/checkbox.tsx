@@ -1,4 +1,4 @@
-import React, { Component, ReactText } from 'react'
+import React, { ReactText, useEffect, useState } from 'react'
 import { Checkbox } from 'antd'
 
 const CheckboxGroup = Checkbox.Group
@@ -17,19 +17,14 @@ interface IProps {
   onChange?: Function,
 }
 
-export default class ReCheckbox extends Component<IProps> {
-  static defaultProps = {
-    value: ''
-  }
-
-  change = (val: Array<any>) => {
-    const { onChange, split, value } = this.props
+export default function (props: IProps) {
+  const { onChange, labelKey = 'label', valKey = 'value', data, split = '/', value, ...args } = props
+  const [optArr, setOptArr]: [undefined | Array<any>, Function] = useState([])
+  const change = (val: Array<any>) => {
     onChange && onChange(typeof value === 'string' ? val.join(split) : val)
   }
 
-  render() {
-    const { labelKey = 'label', valKey = 'value', data, split = '/', value, ...args } = this.props
-
+  useEffect(() => {
     let checkData: Array<{ label: ReactText, value: ReactText }> = []
     if (data instanceof Array) {
       if (data[0] && typeof data[0] !== 'object') {
@@ -47,9 +42,47 @@ export default class ReCheckbox extends Component<IProps> {
         }
       })
     }
-    const optArr = checkData.length > 0 ? checkData : undefined
-    let val: Array<string> = (typeof value === 'string' ? value.split(split) : value) || []
+    setOptArr(checkData.length > 0 ? checkData : undefined)
+  }, [data, labelKey, valKey])
 
-    return <CheckboxGroup {...args} options={optArr} value={val} onChange={this.change} />
-  }
+  let val: Array<string> = (typeof value === 'string' ? value.split(split) : value) || []
+
+  return <CheckboxGroup {...args} options={optArr} value={val} onChange={change} />
 }
+
+// class ReCheckbox extends Component<IProps> {
+//   static defaultProps = {
+//     value: ''
+//   }
+//
+//   change = (val: Array<any>) => {
+//     const { onChange, split, value } = this.props
+//     onChange && onChange(typeof value === 'string' ? val.join(split) : val)
+//   }
+//
+//   render() {
+//     const { labelKey = 'label', valKey = 'value', data, split = '/', value, ...args } = this.props
+//
+//     let checkData: Array<{ label: ReactText, value: ReactText }> = []
+//     if (data instanceof Array) {
+//       if (data[0] && typeof data[0] !== 'object') {
+//         data.forEach((item, i) => checkData.push({ label: item, value: i }))
+//       } else if (labelKey !== 'label' || valKey !== 'value') {
+//         data.forEach((item) => checkData.push({ label: item[labelKey], value: item[valKey] }))
+//       }
+//     } else if (typeof data === 'object') {
+//       Object.keys(data).forEach((key) => {
+//         const item = data[key]
+//         if (typeof item === 'object') {
+//           checkData.push({ label: item[labelKey], value: typeof item[valKey] === 'undefined' ? key : item[valKey] })
+//         } else {
+//           checkData.push({ label: item, value: key })
+//         }
+//       })
+//     }
+//     const optArr = checkData.length > 0 ? checkData : undefined
+//     let val: Array<string> = (typeof value === 'string' ? value.split(split) : value) || []
+//
+//     return <CheckboxGroup {...args} options={optArr} value={val} onChange={this.change} />
+//   }
+// }
