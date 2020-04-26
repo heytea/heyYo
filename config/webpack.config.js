@@ -132,16 +132,36 @@ module.exports = function (webpackEnv) {
   return {
     watch: isEnvDevelopment,
     externals: {
-      'react': 'React',
-      'react-dom': 'ReactDOM',
-      'react-router-dom': 'ReactRouterDOM',
+      'react': {
+        root: "React",
+        commonjs2: "react",
+        commonjs: "react",
+        amd: "react"
+      },
+      'react-dom': {
+        root: "ReactDOM",
+        commonjs2: "react-dom",
+        commonjs: "react-dom",
+        amd: "react-dom"
+      },
+      'react-router-dom': {
+        root: "ReactRouterDOM",
+        commonjs2: "react-router-dom",
+        commonjs: "react-router-dom",
+        amd: "react-router-dom"
+      },
       'mobx': 'mobx',
-      'mobx-react': 'mobxReact',
+      'mobx-react': {
+        root: "mobxReact",
+        commonjs2: "mobx-react",
+        commonjs: "mobx-react",
+        amd: "mobx-react"
+      },
       'axios': 'axios',
       'antd': 'antd',
       'lodash': 'lodash',
       'moment': 'moment',
-      'moment/locale/zh-cn': 'moment.locale',
+      // 'moment/locale/zh-cn': 'moment.locale',
       'xss': 'xss',
     },
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
@@ -182,7 +202,7 @@ module.exports = function (webpackEnv) {
       // In development, it does not produce real files.
       filename: 'index.js',
       library: 'heyyo',
-      libraryTarget: 'umd',
+      libraryTarget: 'umd2',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.

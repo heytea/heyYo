@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 import { datetime } from '../../unit/date'
-import 'moment/locale/zh-cn'
-
-moment.locale('zh-cn')
+// import 'moment/locale/zh-cn'
+//
+// moment.locale('zh-cn')
 
 interface IProps {
   value?: string | number,

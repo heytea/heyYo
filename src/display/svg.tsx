@@ -31,7 +31,7 @@ export default function Svg(props: HTMLAttributes<HTMLAnchorElement> & { src: st
         }
         resolve('')
       }))
-      fn().then((xml: string) => {
+      fn.then((xml: string) => {
         setSvgXml(xml)
         fnMap[src] && delete fnMap[src]
         svgDataMap[src] = xml
