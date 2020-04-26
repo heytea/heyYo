@@ -48,7 +48,7 @@ function Captcha(props: IProps) {
       {...args}
       className={`c-captcha ${className || ''} `}
       addonAfter={
-        <a href="javascript:;" className={`c-captcha-btn ${!loading && remain < 1 && isActive ? 'z-active' : ''}`}
+        <a className={`c-captcha-btn ${!loading && remain < 1 && isActive ? 'z-active' : ''}`}
            onClick={getCode}>
           {remain > 0 ? `${remain}S` : `获取验证码`}
         </a>
