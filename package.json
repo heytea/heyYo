@@ -13,6 +13,7 @@
     "npm": ">=5"
   },
   "scripts": {
+    "tsc-d": "tsc -d --declarationDir ./dist  --emitDeclarationOnly true --noEmit false",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js"
   },
