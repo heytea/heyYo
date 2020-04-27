@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import List from './list'
 import Add from './add'
 import Edit from './edit'

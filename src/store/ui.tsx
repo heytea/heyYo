@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx'
+import React from "react";
 
 export interface IUI {
   mobileWidth: number
@@ -65,4 +66,4 @@ class UI implements IUI {
   }
 }
 
-export default new UI()
+export default React.createContext(new UI())

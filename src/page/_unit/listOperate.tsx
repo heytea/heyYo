@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import Link from '../../display/link'
 import { Button, Modal } from 'antd'
 

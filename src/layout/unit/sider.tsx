@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { IUI } from '../../store/ui'
-import { inject, observer } from 'mobx-react'
+// import { inject, observer } from 'mobx-react-lite'
 import UI from '../../store/ui'
 import { Menu } from 'antd'
 import Link from '../../display/link'
@@ -11,7 +11,7 @@ interface IProps {
   UI?: IUI
 }
 
-@inject('UI') @observer
+// @inject('UI') @observer
 class Sider extends Component<IProps & RouteComponentProps> {
   state = { openKeys: [], selectedKeys: [] }
   openChange = (openKeys: string[]) => {

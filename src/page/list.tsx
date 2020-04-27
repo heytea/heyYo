@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
+// import { inject, observer } from 'mobx-react-lite'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Divider, Button, Tabs, Row, Col } from 'antd'
 import Content from '../display/content'
@@ -22,7 +22,7 @@ interface IProps extends RouteComponentProps {
   itemMap?: any
 }
 
-@inject('UI', 'Auth') @observer
+// @inject('UI', 'Auth') @observer
 class List extends Component<IProps> {
   static contextType = ConfigContext;
 

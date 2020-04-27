@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer, inject } from 'mobx-react'
+// import { observer, inject } from 'mobx-react-lite'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Divider, Spin } from 'antd'
 import EditForm from '../form/editForm'
@@ -17,7 +17,7 @@ interface IProps extends RouteComponentProps {
 }
 
 
-@inject('UI') @observer
+// @inject('UI') @observer
 class Edit extends Component<IProps> {
   static contextType = ConfigContext;
 

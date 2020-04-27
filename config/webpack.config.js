@@ -157,6 +157,12 @@ module.exports = function (webpackEnv) {
         commonjs: "mobx-react",
         amd: "mobx-react"
       },
+      'mobx-react-lite': {
+        root: "mobxReactLite",
+        commonjs2: "mobx-react-lite",
+        commonjs: "mobx-react-lite",
+        amd: "mobx-react-lite"
+      },
       'axios': 'axios',
       'antd': 'antd',
       'lodash': 'lodash',
@@ -204,7 +210,7 @@ module.exports = function (webpackEnv) {
       library: 'heyyo',
       libraryTarget: 'umd2',
       // TODO: remove this when upgrading to webpack 5
-      futureEmitAssets: true,
+      // futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].chunk.js'

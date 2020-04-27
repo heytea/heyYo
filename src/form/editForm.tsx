@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { Form, Row, Col } from 'antd'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import ItemType from './itemType'
 import { FormProps } from 'antd/lib/form/Form'
 
@@ -19,73 +19,20 @@ interface IProps {
   onSubmit?: Function,
   itemMap?: object,
   inlineChild?: boolean
+  children?: ReactNode
 }
 
-@observer
-export default class EditForm extends Component<IProps> {
-
-  submit = (e: React.FormEvent<any>) => {
-    const { onSubmit } = this.props
-    // e.preventDefault()
-    // e.stopPropagation()
-    onSubmit && onSubmit(e)
-  }
-  getRowArr = () => {
-    const { Store, name, fields = [] } = this.props
+const EditFrom = observer(function (props: IProps) {
+    const { onSubmit, Store, name, fields = [], onChange, values = {}, errs = {}, data, loading, inlineChild = false, itemMap, conf, children } = props
+    const [rowArr, setRowArr] = useState([[]])
+    const [lengthMap, setLengthMap]: [{ [key: string]: any }, Function] = useState({})
     let formConf: { [key: string]: any } = {}
-    let formFields = []
+    let formFields: string | any[] = []
+    let formErrs: { [key: string]: any } = {}
+    let formValues: { [key: string]: any } = {}
     if (Store && name) {
       formConf = Store[`${name}FormConf`]
       formConf && (formFields = formConf.fields || [])
-    }
-    if (fields && fields.length > 0) { // 字段可自定义
-      formFields = fields
-    }
-    const rowArr: Array<any> = [[]]
-    const lengthMap: { [key: string]: any } = {}
-    let lengthMapKey = 0
-    let spanLength = 0
-    for (let i = 0; i < formFields.length; i += 1) {
-      const item = formFields[i]
-      if (item.type === 'none') {
-        continue
-      }
-      spanLength = spanLength + (item.span || 12)
-      if (spanLength > 24) {
-        spanLength = item.span || 12
-        lengthMapKey = 1
-        rowArr.push([item])
-      } else {
-        lengthMapKey += 1
-        const endNum = rowArr.length - 1
-        if (!rowArr[endNum]) {
-          rowArr[endNum] = []
-        }
-        rowArr[endNum].push(item)
-      }
-      const tmpLen = (item.title && item.title.length) || 0
-      if (tmpLen > (lengthMap[lengthMapKey] || 0)) {
-        lengthMap[lengthMapKey] = tmpLen
-      }
-    }
-    return { rowArr, lengthMap }
-  }
-
-  change = (valObj: any) => {
-    const { onChange, Store, name } = this.props
-    if (Store && name) {
-      const { setForm } = Store
-      typeof setForm === 'function' && setForm({ name, valObj })
-    }
-    onChange && onChange(valObj)
-  }
-
-  render() {
-    const { values = {}, errs = {}, data, loading, inlineChild = false, children, itemMap, Store, name, conf } = this.props
-    let formErrs: { [key: string]: any } = {}
-    let formValues: { [key: string]: any } = {}
-    let formConf: { [key: string]: any } = {} = {}
-    if (Store && name) {
       formErrs = Store[`${name}Errs`]
       formValues = Store[`${name}Form`]
       formConf = Store[`${name}FormConf`]
@@ -93,17 +40,61 @@ export default class EditForm extends Component<IProps> {
       formErrs = errs
       formValues = values
     }
-
+    if (fields && fields.length > 0) { // 字段可自定义
+      formFields = fields
+    }
     const formProps = formConf && formConf.props || conf || {}
     const { layout = 'horizontal' } = formProps
-    this.getRowArr();
-    const { rowArr, lengthMap } = this.getRowArr()
     const itemProps: { [key: string]: any } = { values: formValues, data: data || Store && Store.dict, loading }
     if (itemMap) {
       itemProps.itemMap = itemMap
     }
+    useEffect(() => {
+      const rowArr: Array<any> = [[]]
+      const lengthMap: { [key: string]: any } = {}
+      let lengthMapKey = 0
+      let spanLength = 0
+      for (let i = 0; i < formFields.length; i += 1) {
+        const item = formFields[i]
+        if (item.type === 'none') {
+          continue
+        }
+        spanLength = spanLength + (item.span || 12)
+        if (spanLength > 24) {
+          spanLength = item.span || 12
+          lengthMapKey = 1
+          rowArr.push([item])
+        } else {
+          lengthMapKey += 1
+          const endNum = rowArr.length - 1
+          if (!rowArr[endNum]) {
+            rowArr[endNum] = []
+          }
+          rowArr[endNum].push(item)
+        }
+        const tmpLen = (item.title && item.title.length) || 0
+        if (tmpLen > (lengthMap[lengthMapKey] || 0)) {
+          lengthMap[lengthMapKey] = tmpLen
+        }
+      }
+      setRowArr(rowArr)
+      setLengthMap(lengthMap)
+    }, [formFields])
+
+    const submit = (e: React.FormEvent<any>) => {
+      onSubmit && onSubmit(e)
+    }
+
+    const change = (valObj: any) => {
+      if (Store && name) {
+        const { setForm } = Store
+        typeof setForm === 'function' && setForm({ name, valObj })
+      }
+      onChange && onChange(valObj)
+    }
+
     return (
-      <Form className="m-edit-form" {...formProps} onFinish={this.submit}>
+      <Form className="m-edit-form" {...formProps} onFinish={submit}>
         {rowArr.map((row, index) => (
           <Row key={index} style={{ paddingBottom: layout === 'inline' ? '10px' : 0 }}>
             {row.map((item: any, cI: number) => (
@@ -115,7 +106,7 @@ export default class EditForm extends Component<IProps> {
                   required={item.rules && ((typeof item.rules === 'string' && item.rules.indexOf('required') >= 0) || (typeof item.rules === 'object' && item.rules.hasOwnProperty('required')))}
                   colon={item.hasOwnProperty('colon') ? item.colon : true}
                 >
-                  <ItemType conf={item} {...itemProps} onChange={this.change} />
+                  <ItemType conf={item} {...itemProps} onChange={change} />
                 </FormItem>
               </Col>
             ))}
@@ -126,19 +117,18 @@ export default class EditForm extends Component<IProps> {
       </Form>
     )
   }
-}
+)
+export default EditFrom
 
 interface IItemProps {
   length: number,
   label: string
 }
 
-class ItemLabel extends Component<IItemProps> {
-  render() {
-    const { length = 0, label } = this.props
-    if (!label) {
-      return null
-    }
-    return <span style={{ width: 14 * length, display: 'inline-block' }}>{label}</span>
+function ItemLabel(props: IItemProps) {
+  const { length = 0, label } = props
+  if (!label) {
+    return null
   }
+  return <span style={{ width: 14 * length, display: 'inline-block' }}>{label}</span>
 }

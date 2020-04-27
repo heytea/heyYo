@@ -1,4 +1,7 @@
 import { observable, action } from 'mobx'
+import React from "react";
+import HTTP, { IResult } from "../unit/http";
+import Config from "../config";
 
 interface IUser {
   id: number,
@@ -14,7 +17,7 @@ export interface IAuth {
 
   setReferrer(url: string): void,
 
-  logout(): Promise<any>,
+  logout?: Function,
 }
 
 class Auth implements IAuth {
@@ -32,10 +35,10 @@ class Auth implements IAuth {
     this.referrer = url
   }
 
-  @action
-  logout = async () => {
-    this.setUser(this.dfUser)
-  }
+  // @action
+  // logout = async () => {
+  //   this.setUser(this.dfUser)
+  // }
 }
 
-export default new Auth()
+export default React.createContext(new Auth() as { [key: string]: any });

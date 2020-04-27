@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react-lite'
 import ItemMap from './itemMap'
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
   onChange?: Function
 }
 
-function HyItemType(props: IProps) {
+export default function HyItemType(props: IProps) {
   const { values = {}, conf = {}, data = {}, loading = false, itemMap = ItemMap, onChange } = props
   const change = (val: any, key: string) => {
     const { onChange } = props
@@ -44,7 +44,7 @@ function HyItemType(props: IProps) {
   return <Render {...newProps} onChange={(val: any) => change(val, field)} />
 }
 
-export default observer(HyItemType)
+// export default observer(HyItemType)
 //  class ItemType extends Component<IProps> {
 //
 //   static defaultProps = {

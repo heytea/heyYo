@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import ItemMap from './itemMap'
 import Cascader from './item/cascader'
 import RangeDate from './item/rangeDate'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react-lite'
 import Input, { IProps as IInputProps } from './input'
 
 interface IProps extends IInputProps {
@@ -8,7 +8,7 @@ interface IProps extends IInputProps {
   className?: string
 }
 
-function Captcha(props: IProps) {
+export default function Captcha(props: IProps) {
   const [remain, setRemain] = useState(0)
   const [loading, setLoading] = useState(false)
   const [intervalID, setIntervalID] = useState(0)
@@ -56,7 +56,7 @@ function Captcha(props: IProps) {
     />)
 }
 
-export default observer(Captcha)
+// export default observer(Captcha)
 
 // @observer
 // class Captcha1 extends Component<IProps, IState> {

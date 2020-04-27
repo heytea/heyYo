@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { TreeSelect } from 'antd'
 import { TreeSelectProps } from 'antd/lib/tree-select'
 

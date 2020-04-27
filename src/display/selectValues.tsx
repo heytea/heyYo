@@ -1,5 +1,4 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import { Tag } from 'antd'
 
 export interface IProps {
@@ -19,7 +18,7 @@ export interface IProps {
 // data = [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }] // valKey = 'id' labelKey = 'name'
 
 
-function SelectValues(props: IProps) {
+export default function SelectValues(props: IProps) {
   const { data, labelKey = 'name', valKey = 'id', splitKey = ',', value = '', vToString = true } = props
   const valMap: { [key: string]: any } = {}
   const keyArr = value instanceof Array ? value : (vToString && typeof value === 'string' ? value.split(splitKey) : [value])
@@ -57,5 +56,3 @@ function SelectValues(props: IProps) {
     </>
   )
 }
-
-export default observer(SelectValues)

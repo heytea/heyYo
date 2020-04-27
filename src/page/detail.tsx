@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer, inject } from 'mobx-react'
+// import { observer, inject } from 'mobx-react-lite'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Content from '../display/content'
 import { Divider } from 'antd'
@@ -21,7 +21,7 @@ export interface IProps extends RouteComponentProps {
 
 const { codeSuccess, apiFormat, codeNotConf } = Conf
 
-@inject('UI', 'Auth') @observer
+// @inject('UI', 'Auth') @observer
 class Detail extends Component<IProps> {
   setTitle() {
     const { UI, Store, name = 'detail' } = this.props
@@ -127,7 +127,7 @@ class Detail extends Component<IProps> {
 }
 
 
-@observer
+// @observer
 class DetailContent extends Component<{ isMobile: boolean, Store: any, PageUI?: any, detailShowConf: { [key: string]: any }, data: any }> {
   render() {
     const { Store, PageUI, detailShowConf, data, isMobile } = this.props
@@ -148,7 +148,7 @@ class DetailContent extends Component<{ isMobile: boolean, Store: any, PageUI?: 
   }
 }
 
-@inject('Auth', 'UI') @observer
+// @inject('Auth', 'UI') @observer
 class Blocks extends Component<{ isMobile: boolean, data: any, Store: any, Auth?: IAuth, UI?: IUI, blocks: any[] }> {
   render() {
     const { isMobile, data = {}, blocks = [], Auth, UI, Store } = this.props

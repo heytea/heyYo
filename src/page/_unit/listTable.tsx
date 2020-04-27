@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import ReactDOM from 'react-dom'
 import { Table } from 'antd'
 import { TableProps } from 'antd/lib/table/Table'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import ListOperate from '../_unit/listOperate'
 
 
