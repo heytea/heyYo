@@ -100,7 +100,7 @@ function handle(err, stats) {
     );
     return console.error(new Error(messages.warnings.join('\n\n')));
   }
-  console.log(chalk.green('编译成功……'))
+  console.log(chalk.green(new Date(), '编译成功……'))
 }
 
 checkBrowsers(paths.appPath, isInteractive).then(() => {

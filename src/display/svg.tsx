@@ -12,6 +12,7 @@ export default function Svg(props: HTMLAttributes<HTMLAnchorElement> & { src: st
   const [svgXml, setSvgXml] = useState('')
   const { src = '', className = '', ...args } = props
   useEffect(() => {
+    let isUnmount = false
     if (svgDataMap[src]) {
       setSvgXml(svgDataMap[src])
     } else {
@@ -32,14 +33,18 @@ export default function Svg(props: HTMLAttributes<HTMLAnchorElement> & { src: st
         resolve('')
       }))
       fn.then((xml: string) => {
-        setSvgXml(xml)
+        !isUnmount && setSvgXml(xml)
         fnMap[src] && delete fnMap[src]
         svgDataMap[src] = xml
+
         const keys = Object.keys(svgDataMap)
         if (keys.length >= svgMapLength) {
           delete svgDataMap[keys[0]]
         }
       })
+    }
+    return () => {
+      isUnmount = true
     }
   }, [src])
   return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }} />)
