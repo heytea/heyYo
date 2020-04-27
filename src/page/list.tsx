@@ -154,6 +154,7 @@ class List extends Component<IProps> {
 
   render() {
     const { config: { codeSuccess, apiFormat } } = this.context
+    // @ts-ignore
     const { Store, name = 'list', Auth, itemMap, UI: { layout: { clientWidth }, mobileWidth } = UI, location } = this.props
     const { isPushListOperate } = this.state
     const listAddConf = Store[`${name}AddConf`] || []

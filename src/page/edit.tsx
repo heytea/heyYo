@@ -142,6 +142,7 @@ class Edit extends Component<IProps> {
 
   render() {
     const { config: { codeSuccess, codeNotConf, apiFormat } } = this.context
+    // @ts-ignore
     const { Store, name = 'edit', UI: { layout: { clientWidth }, mobileWidth } = UI, itemMap } = this.props
     // const { dict } = Store
     const editFormConf = Store[`${name}FormConf`]
