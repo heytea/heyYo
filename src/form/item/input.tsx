@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { Input } from 'antd'
 import Svg from '../../display/svg'
 import { InputProps } from 'antd/lib/input/Input'
+import { observer } from 'mobx-react-lite'
 
 export interface IProps extends InputProps {
   icon?: string | ReactNode,
@@ -9,8 +10,9 @@ export interface IProps extends InputProps {
   onChangeForm?: any,
 }
 
-export default function HyInput(props: IProps) {
-  const { icon, onChange, onChangeForm, ...args } = props
+export default observer(function HyInput(props: IProps) {
+  const { icon, onChange, onChangeForm, value, ...args } = props
+  console.log(value);
   const change = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     onChange && onChange(value)
@@ -19,8 +21,8 @@ export default function HyInput(props: IProps) {
   useEffect(() => {
     setPrefix(icon ? (typeof icon !== 'string' ? icon : <Svg src={icon} />) : null)
   }, [icon])
-  return <Input allowClear={true} {...args} onChange={change} prefix={prefix} />
-}
+  return <Input allowClear={true} {...args} onChange={change} prefix={prefix} value={value} />
+})
 
 // class ReInput extends Component<IProps> {
 //

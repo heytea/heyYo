@@ -66,4 +66,4 @@ class UI implements IUI {
   }
 }
 
-export default React.createContext(new UI())
+export default React.createContext(new UI() as { [key: string]: any })
