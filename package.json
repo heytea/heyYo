@@ -198,5 +198,8 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.1.0"
   }
 }

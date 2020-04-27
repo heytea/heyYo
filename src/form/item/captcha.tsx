@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-// import { observer } from 'mobx-react-lite'
+import { LoadingOutlined } from '@ant-design/icons'
 import Input, { IProps as IInputProps } from './input'
 
 interface IProps extends IInputProps {
@@ -24,7 +24,7 @@ export default function Captcha(props: IProps) {
     if (!loading && remain < 1 && isActive && typeof onGetCode === 'function') {
       setLoading(true)
       const codeData = await onGetCode()
-      if (isUnmount) {
+      if (!isUnmount) {
         setLoading(false)
         if (codeData.code === 0) {
           let remainNum = 60
@@ -48,10 +48,10 @@ export default function Captcha(props: IProps) {
       {...args}
       className={`c-captcha ${className || ''} `}
       addonAfter={
-        <a className={`c-captcha-btn ${!loading && remain < 1 && isActive ? 'z-active' : ''}`}
-           onClick={getCode}>
-          {remain > 0 ? `${remain}S` : `获取验证码`}
-        </a>
+          <a className={`c-captcha-btn ${!loading && remain < 1 && isActive ? 'z-active' : ''}`}
+             onClick={getCode}>
+            {loading ? <LoadingOutlined /> : (remain > 0 ? `${remain}S` : `获取验证码`)}
+          </a>
       }
     />)
 }

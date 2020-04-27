@@ -12,7 +12,6 @@ export interface IProps extends InputProps {
 
 export default observer(function HyInput(props: IProps) {
   const { icon, onChange, onChangeForm, value, ...args } = props
-  console.log(value);
   const change = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     onChange && onChange(value)
