@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { Menu, Dropdown, Avatar } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
 import { useHistory, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import UIContext from '../../store/ui'
@@ -54,7 +55,10 @@ function Header() {
               <Menu.Item key="logout">退出</Menu.Item>
             </Menu>
           )}>
-            <p className="avatar"><Avatar size="small" icon="user" /> {user.name}</p>
+            <p className="avatar">
+              <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
+              {' ' + user.name}
+            </p>
           </Dropdown>
         </div> : null
       }
