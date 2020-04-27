@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { observer } from 'mobx-react-lite'
+// import { observer } from 'mobx-react-lite'
 import { TreeSelect } from 'antd'
 import { TreeSelectProps } from 'antd/lib/tree-select'
 
@@ -16,7 +16,7 @@ interface IProps extends TreeSelectProps<any> {
   onChange?: (val: any) => void
 }
 
-@observer
+// @observer
 export default class SelectTree extends Component<IProps> {
   change = (val: any | Array<any> = '') => {
     const { onChange, multiple = true, multipleToStr = false, split = '/' } = this.props

@@ -120,6 +120,7 @@ class Add extends Component<IProps> {
 
   render() {
     const { config: { codeNotConf } } = this.context
+    // @ts-ignore
     const { Store, name = 'add', UI: { layout: { clientWidth }, mobileWidth } = UI, itemMap } = this.props
     // const { dict = {} } = Store
     const addFormConf = Store[`${name}FormConf`]

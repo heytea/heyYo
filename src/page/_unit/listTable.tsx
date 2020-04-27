@@ -29,7 +29,7 @@ interface IState {
   tableScroll: { top: number, left: number }
 }
 
-@observer
+// @observer
 export default class extends Component<IProps, IState> {
   // state = { tableEl: '', tableScroll: { top: 0, left: 0 } }
   // tableNode: any = ''

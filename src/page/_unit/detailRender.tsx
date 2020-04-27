@@ -18,7 +18,7 @@ import DisplayMap from '../../display/itemMap'
 //   }
 // }
 
-@observer
+// @observer
 export default class DetailRender extends Component<{ item?: { type?: string, props?: object, data: string }, data?: object, Store?: object, scroll?: object, value?: string | number }> {
   render() {
     const { item: { type = '', props = {}, data = '' } = {}, value = '', Store, scroll = {} } = this.props

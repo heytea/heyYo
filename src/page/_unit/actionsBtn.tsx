@@ -9,7 +9,7 @@ export interface IProps {
   isBack?: boolean
 }
 
-@observer
+// @observer
 class ActionBtn extends Component<IProps & RouteComponentProps> {
 
   onClick = (item: { [key: string]: any }) => {

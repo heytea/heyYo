@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom'
 
 const pageMap: { [key: string]: any } = { list: List, add: Add, edit: Edit, detail: Detail }
 
-@observer
+// @observer
 class AutoPage extends Component<any> {
   render() {
     const { type = '', store } = this.props

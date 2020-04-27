@@ -40,7 +40,7 @@ interface IState {
   rowArr: Array<Array<object>>
 }
 
-@observer
+// @observer
 export default class DetailGrid extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)

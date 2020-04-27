@@ -15,7 +15,7 @@ interface IProps {
   values: { [key: string]: any }
 }
 
-@observer
+// @observer
 class RangeDateAp extends Component<IProps> {
   render() {
     const { conf: { props = {} } = {}, field = '', onChangeForm, values } = this.props

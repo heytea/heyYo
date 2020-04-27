@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { LoadingOutlined } from '@ant-design/icons'
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
 import Input, { IProps as IInputProps } from './input'
 
 interface IProps extends IInputProps {

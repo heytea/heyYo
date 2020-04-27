@@ -67,6 +67,7 @@ class Detail extends Component<IProps> {
   }
 
   render() {
+    // @ts-ignore
     const { Store, name = 'detail', history, location, PageUI, UI: { layout: { clientWidth }, mobileWidth } = UI, Auth } = this.props
     const detailData = Store[`${name}Data`]
     if (!detailData) {

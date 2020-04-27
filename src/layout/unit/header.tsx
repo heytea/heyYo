@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Menu, Dropdown, Avatar } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import UserOutlined from '@ant-design/icons/UserOutlined'
 import { useHistory, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import UIContext from '../../store/ui'

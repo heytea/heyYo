@@ -47,6 +47,7 @@ class Sider extends Component<IProps & RouteComponentProps> {
 
   render() {
     const { selectedKeys, openKeys } = this.state
+    // @ts-ignore
     const { UI: { leftMenuMap, layout: { clientWidth }, mobileWidth } = UI, location: { pathname } } = this.props
     const tmpArr = pathname.replace(/^\//, '').split('/')
     const top = `/${tmpArr[0]}`
