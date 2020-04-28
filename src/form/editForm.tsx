@@ -90,7 +90,6 @@ const EditFrom = observer(function (props: IProps) {
         const { setForm } = Store
         typeof setForm === 'function' && setForm({ name, valObj })
       }
-      console.log('valObj', valObj);
       onChange && onChange(valObj)
     }
 
