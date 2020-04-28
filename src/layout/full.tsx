@@ -1,18 +1,16 @@
-import React, { Component, ComponentProps } from 'react'
+import React, { ComponentProps } from 'react'
 import Footer from './unit/footer'
 import Header from './unit/header'
 
-export default class Full extends Component<ComponentProps<any>> {
-  render() {
-    const { children = null, ...args } = this.props
-    return (
-      <div {...args} id="l-full">
-        <Header/>
-        <div className="b-content-wp">
-          <div className="b-content">{children}</div>
-          <Footer/>
-        </div>
+export default function Full(props: ComponentProps<any>) {
+  const { children = null, ...args } = props || {}
+  return (
+    <div {...args} id="l-full">
+      <Header />
+      <div className="b-content-wp">
+        <div className="b-content">{children}</div>
+        <Footer />
       </div>
-    )
-  }
+    </div>
+  )
 }

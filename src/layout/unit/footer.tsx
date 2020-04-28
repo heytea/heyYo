@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import { ConfigContext } from "../../config";
+import React, { useContext } from 'react'
+import { ConfigContext } from '../../config'
+import { observer } from 'mobx-react-lite'
 
-export default class Footer extends Component {
-  static contextType = ConfigContext;
-
-  render() {
-    const { config: { footerText } } = this.context
-    return <div id="b-footer">{footerText}</div>
-  }
-}
+const Footer = observer(function () {
+  const { config: { footerText } } = useContext(ConfigContext)
+  return <div id="b-footer">{footerText}</div>
+})
+export default Footer

@@ -9,7 +9,7 @@ import { ConfigContext } from '../../config'
 import Link from '../../display/link'
 import Svg from '../../display/svg'
 
-function Header() {
+const Header = observer(function () {
   const { logout, user } = useContext(AuthContext)
   const { clearMyMenu, myMenu, site: { name } } = useContext(UIContext)
   const { config: { codeSuccess, apiFormat: { code }, topAccountMenu } } = useContext(ConfigContext)
@@ -64,6 +64,6 @@ function Header() {
       }
     </div>
   )
-}
+})
 
-export default observer(Header)
+export default Header
