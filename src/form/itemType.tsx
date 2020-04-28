@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import ItemMap from './itemMap'
+import ItemMap from './itemMapPlus'
 
 interface IProps {
   loading?: boolean,
