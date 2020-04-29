@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import { TreeSelect } from 'antd'
 import { TreeSelectProps } from 'antd/lib/tree-select'
+import './selectTree.less'
+import { toJS } from 'mobx'
 
 const TreeNode = TreeSelect.TreeNode;
 
-interface IProps extends TreeSelectProps<any> {
+interface IProps extends TreeSelectProps {
   value?: number | string | Array<string>,
   multipleToStr?: boolean,
   data?: Array<any>,
@@ -18,7 +20,7 @@ interface IProps extends TreeSelectProps<any> {
 
 @observer
 export default class SelectTree extends Component<IProps> {
-  change = (val: any | Array<any> = '') => {
+  change = (val: string | Array<any> = '') => {
     const { onChange, multiple = true, multipleToStr = false, split = '/' } = this.props
     const isValToStr = multiple && multipleToStr
 
@@ -61,12 +63,12 @@ export default class SelectTree extends Component<IProps> {
   }
 }
 const childTree = function ({ data = [], valKey = 'id', labelKey = 'title', childKey = 'child', isValToStr }: any = {}) {
-  return data.map ? data.map((item: any) => {
+  return data.map ? data.map((item: any, index: number) => {
     const title = item[labelKey]
     const value = isValToStr ? item[valKey] + '' : item[valKey]
     const child = item[childKey]
     return (
-      <TreeNode title={title} value={value} key={value}>
+      <TreeNode title={toJS(title)} value={value} key={value}>
         {child && childTree({ data: child, valKey, labelKey, childKey })}
       </TreeNode>)
   }) : null

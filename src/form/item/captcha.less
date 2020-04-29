@@ -1,0 +1,18 @@
+@import '../../../theme';
+
+.c-captcha-btn {
+  display: block;
+  width: 70px;
+  text-align: center;
+  color: @text-color-secondary;
+  cursor: not-allowed;
+
+  &:hover {
+    color: @text-color-secondary;
+  }
+
+  &.z-active {
+    cursor: pointer;
+    color: @primary-color;
+  }
+}

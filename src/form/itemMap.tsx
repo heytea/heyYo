@@ -1,26 +1,37 @@
+import InputSearch from './item/inputSearch'
 import Input from './item/input'
-import { InputNumber } from 'antd'
+import InputNumber from './item/inputNumber'
+// import { InputNumber } from 'antd'
 import Checkbox from './item/checkbox'
 import Radio from './item/radio'
 import Select from './item/select'
-import SelectRemote from './item/selectRemote'
 import TextArea from './item/textArea'
 import ImgCaptcha from './item/imgCaptcha'
 import Captcha from './item/captcha'
-import SelectTree from "./item/selectTree";
-import Tree from "./item/tree";
+import Tree from './item/tree'
+import Timestamp from './item/timestamp'
+import DatePicker from './item/datePicker'
+import Switch from './item/switch'
+import Upload from './item/upload'
+import TimePickerRange from './item/timePickerRange'
+import ColorPicker from './itemType'
 
-const itemMap: { [key: string]: any } = {
+export default {
   input: Input,
+  inputSearch: InputSearch,
   inputNumber: InputNumber,
   checkbox: Checkbox,
   radio: Radio,
   select: Select,
-  selectRemote: SelectRemote,
   textArea: TextArea,
   imgCaptcha: ImgCaptcha,
   captcha: Captcha,
-  selectTree: SelectTree,
   tree: Tree,
+  timestamp: Timestamp,
+  datePicker: DatePicker,
+  switch: Switch,
+  upload: Upload,
+  timePickerRange: TimePickerRange,
+  colorPicker: ColorPicker,
 }
-export default itemMap
+

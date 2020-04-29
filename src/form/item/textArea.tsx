@@ -1,27 +1,20 @@
 import React, { Component } from 'react'
 import { Input } from 'antd'
-import PropTypes from 'prop-types'
-import { TextAreaProps } from 'antd/lib/input/TextArea'
+import {TextAreaProps} from 'antd/lib/input/TextArea'
 
 export interface IProps extends TextAreaProps {
-  icon?: string,
   onChange?: any,
+  allowSpace?: boolean
 }
 
-export default class ReInput extends Component<IProps> {
-  static propTypes = {
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    onChange: PropTypes.func,
-  }
-  static defaultProps = {
-    value: '',
-    onChange: () => ''
-  }
+export default class ReTextArea extends Component<IProps> {
 
   change = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { onChange } = this.props
+    const { onChange, allowSpace = false } = this.props
     const value = e.target.value
-    onChange && onChange(value)
+    allowSpace
+    ? onChange && onChange(value)
+    : onChange && onChange(typeof value as any === 'string' ? value.trim() : value)
   }
 
   render() {
