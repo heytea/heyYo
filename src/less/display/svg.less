@@ -6,6 +6,8 @@
   vertical-align: middle;
   width: @btn-height-base - @padding-md;
   height: @btn-height-base - @padding-md;
+  position: relative;
+  top: -1px;
 
   svg {
     width: 100%;
@@ -13,5 +15,28 @@
     max-width: 100%;
     max-height: 100%;
     fill: @text-color-secondary
+  }
+}
+
+.ant-btn {
+  .c-svg {
+    margin-right: 2px;
+  }
+}
+
+.ant-btn-primary {
+  .c-svg svg {
+    fill: @text-color-dark;
+  }
+}
+
+.ant-btn-link {
+  .c-svg svg {
+    fill: @primary-color;
+  }
+}
+.ant-btn-dangerous {
+  .c-svg svg {
+    fill: @error-color;
   }
 }

@@ -96,7 +96,7 @@ const EditFrom = observer(function (props: IProps) {
     return (
       <Form className="m-edit-form" {...formProps} onFinish={submit}>
         {rowArr.map((row, index) => (
-          <Row key={index} style={{ paddingBottom: layout === 'inline' ? '10px' : 0 }}>
+          <Row key={index} gutter={20}>
             {row.map((item: any, cI: number) => (
               <Col key={item.field} span={item.span || 12}>
                 <FormItem

@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-// import { inject, observer } from 'mobx-react-lite'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import React, { Component, useContext, useEffect, useState } from 'react'
+import { RouteComponentProps, useLocation, useHistory } from 'react-router-dom'
 import { Divider, Button, Tabs, Row, Col } from 'antd'
 import Content from '../display/content'
 import EditForm from '../form/editForm'
@@ -12,7 +11,141 @@ import UI, { IUI } from "../store/ui";
 import { IAuth } from "../store/auth";
 import ListOperateC from './_unit/listOperate'
 import { ConfigContext } from '../config'
+import { observer } from "mobx-react-lite";
+import { AuthContext, UIContext } from "../index";
+import TitleBtn from './_list/titleBtn'
+import StoreEditForm from './_unit/storeEditForm'
+import Svg from "../display/svg";
 
+const List = observer(({ Store: store = {} }: any) => {
+  const { config: { apiFormat, codeSuccess } } = useContext(ConfigContext)
+  const UI = useContext(UIContext)
+  const Auth = useContext(AuthContext)
+  const location = useLocation()
+  const history = useHistory()
+  const [isPushListOperate, setIsPushListOperate] = useState(false)
+  const [dfTitle, setDfTitle] = useState('')
+  const { setPageTitle, layout: { clientWidth }, mobileWidth } = UI
+  const listAddConf = store.listPage.add || []
+  const Table = store.listTableUI || ListTable
+  const breadcrumb = store.lsitBreadcrumb
+  const pageTitle = store?.listPage?.title || '列表'
+  const listTips = store.listPage.tips
+  const listData = store.listData
+  const { isExport = false, isSearch = true, tabs, tabField } = store.listPage
+  const listForm = store.listForm
+  const listStatus = store.listStatus
+
+
+  const fetchData = async () => {
+    store.urlSetForm({ name, url: location.search })
+    const initDataFn = store.listInitData
+    typeof initDataFn === 'function' && initDataFn({ location, Auth })
+    store.getList()
+  }
+
+  useEffect(() => {
+    const didMount = store.listDidMount
+    typeof didMount === 'function' && didMount({ location, Auth })
+  }, [])
+
+  useEffect(() => {
+    setPageTitle(pageTitle)
+    setDfTitle(pageTitle && pageTitle.split('-') && pageTitle.split('-')[0])
+  }, [pageTitle])
+
+  useEffect(() => {
+    fetchData()
+  }, [location.pathname, location.search])
+
+  const routePush = (queryStr: string) => {
+    if (queryStr !== location.search) {
+      const path = location.pathname
+      history.push(path + queryStr)
+    } else {
+      fetchData()
+    }
+  }
+  const submit = () => {
+    // todo
+    const queryStr = `?${store.getUrlParamsStr({ formName: name })}`
+    routePush(queryStr)
+  }
+  const pageSizeChange = (_cur: number, size: number) => {
+    store.urlSetForm({ name, url: location.search })
+    const valObj: { [key: string]: any } = {}
+    valObj[apiFormat.page] = 1
+    valObj[apiFormat.currentPage] = 1
+    valObj[apiFormat.pageSize] = size
+    store.setForm({ name, valObj })
+    const queryStr = `?${store.getUrlParamsStr({ formName: name, page: true, sorter: true })}`
+    routePush(queryStr)
+  }
+  const pageChange = (page: number) => {
+    store.urlSetForm({ name, url: location.search })
+    const valObj: { [key: string]: any } = {}
+    valObj[apiFormat.page] = page
+    valObj[apiFormat.currentPage] = page
+    store.setForm({ name, valObj })
+    const queryStr = `?${store.getUrlParamsStr({ formName: name, page: true, sorter: true })}`
+    routePush(queryStr)
+  }
+  const sorter = ({ field, order }: any) => {
+    store.urlSetForm({ name, url: location.search })
+    store.setForm({ name, valObj: { _sorterField: field, _sorterVal: order } })
+    const queryStr = `?${store.getUrlParamsStr({ formName: name, page: false, sorter: true })}`
+    routePush(queryStr)
+  }
+  const tagChange = (val: any) => {
+    const listFormConf = store.listPage.form || {}
+    const tabChange = store.listTabChange
+    const { tabField } = listFormConf
+    tabChange && tabChange(val)
+    routePush(`?${tabField}=${val}`)
+  }
+
+  const pagination = {
+    showQuickJumper: true,
+    onChange: pageChange,
+    onShowSizeChange: pageSizeChange,
+    current: listData.data[apiFormat.currentPage] || 0,
+    total: listData.data[apiFormat.count] || 0,
+    pageSize: listData.data[apiFormat.pageSize] || 0,
+    showSizeChanger: true,
+    size: 'small'
+  }
+  const code = listData[apiFormat.code]
+  const errMsg = listData[apiFormat.msg]
+  return (
+    <div className="m-list" data-url={location.pathname + location.search}>
+      <div className="m-list-title">
+        <Breadcrumb data={breadcrumb} dfTitle={dfTitle} />
+        <TitleBtn store={store} />
+      </div>
+      <Divider />
+      {listTips && <PageTips {...listTips} />}
+      {tabs && tabs.map &&
+      <Tabs activeKey={listForm[tabField] + ''} onChange={tagChange}>
+        {tabs.map((item: any) => <Tabs.TabPane tab={item.name} key={item.value + ''} />)}
+      </Tabs>
+      }
+      <StoreEditForm store={store} name="list">
+        {isSearch &&
+        <Button htmlType="submit" type="primary" icon={listStatus.loading ? '' : <Svg src={'search'} />}
+                loading={listStatus.loading}>查询</Button>}
+        {isExport &&
+        <Button htmlType="button" loading={listStatus.exportLoading} type="primary" ghost
+                icon={listStatus.exportLoading ? '' : <Svg src={'download'} />}
+                style={isSearch && { marginLeft: '10px' }}
+                onClick={store.exportList}>
+          导出
+        </Button>
+        }
+      </StoreEditForm>
+    </div>
+  )
+})
+export default List
 
 interface IProps extends RouteComponentProps {
   UI?: IUI
@@ -23,7 +156,7 @@ interface IProps extends RouteComponentProps {
 }
 
 // @inject('UI', 'Auth') @observer
-class List extends Component<IProps> {
+class List1 extends Component<IProps> {
   static contextType = ConfigContext;
 
   state = { isPushListOperate: false }
@@ -259,5 +392,3 @@ class List extends Component<IProps> {
     )
   }
 }
-
-export default withRouter(List)

@@ -32,6 +32,11 @@ export interface IHttp {
   conf?: AxiosRequestConfig
 }
 
+export const dfData: IResult = { code: '', msg: '', data: '' }
+export const dfDataArr: IResult = { code: '', msg: '', data: [] }
+export const dfDataObj: IResult = { code: '', msg: '', data: {} }
+export const dfDataPage: IResult = { code: '', msg: '', data: { data: [] } }
+
 export default function HTTP(opt?: IHttp) {
   const { beforeFn = '', afterFn = '', conf = {} } = opt || {}
   const axiox = Axios.create({
@@ -122,7 +127,6 @@ export default function HTTP(opt?: IHttp) {
     return result
   }
 
-
   const httpGet: IMethod = async function (url: string, data: Object = {}, tips: boolean | string = false, conf: Object = {}): Promise<IResult> {
     return AjaxFn('get', url, data, tips, conf)
   }
@@ -139,10 +143,6 @@ export default function HTTP(opt?: IHttp) {
     return AjaxFn('delete', url, data, tips, conf)
   }
 
-  const dfData: IResult = { code: '', msg: '', data: '' }
-  const dfDataArr: IResult = { code: '', msg: '', data: [] }
-  const dfDataObj: IResult = { code: '', msg: '', data: {} }
-  const dfDataPage: IResult = { code: '', msg: '', data: { data: [] } }
   return { httpGet, httpPost, httpPatch, httpPut, httpDel, dfData, dfDataArr, dfDataObj, dfDataPage }
 }
 

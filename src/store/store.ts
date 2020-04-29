@@ -1,0 +1,311 @@
+import { observable, action } from 'mobx'
+import XSS, { FilterXSS } from 'xss'
+import { dfDataObj, dfData, dfDataPage } from "../unit/http";
+
+export const dfWhiteList: { [key: string]: any } = XSS.whiteList
+dfWhiteList.embed = ['src', 'allowfullscreen', 'quality', 'width', 'height', 'align', 'type', 'allowscriptaccess']
+Object.keys(dfWhiteList).forEach(key => {
+  dfWhiteList[key].push('style')
+})
+const OrderMap: { [key: string]: string } = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend' }
+
+interface ISetFormOpt {
+  name: 'list' | 'add' | 'detail' | 'edit'
+  valObj?: { [key: string]: any },
+  isXss?: boolean,
+  trimType?: 'left' | 'right' | true | false,
+  isVerify?: boolean
+}
+
+interface IUrlSetForm extends ISetFormOpt {
+  url: string
+}
+
+export default class Store {
+  xss: FilterXSS
+
+  constructor({ whiteList = dfWhiteList } = {}) {
+    this.xss = new XSS.FilterXSS({ whiteList })
+  }
+
+  @observable dict: { [key: string]: object | any[] } = {}
+
+  // 字段配置
+  fields: { [key: string]: { [key: string]: any } } = {}
+
+  // 列表
+  dfListForm: { [key: string]: any } = {}
+  @observable listForm: { [key: string]: any } = {}
+  @observable listStatus = { submit: false, loading: false }
+  @observable listOperateStatus: { [key: string]: any } = {}
+
+  listPage: { [key: string]: any } = {
+    title: '列表',
+    addConf: {},
+    form: [],
+    table: {
+      dataKey: 'data',
+      columns: []
+    }
+  }
+  listInitData?: Function
+  listApiFn?: Function
+  listRequestBeforeFn?: Function
+  listRequestAfterFn?: Function
+  @observable listData = { ...dfDataPage }
+
+  // 添加
+  dfAddForm: { [key: string]: any } = {}
+  @observable addForm: { [key: string]: any } = {}
+  @observable addStatus = { submit: false, loading: false }
+  addPage = {
+    title: '添加',
+    form: {}
+  }
+  addInitData?: Function
+  addApiFn?: Function
+  addRequestBeforeFn?: Function
+  addRequestAfterFn?: Function
+  @observable addData = { ...dfData }
+
+  // 详情
+  @observable detailStatus = { submit: true, loading: false }
+  @observable detailForm = { id: '' }
+  detailPage = {
+    title: '详情',
+    form: {}
+  }
+  detailInitData?: Function
+  detailApiFn?: Function
+  detailRequestBeforeFn?: Function
+  detailRequestAfterFn?: Function
+  @observable detailData = { ...dfDataObj }
+
+  // 编辑
+  dfEditForm: { [key: string]: any } = {}
+  @observable editForm: { [key: string]: any } = {}
+  @observable editStatus = { submit: false, loading: false }
+  editPage = {
+    title: '编辑',
+    form: {}
+  }
+  editInitData?: Function
+  editApiFn?: Function
+  editRequestBeforeFn?: Function
+  editRequestAfterFn?: Function
+  @observable editData = { ...dfDataObj }
+
+  getTypeConf = (name: string) => {
+    if (name === 'list') {
+      return {
+        form: this.listForm,
+        dfForm: this.dfAddForm,
+        status: this.listStatus,
+        page: this.listPage,
+        initData: this.listInitData,
+        apiFn: this.listApiFn,
+        requestBeforeFn: this.listRequestBeforeFn,
+        requestAfterFn: this.listRequestAfterFn,
+        pageData: this.listData,
+      }
+    }
+    if (name === 'add') {
+      return {
+        form: this.addForm,
+        dfForm: this.dfAddForm,
+        status: this.addStatus,
+        page: this.addPage,
+        initData: this.addInitData,
+        apiFn: this.addApiFn,
+        requestBeforeFn: this.addRequestBeforeFn,
+        requestAfterFn: this.addRequestAfterFn,
+        pageData: this.addData,
+      }
+    }
+    if (name === 'detail') {
+      return {
+        form: this.detailForm,
+        dfForm: this.dfAddForm,
+        status: this.detailStatus,
+        page: this.detailPage,
+        initData: this.detailInitData,
+        apiFn: this.detailApiFn,
+        requestBeforeFn: this.detailRequestBeforeFn,
+        requestAfterFn: this.detailRequestAfterFn,
+        pageData: this.detailData,
+      }
+    }
+    if (name === 'edit') {
+      return {
+        form: this.editForm,
+        dfForm: this.dfAddForm,
+        status: this.editStatus,
+        page: this.editPage,
+        initData: this.editInitData,
+        apiFn: this.editApiFn,
+        requestBeforeFn: this.editRequestBeforeFn,
+        requestAfterFn: this.editRequestAfterFn,
+        pageData: this.editData,
+      }
+    }
+    return null
+  }
+  // 基础方法
+  @action
+  setForm = ({ name, valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+    const type = this.getTypeConf(name)
+    if (!type) {
+      console.error('type 找不到对应的配置')
+    } else {
+      const { form } = type
+      Object.keys(valObj).forEach((key) => {
+        let tmpValue = valObj[key]
+        if (typeof tmpValue === 'string') {
+          if (isXss && !this.fields[key]?.isHtml) {
+            tmpValue = this.xss.process(tmpValue)
+          }
+          if (trimType === 'left') {
+            tmpValue = tmpValue.replace(/^[\s\uFEFF\xA0]+/, '')
+          } else if (trimType === 'right') {
+            tmpValue = tmpValue.replace(/[\s\uFEFF\xA0]+$/, '')
+          } else if (trimType === true) {
+            tmpValue.trim()
+          }
+        }
+        form[key] = tmpValue
+      })
+    }
+  }
+
+  urlSetForm = ({ name = 'list', url = '' }: IUrlSetForm) => {
+    const type = this.getTypeConf(name)
+    if (!type) {
+      console.error('type 找不到对应的配置')
+    } else {
+      const { form, dfForm } = type
+      const newForm: { [key: string]: any } = {}
+      if (typeof form === 'object') {
+        const searchParams = new URLSearchParams(url.replace(/$\?/, ''))
+        Object.keys(form).forEach((key) => {
+          if (searchParams.has(key)) {
+            newForm[key] = this.xss.process(searchParams.get(key) || '')
+          }
+        })
+      }
+      this.setForm({ name, valObj: { ...dfForm, ...newForm } })
+    }
+  }
+
+  getUrlParams = ({ fields = [], url = '' }: { fields?: Array<string>, url?: string } = {}) => {
+    const valObj: { [key: string]: any } = {}
+    const searchParams = new URLSearchParams(url ? url.replace(/$\?/, '') : '')
+    fields.forEach((key) => valObj[key] = searchParams.has(key) ? this.xss.process(searchParams.get(key) || '') : '')
+    return valObj
+  }
+
+  outHtml = (content: string) => {
+    return { __html: this.xss.process(content) }
+  }
+
+  getSortOrder = (field: string) => {
+    const { _sorterField = '', _sorterVal = '' } = this.listForm
+    return _sorterVal === field ? OrderMap[_sorterVal] || '' : ''
+  }
+  @action
+  executeDataFn = async ({ form = {}, name = '' }: any) => {
+    const typeConf = this.getTypeConf(name)
+    if (typeConf) {
+      const { requestAfterFn, requestBeforeFn, apiFn = () => '' } = typeConf
+      const tmpForm = typeof requestBeforeFn === 'function' ? await requestBeforeFn(form) : form
+      const isQuery = /[Dd]etail|[Ll]ist|[Tt]ree$/.test(name)
+      const reqForm: { [key: string]: any } = {}
+      Object.keys(tmpForm).forEach((key: any) => {
+        const val = tmpForm[key]
+        if (typeof val !== 'undefined' && !(isQuery && val === '')) {
+          reqForm[key] = val
+        }
+      })
+      const data = await apiFn(reqForm)
+      if (typeof requestAfterFn === 'function') {
+        const afterObj = await requestAfterFn({ data, form })
+        return afterObj.data
+      }
+      return data
+    }
+  }
+  @action
+  resetListTable = () => {
+    const listTable = this.listPage.table
+    if (listTable && listTable.rowSelection)
+      listTable.rowSelection.selectedRowKeys = []
+  }
+  getErrData = (e: Error) => {
+    return { code: 700, msg: e.message, data: '' }
+  }
+  @action
+  getList = async () => {
+    this.listStatus.loading = true
+    try {
+      this.resetListTable()
+      const { _sorterField, _sorterVal, ...opts } = this.listForm
+      if (_sorterField && _sorterVal) {
+        opts[`${_sorterField}Order`] = _sorterVal
+      }
+      this.listData = await this.executeDataFn({ form: opts, name: 'list' })
+    } catch (e) {
+      this.listData = this.getErrData(e)
+    }
+    this.listStatus.loading = false
+    return this.listData
+  }
+
+  @action
+  add = async () => {
+    this.addStatus.loading = true
+    try {
+      this.addData = await this.executeDataFn({ form: this.addForm, name: 'add' })
+    } catch (e) {
+      this.addData = this.getErrData(e)
+    }
+    this.addStatus.loading = false
+    return this.addData
+  }
+  @action
+  getDetail = async () => {
+    this.detailStatus.loading = true
+    try {
+      this.detailData = await this.executeDataFn({ form: this.detailForm, name: 'detail' })
+    } catch (e) {
+      this.detailData = this.getErrData(e)
+    }
+    this.detailStatus.loading = false
+    return this.detailData
+  }
+  @action
+  edit = async () => {
+    this.editStatus.loading = true
+    try {
+      this.editData = await this.executeDataFn({ form: this.editForm, name: 'edit' })
+    } catch (e) {
+      this.editData = this.getErrData(e)
+    }
+    this.editStatus.loading = false
+    return this.editData
+  }
+  @action
+  setListOperateStatus = ({ type = 'row', status: { index, actionName, loading } }: { type: string, status: { index: number, actionName: string, loading: boolean } }) => {
+    const listOperateStatus = this.listOperateStatus
+    listOperateStatus && (listOperateStatus[`${actionName}-${type === 'row' ? index : type}`] = loading)
+  }
+
+  downBolb = (blob: any, name: string) => {
+    var downloadElement = document.createElement('a')
+    var href = window.URL.createObjectURL(blob)
+    downloadElement.href = href
+    downloadElement.download = name
+    document.body.appendChild(downloadElement)
+    downloadElement.click()
+    document.body.removeChild(downloadElement)
+    window.URL.revokeObjectURL(href)
+  }
+}
