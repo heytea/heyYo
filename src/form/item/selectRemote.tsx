@@ -24,7 +24,7 @@ export default class RemoteSelect extends Component<IProps> {
     fetching: false,
   }
 
-  fetchUser = (value:string) => {
+  fetchUser = () => {
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });

@@ -13,7 +13,7 @@ interface IProps {
 
 @observer
 export default class TimePick extends Component<IProps> {
-  onChange = (time: moment.Moment, timeString: string, type: string) => {
+  onChange = (_time: moment.Moment, timeString: string, type: string) => {
     const {field = '', onChange} = this.props;
     const values = {};
     const [startKey, endKey] = field.split(',');

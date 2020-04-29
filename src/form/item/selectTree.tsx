@@ -7,7 +7,7 @@ import { toJS } from 'mobx'
 
 const TreeNode = TreeSelect.TreeNode;
 
-interface IProps extends TreeSelectProps {
+interface IProps extends TreeSelectProps<any> {
   value?: number | string | Array<string>,
   multipleToStr?: boolean,
   data?: Array<any>,
@@ -63,7 +63,7 @@ export default class SelectTree extends Component<IProps> {
   }
 }
 const childTree = function ({ data = [], valKey = 'id', labelKey = 'title', childKey = 'child', isValToStr }: any = {}) {
-  return data.map ? data.map((item: any, index: number) => {
+  return data.map ? data.map((item: any) => {
     const title = item[labelKey]
     const value = isValToStr ? item[valKey] + '' : item[valKey]
     const child = item[childKey]

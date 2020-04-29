@@ -60,7 +60,7 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
       return { ...this.getErrData(codeSuccess, ''), form, status, loading, data }
     }
 
-    executeDataFn = action(async ({ fn, form = {}, formName = '' }) => {
+    executeDataFn = action(async ({ fn, form = {}, formName = '' }: any) => {
 
       const requestBeforeFn = this[`${formName}RequestBeforeFn`] // 在向服务器发送前，修改请求数据的钩子
 
@@ -159,7 +159,7 @@ export default function <T extends { new(...args: any[]): { dataFn: { [key: stri
       return this[`${formName}Data`]
     })
 
-    setListOperateStatus = action(({ name = 'list', type = 'row', status: { index, actionName, loading } }) => {
+    setListOperateStatus = action(({ name = 'list', type = 'row', status: { index, actionName, loading } }:any) => {
       const listOperateStatus = this[`${name}OperateStatus`]
       listOperateStatus && (listOperateStatus[`${actionName}-${type === 'row' ? index : type}`] = loading)
     })

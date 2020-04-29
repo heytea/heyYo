@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DatePicker, message } from 'antd'
+import { DatePicker } from 'antd'
 import moment from 'moment'
 import { datetime } from '../../unit/date'
 import 'moment/locale/zh-cn'
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export default class RangeTimeStamp extends Component<IProps> {
-  change = (date: any, dateString: any) => {
+  change = (_date: any, dateString: any) => {
     const { onChange } = this.props
     onChange && onChange(dateString)
   }
@@ -29,6 +29,7 @@ export default class RangeTimeStamp extends Component<IProps> {
         if (!current) return
         return current && current < moment().startOf('day')
       }
+    return undefined
   }
 
   render() {

@@ -14,12 +14,12 @@ interface IProps {
   disabledBeforeToday?: boolean,
   disabledAfterToday?: boolean,
   disabledBeforeNotToday?: boolean,
-  disabledDate?: (current: moment.Moment | undefined) => boolean,
+  disabledDate?: (current: moment.Moment | undefined | any) => boolean,
   showTime?: any
 }
 
 export default class ReDatePicker extends Component<IProps> {
-  change = (val: any, dateString: any) => {
+  change = (_val: any, dateString: any) => {
     const {onChange} = this.props
     onChange && onChange(dateString)
   }
@@ -39,6 +39,7 @@ export default class ReDatePicker extends Component<IProps> {
       if (!current) return true;
       return current && current < moment().endOf('day')
     });
+    return false
   };
 
   render() {

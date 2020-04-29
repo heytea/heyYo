@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, FocusEventHandler } from 'react'
+import React, { Component } from 'react'
 import { Input } from 'antd'
 import { SearchProps } from 'antd/lib/input/index'
 import Svg from '../../display/svg'

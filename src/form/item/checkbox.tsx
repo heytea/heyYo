@@ -2,7 +2,6 @@ import React, { Component, ReactText } from 'react'
 import { Checkbox } from 'antd'
 
 const CheckboxGroup = Checkbox.Group
-import CheckboxGroupProps from 'antd/lib/checkbox/Group'
 // data 支持
 // data = ['a', 'b'] => [{label:'a',value:0}]
 // data = { 1: 'name1', 2: 'name2' }

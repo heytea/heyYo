@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {DatePicker} from 'antd'
 import moment from 'moment'
 import {datetime} from '../../unit/date'
-import {RangePickerValue} from 'antd/lib/date-picker/interface';
 
 interface IProps {
   start?: string | number,
@@ -21,11 +20,12 @@ interface IProps {
 const {RangePicker} = DatePicker
 export default class RangeDate extends Component<IProps> {
   change = (e: Array<any>, dateStrings: [string, string]) => {
+    console.log(e)
     const {onChange} = this.props
     const [start, end] = dateStrings;
     onChange && onChange([start, end]);
   }
-  getDisabledDate = (): ((current: moment.Moment | undefined) => boolean) | undefined => {
+  getDisabledDate = (): ((current: moment.Moment | any) => boolean) | undefined => {
     const {disabledBeforeToday, disabledDate, disabledAfterToday, disabledBeforeNotToday} = this.props;
     if (disabledDate) return disabledDate;
     if (disabledBeforeToday) return ((current: moment.Moment | undefined): boolean => {
@@ -40,6 +40,7 @@ export default class RangeDate extends Component<IProps> {
       if (!current) return true;
       return current && current < moment().endOf('day')
     });
+    return undefined
   };
 
   render() {
@@ -59,8 +60,7 @@ export default class RangeDate extends Component<IProps> {
       }
     }
     return (
-      <RangePicker format={format} showTime={showTime} value={value} disabled={disabled} onChange={this.change}
-                   disabledDate={disabledDate} allowClear={allowClear}/>
+      <RangePicker format={format} showTime={showTime} value={value} disabled={disabled} onChange={this.change} disabledDate={disabledDate} allowClear={allowClear}/>
     )
   }
 }

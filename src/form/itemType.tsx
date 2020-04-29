@@ -13,15 +13,6 @@ interface IProps {
 
 @observer
 export default class ItemType extends Component<IProps> {
-
-  static defaultProps = {
-    loading: false,
-    conf: {},
-    values: {},
-    data: {},
-    itemMap: ItemMap
-  }
-
   change = (val: any, key: string) => {
     const { onChange } = this.props
     const formObj = {}
@@ -30,7 +21,7 @@ export default class ItemType extends Component<IProps> {
   }
 
   render() {
-    const { values = {}, conf = {}, data = {}, loading = false, itemMap = {}, onChange } = this.props
+    const { values = {}, conf = {}, data = {}, loading = false, itemMap = ItemMap, onChange } = this.props
     const { field, props = {} } = conf
     const value = values[field]
     const itemData = data[conf.data]

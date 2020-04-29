@@ -9,7 +9,7 @@ export interface IProps extends TextAreaProps {
 
 export default class ReSwitch extends Component<IProps> {
 
-  change = (checked: boolean, event: MouseEvent) => {
+  change = (checked: boolean, _event: MouseEvent) => {
     const { onChange } = this.props
     onChange && onChange(checked)
   }

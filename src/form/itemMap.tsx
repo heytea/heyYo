@@ -12,7 +12,6 @@ import Tree from './item/tree'
 import Timestamp from './item/timestamp'
 import DatePicker from './item/datePicker'
 import Switch from './item/switch'
-import Upload from './item/upload'
 import TimePickerRange from './item/timePickerRange'
 import ColorPicker from './itemType'
 
@@ -30,7 +29,6 @@ export default {
   timestamp: Timestamp,
   datePicker: DatePicker,
   switch: Switch,
-  upload: Upload,
   timePickerRange: TimePickerRange,
   colorPicker: ColorPicker,
 }
