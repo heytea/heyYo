@@ -17,7 +17,7 @@ import TitleBtn from './_list/titleBtn'
 import StoreEditForm from './_unit/storeEditForm'
 import Svg from "../display/svg";
 
-const List = observer(({ Store: store = {} }: any) => {
+const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const { config: { apiFormat, codeSuccess } } = useContext(ConfigContext)
   const UI = useContext(UIContext)
   const Auth = useContext(AuthContext)
@@ -68,7 +68,7 @@ const List = observer(({ Store: store = {} }: any) => {
   }
   const submit = () => {
     // todo
-    const queryStr = `?${store.getUrlParamsStr({ formName: name })}`
+    const queryStr = `?${store.getUrlParamsStr({ name })}`
     routePush(queryStr)
   }
   const pageSizeChange = (_cur: number, size: number) => {
@@ -78,7 +78,7 @@ const List = observer(({ Store: store = {} }: any) => {
     valObj[apiFormat.currentPage] = 1
     valObj[apiFormat.pageSize] = size
     store.setForm({ name, valObj })
-    const queryStr = `?${store.getUrlParamsStr({ formName: name, page: true, sorter: true })}`
+    const queryStr = `?${store.getUrlParamsStr({ name, page: true, sorter: true })}`
     routePush(queryStr)
   }
   const pageChange = (page: number) => {
@@ -87,13 +87,13 @@ const List = observer(({ Store: store = {} }: any) => {
     valObj[apiFormat.page] = page
     valObj[apiFormat.currentPage] = page
     store.setForm({ name, valObj })
-    const queryStr = `?${store.getUrlParamsStr({ formName: name, page: true, sorter: true })}`
+    const queryStr = `?${store.getUrlParamsStr({ name, page: true, sorter: true })}`
     routePush(queryStr)
   }
   const sorter = ({ field, order }: any) => {
     store.urlSetForm({ name, url: location.search })
     store.setForm({ name, valObj: { _sorterField: field, _sorterVal: order } })
-    const queryStr = `?${store.getUrlParamsStr({ formName: name, page: false, sorter: true })}`
+    const queryStr = `?${store.getUrlParamsStr({ name, page: false, sorter: true })}`
     routePush(queryStr)
   }
   const tagChange = (val: any) => {
@@ -129,7 +129,7 @@ const List = observer(({ Store: store = {} }: any) => {
         {tabs.map((item: any) => <Tabs.TabPane tab={item.name} key={item.value + ''} />)}
       </Tabs>
       }
-      <StoreEditForm store={store} name="list">
+      <StoreEditForm store={store} name="list" onSubmit={submit}>
         {isSearch &&
         <Button htmlType="submit" type="primary" icon={listStatus.loading ? '' : <Svg src={'search'} />}
                 loading={listStatus.loading}>查询</Button>}
@@ -202,7 +202,7 @@ class List1 extends Component<IProps> {
   }
   submit = () => {
     const { Store, name = 'list' } = this.props
-    const queryStr = `?${Store.getUrlParamsStr({ formName: name })}`
+    const queryStr = `?${Store.getUrlParamsStr({ name })}`
     this.routePush(queryStr)
   }
   exportList = () => {

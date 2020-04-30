@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Select } from 'antd'
 import { SelectProps } from 'antd/lib/select'
+import { observer } from "mobx-react-lite";
 
 const Option = Select.Option
 
@@ -25,7 +26,7 @@ export interface IProps extends SelectProps<any> {
 // data = { 1: { name: 'name1' }, 2: { name: 'name2' } } // valKey 不填 取 key
 // data = { 1: { id: 1, name: 'name1' }, 2: { id: 2, name: 'name2' } } // valKey = 'id' labelKey = 'name'
 // data = [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }] // valKey = 'id' labelKey = 'name'
-export default function HySelect(props: IProps) {
+const HySelect = observer(function HySelect(props: IProps) {
   const { onChange, data, labelKey = 'name', valKey = 'id', showSearch = false, isNull = true, placeholder = '请选择', splitKey = ',', value = '', vToString = true, mode, ...args } = props
   const change = (val: any) => {
     if (onChange) {
@@ -92,8 +93,8 @@ export default function HySelect(props: IProps) {
       {c}
     </Select>
   )
-}
-
+})
+export default HySelect
 // class S extends Component<IProps> {
 //   static defaultProps = {
 //     value: ''

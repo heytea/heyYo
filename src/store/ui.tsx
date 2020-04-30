@@ -18,6 +18,7 @@ export interface IUI {
   myMenu: { [key: string]: any },
   leftMenuMap: { [key: string]: any },
   initDataLoading: boolean,
+  isMobile: boolean,
 
   [key: string]: any
 }
@@ -34,7 +35,7 @@ class UI implements IUI {
     }
   }
 
-  mobileWidth = 768
+  mobileWidth = 720
   @observable pageTitle = ''
   setPageTitle = (title: string) => {
     this.pageTitle = title
@@ -63,6 +64,11 @@ class UI implements IUI {
       map[item.path] = item.navList || []
     })
     return map
+  }
+
+  @computed
+  get isMobile() {
+    return this.layout.clientWidth <= this.mobileWidth
   }
 }
 

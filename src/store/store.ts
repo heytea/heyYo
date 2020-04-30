@@ -43,6 +43,8 @@ export default class Store {
     title: '列表',
     addConf: {},
     form: [],
+    formProps: {},
+    emptyValSetUrl: [],
     table: {
       dataKey: 'data',
       columns: []
@@ -201,6 +203,39 @@ export default class Store {
     const searchParams = new URLSearchParams(url ? url.replace(/$\?/, '') : '')
     fields.forEach((key) => valObj[key] = searchParams.has(key) ? this.xss.process(searchParams.get(key) || '') : '')
     return valObj
+  }
+
+  // getFields = ({ name = '', page = false }: { page?: boolean, name?: string } = {}) => {
+  //   const typeConf = this.getTypeConf(name)
+  //   if (!typeConf) {
+  //     console.error('type 找不到对应的配置')
+  //   } else {
+  //     let fieldArr: Array<any> = []
+  //     const { page: { fields = [] } } = typeConf
+  //     fields?.forEach(() => {
+  //
+  //     })
+  //   }
+  // }
+  getUrlParamsStr = ({ name = '', page = false, sorter = false } = {}) => {
+    const typeConf = this.getTypeConf(name)
+    if (!typeConf) {
+      console.error('type 找不到对应的配置')
+      return ''
+    }
+    const { form = {}, page: { emptyValSetUrl = [] } = {} } = typeConf
+    const searchParams = new URLSearchParams()
+    Object.keys(form).forEach((field: string) => {
+      const value = form[field]
+      if (
+        (sorter === true && ['_sorterField', '_sorterVal'].indexOf(field) >= 0) ||
+        (page === true && ['page', 'pageSize', 'currentPage'].indexOf(field) >= 0) ||
+        !(typeof value === 'undefined' || (value === '' && emptyValSetUrl.indexOf(field) < 0))
+      ) {
+        searchParams.set(field, value);
+      }
+    })
+    return searchParams.toString()
   }
 
   outHtml = (content: string) => {
