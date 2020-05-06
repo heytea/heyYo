@@ -127,9 +127,6 @@ export default class Store implements IStore {
     const typeConf = this.getTypeConf(name)
     if (typeConf) {
       const { status: oldStatus } = typeConf
-      console.log(name);
-      console.log(oldStatus);
-      console.log(status);
       Object.keys(status)?.forEach((key: string) => oldStatus[key] = status[key])
     }
   }
