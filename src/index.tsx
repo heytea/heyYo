@@ -1,4 +1,9 @@
 import { typeProps } from './display/itemMap'
+import { Auth } from './store/auth'
+import { UI } from './store/ui'
+
+export const DfAuth = Auth
+export const DfUI = UI
 
 export const displayTypeProps = typeProps
 export { default as Content } from './display/content'
@@ -24,6 +29,7 @@ export { default as SelectTree } from './form/item/selectTree'
 export { default as TextArea } from './form/item/textArea'
 export { default as Tree } from './form/item/tree'
 export { default as EditForm } from './form/editForm'
+export { default as StoreEditForm } from './form/storeEditForm'
 export { default as ItemMap } from './form/itemMap'
 export { default as ItemMapPlus } from './form/itemMapPlus'
 export { default as Validator } from './form/validator'

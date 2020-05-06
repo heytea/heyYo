@@ -14,7 +14,7 @@ import { ConfigContext } from '../config'
 import { observer } from "mobx-react-lite";
 import { AuthContext, UIContext } from "../index";
 import TitleBtn from './_list/titleBtn'
-import StoreEditForm from './_unit/storeEditForm'
+import StoreEditForm from '../form/storeEditForm'
 import Svg from "../display/svg";
 
 const List = observer(({ Store: store = {}, name = 'list' }: any) => {

@@ -21,7 +21,11 @@ interface IUrlSetForm extends ISetFormOpt {
   url: string
 }
 
-export default class Store {
+export interface IStore {
+  [key: string]: any
+}
+
+export default class Store implements IStore {
   xss: FilterXSS
 
   constructor({ whiteList = dfWhiteList } = {}) {
@@ -34,7 +38,7 @@ export default class Store {
   fields: { [key: string]: { [key: string]: any } } = {}
 
   // 列表
-  dfListForm: { [key: string]: any } = {}
+  listDfForm: { [key: string]: any } = {}
   @observable listForm: { [key: string]: any } = {}
   @observable listStatus = { submit: false, loading: false }
   @observable listOperateStatus: { [key: string]: any } = {}
@@ -57,7 +61,7 @@ export default class Store {
   @observable listData = { ...dfDataPage }
 
   // 添加
-  dfAddForm: { [key: string]: any } = {}
+  addDfForm: { [key: string]: any } = {}
   @observable addForm: { [key: string]: any } = {}
   @observable addStatus = { submit: false, loading: false }
   addPage = {
@@ -84,7 +88,7 @@ export default class Store {
   @observable detailData = { ...dfDataObj }
 
   // 编辑
-  dfEditForm: { [key: string]: any } = {}
+  editDfForm: { [key: string]: any } = {}
   @observable editForm: { [key: string]: any } = {}
   @observable editStatus = { submit: false, loading: false }
   editPage = {
@@ -98,67 +102,42 @@ export default class Store {
   @observable editData = { ...dfDataObj }
 
   getTypeConf = (name: string) => {
-    if (name === 'list') {
+    if (this[`${name}Page`] && this[`${name}Form`]) {
       return {
-        form: this.listForm,
-        dfForm: this.dfAddForm,
-        status: this.listStatus,
-        page: this.listPage,
-        initData: this.listInitData,
-        apiFn: this.listApiFn,
-        requestBeforeFn: this.listRequestBeforeFn,
-        requestAfterFn: this.listRequestAfterFn,
-        pageData: this.listData,
+        form: this[`${name}Form`] || {},
+        dfForm: this[`${name}DfForm`] || {},
+        status: this[`${name}Status`] || {},
+        page: this[`${name}Page`] || {},
+        initData: this[`${name}InitData`],
+        apiFn: this[`${name}ApiFn`],
+        requestBeforeFn: this[`${name}RequestBeforeFn`],
+        requestAfterFn: this[`${name}RequestAfterFn`],
+        pageData: this[`${name}Data`] || {},
       }
     }
-    if (name === 'add') {
-      return {
-        form: this.addForm,
-        dfForm: this.dfAddForm,
-        status: this.addStatus,
-        page: this.addPage,
-        initData: this.addInitData,
-        apiFn: this.addApiFn,
-        requestBeforeFn: this.addRequestBeforeFn,
-        requestAfterFn: this.addRequestAfterFn,
-        pageData: this.addData,
-      }
-    }
-    if (name === 'detail') {
-      return {
-        form: this.detailForm,
-        dfForm: this.dfAddForm,
-        status: this.detailStatus,
-        page: this.detailPage,
-        initData: this.detailInitData,
-        apiFn: this.detailApiFn,
-        requestBeforeFn: this.detailRequestBeforeFn,
-        requestAfterFn: this.detailRequestAfterFn,
-        pageData: this.detailData,
-      }
-    }
-    if (name === 'edit') {
-      return {
-        form: this.editForm,
-        dfForm: this.dfAddForm,
-        status: this.editStatus,
-        page: this.editPage,
-        initData: this.editInitData,
-        apiFn: this.editApiFn,
-        requestBeforeFn: this.editRequestBeforeFn,
-        requestAfterFn: this.editRequestAfterFn,
-        pageData: this.editData,
-      }
-    }
+    console.error('type找不到对应的配置')
     return null
   }
+
+
   // 基础方法
+
+  @action
+  setStatus = ({ name, status }: { name: string, status: { loading?: boolean, submit?: boolean } }) => {
+    const typeConf = this.getTypeConf(name)
+    if (typeConf) {
+      const { status: oldStatus } = typeConf
+      console.log(name);
+      console.log(oldStatus);
+      console.log(status);
+      Object.keys(status)?.forEach((key: string) => oldStatus[key] = status[key])
+    }
+  }
+
   @action
   setForm = ({ name, valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
     const type = this.getTypeConf(name)
-    if (!type) {
-      console.error('type 找不到对应的配置')
-    } else {
+    if (type) {
       const { form } = type
       Object.keys(valObj).forEach((key) => {
         let tmpValue = valObj[key]
@@ -181,9 +160,7 @@ export default class Store {
 
   urlSetForm = ({ name = 'list', url = '' }: IUrlSetForm) => {
     const type = this.getTypeConf(name)
-    if (!type) {
-      console.error('type 找不到对应的配置')
-    } else {
+    if (type) {
       const { form, dfForm } = type
       const newForm: { [key: string]: any } = {}
       if (typeof form === 'object') {
@@ -220,7 +197,6 @@ export default class Store {
   getUrlParamsStr = ({ name = '', page = false, sorter = false } = {}) => {
     const typeConf = this.getTypeConf(name)
     if (!typeConf) {
-      console.error('type 找不到对应的配置')
       return ''
     }
     const { form = {}, page: { emptyValSetUrl = [] } = {} } = typeConf

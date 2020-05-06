@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Input, { IProps as IInputProps } from './input'
+import { Button } from 'antd'
 
 interface IProps extends IInputProps {
   value?: string,
@@ -15,7 +16,7 @@ export default function ImgCaptcha(props: IProps) {
     const isSvg = /^<svg/.test(img)
     const tmpAProps: { [key: string]: any } = {
       className: 'c-img-captcha-btn',
-      href: 'javascript:;',
+      // href: 'javascript:;',
       title: '更新验证码',
       onClick: () => onGetImg && onGetImg()
     }
@@ -27,7 +28,8 @@ export default function ImgCaptcha(props: IProps) {
     setAProps(tmpAProps)
   }, [img])
 
-  return <Input placeholder="验证码" autoComplete="off" {...args} className={reClassName} addonAfter={<a {...aProps} />} />
+  return <Input placeholder="验证码" autoComplete="off" {...args} className={reClassName}
+                addonAfter={<a {...aProps} />} />
 }
 
 // class ImgCaptcha1 extends Component<IProps> {

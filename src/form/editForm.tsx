@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Row, Col } from 'antd'
 import { observer } from 'mobx-react-lite'
 import ItemType from './itemType'
@@ -8,6 +8,7 @@ const FormItem = Form.Item
 
 interface IProps {
   loading?: boolean,
+  isGrid?: boolean,
   values?: object,
   fields?: Array<{ type?: string, span?: number, title?: string }>,
   data?: object,
@@ -15,7 +16,7 @@ interface IProps {
 }
 
 const EditFrom = observer(function (props: IProps & FormProps) {
-    const { onSubmit, fields = [], onChange, values = {}, data, loading, children, ...args } = props
+    const { onSubmit, fields = [], onChange, values = {}, data, loading, children, isGrid = false, ...args } = props
     const [rowArr, setRowArr] = useState([[]])
     const [lengthMap, setLengthMap]: [{ [key: string]: any }, Function] = useState({})
     let formFields: string | any[] = []
@@ -26,57 +27,71 @@ const EditFrom = observer(function (props: IProps & FormProps) {
 
     useEffect(() => {
       const rowArr: Array<any> = [[]]
-      const lengthMap: { [key: string]: any } = {}
-      let lengthMapKey = 0
-      let spanLength = 0
-      for (let i = 0; i < formFields.length; i += 1) {
-        const item = formFields[i]
-        if (item.type === 'none') {
-          continue
-        }
-        spanLength = spanLength + (item.span || 12)
-        if (spanLength > 24) {
-          spanLength = item.span || 12
-          lengthMapKey = 1
-          rowArr.push([item])
-        } else {
-          lengthMapKey += 1
-          const endNum = rowArr.length - 1
-          if (!rowArr[endNum]) {
-            rowArr[endNum] = []
+      if (isGrid) {
+        const lengthMap: { [key: string]: any } = {}
+        let lengthMapKey = 0
+        let spanLength = 0
+        for (let i = 0; i < formFields.length; i += 1) {
+          const item = formFields[i]
+          if (item.type === 'none') {
+            continue
           }
-          rowArr[endNum].push(item)
+          spanLength = spanLength + (item.span || 12)
+          if (spanLength > 24) {
+            spanLength = item.span || 12
+            lengthMapKey = 1
+            rowArr.push([item])
+          } else {
+            lengthMapKey += 1
+            const endNum = rowArr.length - 1
+            if (!rowArr[endNum]) {
+              rowArr[endNum] = []
+            }
+            rowArr[endNum].push(item)
+          }
+          const tmpLen = (item.title && item.title.length) || 0
+          if (tmpLen > (lengthMap[lengthMapKey] || 0)) {
+            lengthMap[lengthMapKey] = tmpLen
+          }
         }
-        const tmpLen = (item.title && item.title.length) || 0
-        if (tmpLen > (lengthMap[lengthMapKey] || 0)) {
-          lengthMap[lengthMapKey] = tmpLen
-        }
+        setRowArr(rowArr)
+        setLengthMap(lengthMap)
       }
-      setRowArr(rowArr)
-      setLengthMap(lengthMap)
-    }, [formFields])
+    }, [formFields, isGrid])
 
     const change = (valObj: any) => {
       onChange && onChange(valObj)
     }
     return (
       <Form className="m-edit-form" {...args}>
-        {rowArr.map((row, index) => (
+        {isGrid ? rowArr.map((row, index) => (
           <Row key={index} gutter={20}>
             {row.map((item: any, cI: number) => (
               <Col key={item.field} span={item.span || 12}>
                 <FormItem
+                  name={item.field}
                   label={item.title ? <ItemLabel length={lengthMap[cI + 1]} label={item.title} /> : ''}
                   rules={item.rules}
-                  dependencies={item.dependencies || ''}
+                  dependencies={item.dependencies || []}
                   colon={item.hasOwnProperty('colon') ? item.colon : true}
                 >
-                  <ItemType conf={item} {...itemProps} onChange={change} />
+                  <ItemType conf={item} {...itemProps} onFieldChange={change} />
                 </FormItem>
               </Col>
             ))}
           </Row>
-        ))}
+        )) : formFields.map((item: any) => item.type && item.type !== 'none' ? (
+          <FormItem
+            name={item.field}
+            key={item.field}
+            label={item.title || ''}
+            rules={item.rules}
+            dependencies={item.dependencies || []}
+            colon={item.hasOwnProperty('colon') ? item.colon : true}
+          >
+            <ItemType conf={item} {...itemProps} onFieldChange={change} />
+          </FormItem>
+        ) : null)}
         {children}
       </Form>
     )

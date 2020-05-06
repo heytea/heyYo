@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx'
-import React from "react";
-import HTTP, { IResult } from "../unit/http";
-import Config from "../config";
+import React from 'react'
+import Store from './store'
 
 interface IUser {
   id: number,
@@ -20,7 +19,7 @@ export interface IAuth {
   logout?: Function,
 }
 
-class Auth implements IAuth {
+export class Auth extends Store implements IAuth {
   dfUser = { id: 0, name: '' }
   @observable user: IUser = { ...this.dfUser, }
   @observable referrer: string = ''

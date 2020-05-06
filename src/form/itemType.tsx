@@ -9,15 +9,16 @@ interface IProps {
   data?: { [key: string]: any },
   itemMap?: { [key: string]: any },
   onChange?: Function
+  onFieldChange?: Function
 }
 
 export default observer(function HyItemType(props: IProps) {
-  const { values = {}, conf = {}, data = {}, loading = false, itemMap = ItemMap, onChange } = props
+  const { values = {}, conf = {}, data = {}, loading = false, itemMap = ItemMap, onChange, onFieldChange } = props
   const change = (val: any, key: string) => {
-    const { onChange } = props
     const formObj: { [key: string]: any } = {}
     formObj[key] = typeof val === 'undefined' ? '' : val
-    onChange && onChange(formObj)
+    onFieldChange && onFieldChange(formObj)
+    onChange && onChange(val)
   }
   const { field, } = conf
   const value = values[field]

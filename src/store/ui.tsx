@@ -23,7 +23,7 @@ export interface IUI {
   [key: string]: any
 }
 
-class UI implements IUI {
+export class UI implements IUI {
   constructor() {
     if (process.browser) {
       const { clientWidth, clientHeight } = document.documentElement
