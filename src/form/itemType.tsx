@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import ItemMap from './itemMap'
 import { observer } from 'mobx-react-lite'
+import { useUpdateEffect } from '../unit/hooks'
+import ItemMap from './itemMap'
 
 interface IProps {
   loading?: boolean,
@@ -18,7 +19,6 @@ export default observer(function HyItemType(props: IProps) {
     const formObj: { [key: string]: any } = {}
     formObj[key] = typeof val === 'undefined' ? '' : val
     onFieldChange && onFieldChange(formObj)
-    onChange && onChange(val)
   }
   const { field, } = conf
   const value = values[field]
@@ -32,6 +32,9 @@ export default observer(function HyItemType(props: IProps) {
   if (itemData) {
     newProps.data = itemData
   }
+  useUpdateEffect(() => { // 向上传递经过 store 处理的值 主要解决 form.item 拦截的值 与 store 的值不一致的问题
+    onChange && onChange(value)
+  }, [value])
   // if (!(Render.prototype && Render.prototype.isReactComponent)) {
   //   newProps = { ...newProps, conf, field, onChangeForm: onChange, loading, values, dict: data }
   //   return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)} />
