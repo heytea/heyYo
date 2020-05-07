@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const EditFrom = observer(function (props: IProps & FormProps) {
-    const { onSubmit, fields = [], onChange, values = {}, data, loading, children, isGrid = false, ...args } = props
+    const { onSubmit, fields = [], onChange = () => '', values = {}, data, loading, children, isGrid = false, ...args } = props
     const [rowArr, setRowArr] = useState([[]])
     const [lengthMap, setLengthMap]: [{ [key: string]: any }, Function] = useState({})
     let formFields: string | any[] = []
@@ -24,7 +24,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
       formFields = fields
     }
     const itemProps: { [key: string]: any } = { values, data, loading }
-
+    
     useEffect(() => {
       const rowArr: Array<any> = [[]]
       if (isGrid) {
@@ -58,46 +58,38 @@ const EditFrom = observer(function (props: IProps & FormProps) {
         setLengthMap(lengthMap)
       }
     }, [formFields, isGrid])
-
-    const change = (valObj: any) => {
-      onChange && onChange(valObj)
-    }
     return (
       <Form className="m-edit-form" {...args}>
         {isGrid ? rowArr.map((row, index) => (
           <Row key={index} gutter={20}>
             {row.map((item: any, cI: number) => (
               <Col key={item.field} span={item.span || 12}>
-                <FormItem
-                  name={item.field}
-                  label={item.title ? <ItemLabel length={lengthMap[cI + 1]} label={item.title} /> : ''}
-                  rules={item.rules}
-                  dependencies={item.dependencies || []}
-                  colon={item.hasOwnProperty('colon') ? item.colon : true}
-                >
-                  <ItemType conf={item} {...itemProps} onFieldChange={change} />
-                </FormItem>
+                <HyFormItem item={item} itemProps={itemProps} onChange={onChange} />
               </Col>
             ))}
           </Row>
-        )) : formFields.map((item: any) => item.type && item.type !== 'none' ? (
-          <FormItem
-            name={item.field}
-            key={item.field}
-            label={item.title || ''}
-            rules={item.rules}
-            dependencies={item.dependencies || []}
-            colon={item.hasOwnProperty('colon') ? item.colon : true}
-          >
-            <ItemType conf={item} {...itemProps} onFieldChange={change} />
-          </FormItem>
-        ) : null)}
+        )) : formFields.map((item: any) => item.type && item.type !== 'none' ?
+          <HyFormItem key={item.field} item={item} itemProps={itemProps} onChange={onChange} /> : null)}
         {children}
       </Form>
     )
   }
 )
 export default EditFrom
+
+function HyFormItem({ item, itemProps, onChange }: { item: any, itemProps: any, onChange: Function }) {
+  return (
+    <FormItem
+      name={item.field}
+      label={item.title || ''}
+      rules={item.rules}
+      dependencies={item.dependencies || []}
+      colon={item.hasOwnProperty('colon') ? item.colon : true}
+    >
+      <ItemType conf={item} {...itemProps} onFieldChange={onChange} />
+    </FormItem>
+  )
+}
 
 interface IItemProps {
   length: number,

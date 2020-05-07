@@ -6,7 +6,7 @@ export interface IProps extends SpinProps {
   isCenter?: boolean
 }
 
-export default function Loading(props: IProps) {
+export default function HyLoading(props: IProps) {
   const { isCenter = true, ...args } = props
   return <Spin className={isCenter ? 'c-loading-center' : ''} spinning={true} {...args} />
 }
