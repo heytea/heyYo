@@ -24,7 +24,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
       formFields = fields
     }
     const itemProps: { [key: string]: any } = { values, data, loading }
-    
+
     useEffect(() => {
       const rowArr: Array<any> = [[]]
       if (isGrid) {
@@ -64,12 +64,12 @@ const EditFrom = observer(function (props: IProps & FormProps) {
           <Row key={index} gutter={20}>
             {row.map((item: any, cI: number) => (
               <Col key={item.field} span={item.span || 12}>
-                <HyFormItem item={item} itemProps={itemProps} onChange={onChange} />
+                <HyFormItem item={item} itemProps={itemProps} onFieldChange={onChange} />
               </Col>
             ))}
           </Row>
         )) : formFields.map((item: any) => item.type && item.type !== 'none' ?
-          <HyFormItem key={item.field} item={item} itemProps={itemProps} onChange={onChange} /> : null)}
+          <HyFormItem key={item.field} item={item} itemProps={itemProps} onFieldChange={onChange} /> : null)}
         {children}
       </Form>
     )
@@ -77,7 +77,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
 )
 export default EditFrom
 
-function HyFormItem({ item, itemProps, onChange }: { item: any, itemProps: any, onChange: Function }) {
+function HyFormItem({ item, itemProps, onFieldChange }: { item: any, itemProps: any, onFieldChange: Function }) {
   return (
     <FormItem
       name={item.field}
@@ -86,7 +86,7 @@ function HyFormItem({ item, itemProps, onChange }: { item: any, itemProps: any, 
       dependencies={item.dependencies || []}
       colon={item.hasOwnProperty('colon') ? item.colon : true}
     >
-      <ItemType conf={item} {...itemProps} onFieldChange={onChange} />
+      <ItemType conf={item} {...itemProps} onFieldChange={onFieldChange} />
     </FormItem>
   )
 }

@@ -23,6 +23,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   }
   const fieldsChange = () => {
     const fieldsErrs = formInstance.getFieldsError()
+    console.log('fieldsChange');
     let isSubmit = true
     for (let i = 0; i < fieldsErrs.length; i += 1) {
       const errs = fieldsErrs[i]?.errors || []
@@ -47,6 +48,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   return (
     <EditFrom
       onFieldsChange={fieldsChange}
+      onValuesChange={() => console.log('onValuesChange')}
       form={formInstance}
       data={store.dict}
       layout={isMobile ? 'vertical' : 'horizontal'}

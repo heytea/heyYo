@@ -33,6 +33,7 @@ export default observer(function HyItemType(props: IProps) {
     newProps.data = itemData
   }
   useUpdateEffect(() => { // 向上传递经过 store 处理的值 主要解决 form.item 拦截的值 与 store 的值不一致的问题
+    console.log('useUpdateEffect');
     onChange && onChange(value)
   }, [value])
   // if (!(Render.prototype && Render.prototype.isReactComponent)) {
