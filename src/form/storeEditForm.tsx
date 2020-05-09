@@ -9,7 +9,8 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   if (!name) {
     return null
   }
-  const typeConf = store.getTypeConf(name)
+  console.log(store);
+  const typeConf = store?.getTypeConf(name)
   if (!typeConf) {
     return null
   }
