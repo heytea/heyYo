@@ -63,6 +63,7 @@ export default class Store implements IStore {
   // 添加
   addDfForm: { [key: string]: any } = {}
   @observable addForm: { [key: string]: any } = {}
+  @observable addErrs: { [key: string]: any } = {}
   @observable addStatus = { submit: false, loading: false }
   addPage = {
     title: '添加',
@@ -90,6 +91,7 @@ export default class Store implements IStore {
   // 编辑
   editDfForm: { [key: string]: any } = {}
   @observable editForm: { [key: string]: any } = {}
+  @observable editErrs: { [key: string]: any } = {}
   @observable editStatus = { submit: false, loading: false }
   editPage = {
     title: '编辑',
@@ -105,6 +107,7 @@ export default class Store implements IStore {
     if (this[`${name}Page`] && this[`${name}Form`]) {
       return {
         form: this[`${name}Form`] || {},
+        errs: this[`${name}Errs`] || {},
         dfForm: this[`${name}DfForm`] || {},
         status: this[`${name}Status`] || {},
         page: this[`${name}Page`] || {},
@@ -152,6 +155,43 @@ export default class Store implements IStore {
         }
         form[key] = tmpValue
       })
+    }
+  }
+
+  @action
+  setErrs = ({ name, errs }: { name: string, errs: { [key: string]: string[] | string } }) => {
+    const typeConf = this.getTypeConf(name)
+    if (typeConf) {
+      let isSubmit = true
+      let { errs: thisErrs, status, form, page } = typeConf
+      if (Object.keys(errs).length > 0 && thisErrs) {
+        thisErrs = Object.assign(thisErrs, errs)
+        // 判断能否提交
+        const fields = Object.keys(thisErrs)
+        for (let i = 0; i < fields.length; i += 1) {
+          const err = errs[fields[i]]
+          if (err?.length > 0) {
+            isSubmit = false
+            break
+          }
+        }
+        // 判断空值与必填
+        if (status.submit) {
+          for (let i = 0; i < fields.length; i += 1) {
+            const field = fields[i]
+            if (typeof form[field] === 'undefined' || form[field] === '') {
+              const rules = page[form]?.rules || this.fields[field]?.rules || []
+              for (let j = 0; j < rules.length; j += 1) {
+                if (rules[j].required) {
+                  isSubmit = false
+                  break
+                }
+              }
+            }
+          }
+        }
+        status.submit = isSubmit
+      }
     }
   }
 
@@ -306,7 +346,7 @@ export default class Store implements IStore {
     listOperateStatus && (listOperateStatus[`${actionName}-${type === 'row' ? index : type}`] = loading)
   }
 
-  downBolb = (blob: any, name: string) => {
+  downBlob = (blob: any, name: string) => {
     var downloadElement = document.createElement('a')
     var href = window.URL.createObjectURL(blob)
     downloadElement.href = href

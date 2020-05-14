@@ -9,7 +9,6 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   if (!name) {
     return null
   }
-  console.log(store);
   const typeConf = store?.getTypeConf(name)
   if (!typeConf) {
     return null
@@ -22,18 +21,25 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   const onChange = (valObj: { [key: string]: any }) => {
     store.setForm({ name, valObj })
   }
-  const fieldsChange = () => {
-    const fieldsErrs = formInstance.getFieldsError()
-    console.log('fieldsChange');
-    let isSubmit = true
-    for (let i = 0; i < fieldsErrs.length; i += 1) {
-      const errs = fieldsErrs[i]?.errors || []
-      if (errs.length > 0) {
-        isSubmit = false
-        break
-      }
-    }
-    store.setStatus({ name, status: { submit: isSubmit } })
+  const fieldsChange = (fields: any) => {
+    const errs: { [key: string]: string[] | string } = {}
+    fields?.forEach((field: any) => {
+      const { name, errors } = field
+      name?.forEach((key: string) => {
+        errs[key] = errors
+      })
+    })
+    store.setErrs({ name, errs })
+    // const fieldsErrs = formInstance.getFieldsError()
+    // let isSubmit = true
+    // for (let i = 0; i < fieldsErrs.length; i += 1) {
+    //   const errs = fieldsErrs[i]?.errors || []
+    //   if (errs.length > 0) {
+    //     isSubmit = false
+    //     break
+    //   }
+    // }
+    // store.setStatus({ name, status: { submit: isSubmit } })
   }
   useEffect(() => {
     const tmpFieldsConf: any[] = []
