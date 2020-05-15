@@ -13,7 +13,6 @@ import Timestamp from './item/timestamp'
 import DatePicker from './item/datePicker'
 import Switch from './item/switch'
 import TimePickerRange from './item/timePickerRange'
-import ColorPicker from './itemType'
 
 export default {
   input: Input,
@@ -29,7 +28,6 @@ export default {
   timestamp: Timestamp,
   datePicker: DatePicker,
   switch: Switch,
-  timePickerRange: TimePickerRange,
-  colorPicker: ColorPicker,
+  timePickerRange: TimePickerRange
 }
 

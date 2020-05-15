@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Divider, Button, Tabs, Row, Col } from 'antd'
+import { Divider, Button, Tabs} from 'antd'
 import Content from '../display/content'
 import EditForm from '../form/editForm'
 import ListTable from './_unit/listTable'
@@ -48,6 +48,13 @@ class List extends Component<IProps> {
     const { Store, location, name = 'list', Auth } = this.props
     const didMount = Store[`${name}DidMount`];
     typeof didMount === 'function' && didMount.call(Store, { location, Auth })
+  }
+
+  componentWillUnmount() {
+    const {Store, name = 'list', location} = this.props
+    const LeaveDataFn = Store[`${name}LeaveDataFn`]
+    typeof LeaveDataFn === 'function' && LeaveDataFn.call(Store, {location})
+    // closure.defaultListForm = null;
   }
 
   // UNSAFE_componentWillReceiveProps(nextProps: IProps) {
@@ -115,31 +122,59 @@ class List extends Component<IProps> {
     tagChange && tagChange(val)
     this.routePush(`?${tabField}=${val}`)
   }
+  // getListAddConfInner = (conf: any) => {
+  //   if (!conf) return null;
+  //   let isArray = Object.prototype.toString.call(conf).includes('Array');
+  //   let maps = isArray ? Array.from(conf) : [conf];
+  //   return <div className="add-link"><Row> {
+  //     maps.map(listAddConf => {
+  //       return listAddConf.name && <Col key={listAddConf.name} span={24 / maps.length}>
+  //           <Link className=""
+  //                 href={listAddConf.url ? (typeof listAddConf.url === 'function' ? listAddConf.url() : listAddConf.url) : 'javascript:;'}>
+  //               <Button type="primary" {...listAddConf.props}>{listAddConf.name}</Button></Link></Col>
+  //     })
+  //   }
+  //   </Row>
+  //   </div>
+  // };
+  
   getListAddConfInner = (conf: any) => {
     if (!conf) return null;
+    const {Store, name = 'list'} = this.props
+    const Customized = Store[`${name}AddConfInner`];
+    if (Customized) return <Customized/>;
     let isArray = Object.prototype.toString.call(conf).includes('Array');
     let maps = isArray ? Array.from(conf) : [conf];
-    return <div className="add-link"><Row> {
-      maps.map(listAddConf => {
-        return listAddConf.name && <Col key={listAddConf.name} span={24 / maps.length}>
-            <Link className=""
-                  href={listAddConf.url ? (typeof listAddConf.url === 'function' ? listAddConf.url() : listAddConf.url) : 'javascript:;'}>
-                <Button type="primary" {...listAddConf.props}>{listAddConf.name}</Button></Link></Col>
-      })
-    }
-    </Row>
-    </div>
+    return (
+      <div className="add-link">
+        {
+          maps.map((listAddConf) => {
+            if (listAddConf.render) {
+              const Render = listAddConf.render
+              return <Render key={listAddConf.name} {...listAddConf} Store={Store}/>
+            }
+            return listAddConf.name && (listAddConf.url ?
+                <Link key={listAddConf.name}
+                      href={listAddConf.url ? (typeof listAddConf.url === 'function' ? listAddConf.url() : listAddConf.url) : 'javascript:;'}
+                      style={{marginLeft: 8}}>
+                  <Button type="primary" {...listAddConf.props}>{listAddConf.name}</Button>
+                </Link> : <Button key={listAddConf.name} style={{marginLeft: 8}} type="primary" {...listAddConf.props}>{listAddConf.name}</Button>
+            )
+          })
+        }
+      </div>
+    )
   };
-  // getListBatchOperationsRender = (listBatchOperations: any) => {
-  //   if (!listBatchOperations) return null;
-  //   const { Store } = this.props;
-  //   let isArray = Object.prototype.toString.call(listBatchOperations).includes('Array');
-  //   let maps = isArray ? Array.from(listBatchOperations) : [listBatchOperations];
-  //   return maps.map((item, key) => {
-  //     const { ModalUI, modalProps = {} } = item;
-  //     return ModalUI && <ModalUI {...modalProps} Store={Store} key={key}/>
-  //   });
-  // };
+  getListBatchOperationsRender = (listBatchOperations: any) => {
+    if (!listBatchOperations) return null;
+    const { Store } = this.props;
+    let isArray = Object.prototype.toString.call(listBatchOperations).includes('Array');
+    let maps = isArray ? Array.from(listBatchOperations) : [listBatchOperations];
+    return maps.map((item, key) => {
+      const { ModalUI, modalProps = {} } = item;
+      return ModalUI && <ModalUI {...modalProps} Store={Store} key={key}/>
+    });
+  };
 
   componentDidUpdate(prevProps: Readonly<IProps>) {
     const { Store, name = 'list', location } = this.props;
@@ -166,7 +201,7 @@ class List extends Component<IProps> {
     const listForm = Store[`${name}Form`] || {}
     const listData = Store[`${name}Data`] || Object.assign({}, Store.dfDataPage)
     const tableFn = Store[`${name}TableFn`]
-    // const listBatchOperations = Store[`${name}BatchOperations`] || []
+    const listBatchOperations = Store[`${name}BatchOperations`] || []
     const listTips = Store[`${name}Tips`]
     const breadcrumb = Store[`${name}Breadcrumb`]
     let columnsOperate: any[] = []
@@ -233,7 +268,7 @@ class List extends Component<IProps> {
         </EditForm>
         {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}
         {(isSearch || isExport) && <Divider/>}
-        {typeof ListPageTableBeforeNode === 'function' ? <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
+        {typeof ListPageTableBeforeNode === 'function' ? () => <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
         {errno !== '' && errno !== codeSuccess ?
           <Content code={errno} msg={errmsg} loading={loading}/>
           :
@@ -252,7 +287,7 @@ class List extends Component<IProps> {
           />
         }
         {listPageTableAfterNode}
-        {/*{this.getListBatchOperationsRender(listBatchOperations)}*/}
+        {this.getListBatchOperationsRender(listBatchOperations)}
       </div>
     )
   }

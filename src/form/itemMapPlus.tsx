@@ -8,7 +8,6 @@ import Timestamp from './item/timestamp'
 import Tree from './item/tree'
 import InputRange from "./item/inputRange";
 import EditorWang, {IProps as EditorWangIProps} from './item/editor_wang';
-import ColorPicker from './item/colorPicker';
 
 interface IProps {
   conf?: { props?: Object, [key: string]: any },
@@ -40,6 +39,5 @@ export default {
   timestamp: Timestamp,
   tree: Tree,
   inputRange: (props: IProps) => <InputRange {...props}/>,
-  colorPicker: ColorPicker,
 }
 
