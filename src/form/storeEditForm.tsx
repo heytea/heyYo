@@ -45,7 +45,6 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   return (
     <EditFrom
       onFieldsChange={fieldsChange}
-      onValuesChange={() => console.log('onValuesChange')}
       form={formInstance}
       data={store.dict}
       layout={isMobile ? 'vertical' : 'horizontal'}

@@ -79,7 +79,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
 export default EditFrom
 
 const HyFormItem = observer(function ({ item, errs, itemProps, onFieldChange }: { item: any, errs?: object, itemProps: any, onFieldChange: Function }) {
-  const help = errs && (typeof errs[item.field] === 'string' ? errs[item.field] : errs[item.field][0]) || ''
+  const help = errs && errs[item.field] && (typeof errs[item.field] === 'string' ? errs[item.field] : (errs[item.field].length > 0 ? errs[item.field][0] : '')) || ''
   const { field, title = '', rules, dependencies = [] } = item
   const props: { [key: string]: any } = { name: field, label: title, rules, dependencies }
   if (help) {
