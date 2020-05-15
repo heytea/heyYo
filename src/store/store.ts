@@ -169,23 +169,19 @@ export default class Store implements IStore {
         // 判断能否提交
         const fields = Object.keys(thisErrs)
         for (let i = 0; i < fields.length; i += 1) {
-          const err = errs[fields[i]]
+          const field = fields[i]
+          const err = errs[field]
           if (err?.length > 0) {
             isSubmit = false
             break
           }
-        }
-        // 判断空值与必填
-        if (status.submit) {
-          for (let i = 0; i < fields.length; i += 1) {
-            const field = fields[i]
-            if (typeof form[field] === 'undefined' || form[field] === '') {
-              const rules = page[form]?.rules || this.fields[field]?.rules || []
-              for (let j = 0; j < rules.length; j += 1) {
-                if (rules[j].required) {
-                  isSubmit = false
-                  break
-                }
+          // 判断空值与必填
+          if (typeof form[field] === 'undefined' || form[field] === '') {
+            const rules = page[form]?.rules || this.fields[field]?.rules || []
+            for (let j = 0; j < rules.length; j += 1) {
+              if (rules[j].required) {
+                isSubmit = false
+                break
               }
             }
           }
