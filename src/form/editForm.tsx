@@ -10,13 +10,14 @@ interface IProps {
   loading?: boolean,
   isGrid?: boolean,
   values?: object,
+  errs?: object,
   fields?: Array<{ type?: string, span?: number, title?: string }>,
   data?: object,
   onSubmit?: Function,
 }
 
 const EditFrom = observer(function (props: IProps & FormProps) {
-    const { onSubmit, fields = [], onChange = () => '', values = {}, data, loading, children, isGrid = false, ...args } = props
+    const { onSubmit, fields = [], onChange = () => '', values = {}, data, errs, loading, children, isGrid = false, ...args } = props
     const [rowArr, setRowArr] = useState([[]])
     const [lengthMap, setLengthMap]: [{ [key: string]: any }, Function] = useState({})
     let formFields: string | any[] = []
@@ -64,12 +65,12 @@ const EditFrom = observer(function (props: IProps & FormProps) {
           <Row key={index} gutter={20}>
             {row.map((item: any, cI: number) => (
               <Col key={item.field} span={item.span || 12}>
-                <HyFormItem item={item} itemProps={itemProps} onFieldChange={onChange} />
+                <HyFormItem errs={errs} item={item} itemProps={itemProps} onFieldChange={onChange} />
               </Col>
             ))}
           </Row>
         )) : formFields.map((item: any) => item.type && item.type !== 'none' ?
-          <HyFormItem key={item.field} item={item} itemProps={itemProps} onFieldChange={onChange} /> : null)}
+          <HyFormItem key={item.field} errs={errs} item={item} itemProps={itemProps} onFieldChange={onChange} /> : null)}
         {children}
       </Form>
     )
@@ -77,19 +78,24 @@ const EditFrom = observer(function (props: IProps & FormProps) {
 )
 export default EditFrom
 
-function HyFormItem({ item, itemProps, onFieldChange }: { item: any, itemProps: any, onFieldChange: Function }) {
+const HyFormItem = observer(function ({ item, errs, itemProps, onFieldChange }: { item: any, errs?: object, itemProps: any, onFieldChange: Function }) {
+  const help = errs && (typeof errs[item.field] === 'string' ? errs[item.field] : errs[item.field][0]) || ''
+  const { field, title = '', rules, dependencies = [] } = item
+  const props: { [key: string]: any } = { name: field, label: title, rules, dependencies }
+  if (help) {
+    props.help = help
+    props.validateStatus = 'error'
+  }
+
   return (
     <FormItem
-      name={item.field}
-      label={item.title || ''}
-      rules={item.rules}
-      dependencies={item.dependencies || []}
+      {...props}
       colon={item.hasOwnProperty('colon') ? item.colon : true}
     >
       <ItemType conf={item} {...itemProps} onFieldChange={onFieldChange} />
     </FormItem>
   )
-}
+})
 
 interface IItemProps {
   length: number,

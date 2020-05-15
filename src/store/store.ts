@@ -167,6 +167,7 @@ export default class Store implements IStore {
       if (Object.keys(errs).length > 0 && thisErrs) {
         thisErrs = Object.assign(thisErrs, errs)
         // 判断能否提交
+        const fieldsConf: any = {}
         const fields = Object.keys(thisErrs)
         for (let i = 0; i < fields.length; i += 1) {
           const field = fields[i]
@@ -177,11 +178,24 @@ export default class Store implements IStore {
           }
           // 判断空值与必填
           if (typeof form[field] === 'undefined' || form[field] === '') {
-            const rules = page[form]?.rules || this.fields[field]?.rules || []
-            for (let j = 0; j < rules.length; j += 1) {
-              if (rules[j].required) {
-                isSubmit = false
-                break
+            let fieldConf = fieldsConf[field]
+            if (!fieldConf) {
+              page.form?.forEach((fField: string | { [key: string]: any }) => {
+                if (typeof fField === 'string') {
+                  fieldsConf[fField] = { field: fField, ...this.fields[fField] }
+                } else if (fField.field && typeof fField.field === 'string') {
+                  fieldsConf[fField.field] = { ...(fField.conf ? this.fields[fField.conf] : this.fields[fField.field] || {}), ...fField }
+                }
+              })
+            }
+            fieldConf = fieldsConf[field]
+            const rules = fieldConf?.rules || []
+            if (fieldConf?.type !== 'none') {
+              for (let j = 0; j < rules.length; j += 1) {
+                if (rules[j].required) {
+                  isSubmit = false
+                  break
+                }
               }
             }
           }
