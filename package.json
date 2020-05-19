@@ -1,6 +1,6 @@
 {
   "name": "@heytea/heyyo",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "中台前端框架",
   "author": "dev@heytea.com",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "build": "rollup -c",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
-    "predeploy": "cd example && yarn install && yarn run build",
+    "predeploy": "cd example && yarn install && yarn run buil7d",
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
