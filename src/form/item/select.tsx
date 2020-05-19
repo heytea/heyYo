@@ -1,7 +1,7 @@
 import React, {Component, ComponentClass, FunctionComponent} from 'react'
 import {observer} from 'mobx-react'
 import {Select} from 'antd'
-import {SelectProps, ModeOption} from 'antd/lib/select'
+import {SelectProps} from 'antd/lib/select'
 
 const Option = Select.Option
 
@@ -51,7 +51,7 @@ export default class extends Component<IProps> {
 
   render() {
     const {data, labelKey = 'name', valKey = 'id', disabledKey = '', showSearch = false, isNull = true, placeholder = '请选择', splitKey = ',', value = '', vToString = true, mode, ...args} = this.props
-    const dfProps: { optionFilterProp?: string, filterOption?: (input: any, option: any) => any, mode?: ModeOption } = {}
+    const dfProps: { optionFilterProp?: string, filterOption?: (input: any, option: any) => any } = {}
     if (showSearch) {
       dfProps.optionFilterProp = labelKey
       dfProps.filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -60,7 +60,6 @@ export default class extends Component<IProps> {
     let isToString = vToString
 
     if (mode === 'multiple') {
-      dfProps.mode = mode
       if (typeof value === 'string' || value === null) {
         newValue = value ? value.split(splitKey) : []
       }

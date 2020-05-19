@@ -1,25 +1,26 @@
-import React, { Component } from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
-import { IUI } from '../../store/ui'
-import { inject, observer } from 'mobx-react'
+import React, {Component} from 'react'
+import {withRouter, RouteComponentProps} from 'react-router-dom'
+import {IUI} from '../../store/ui'
+import {inject, observer} from 'mobx-react'
 import UI from '../../store/ui'
-import { Menu } from 'antd'
+import {Menu} from 'antd'
 import Link from '../../display/link'
 import Svg from "../../display/svg";
 
 interface IProps {
-  UI?: IUI
+  UI?: IUI,
+  onClick?: (props: any) => any
 }
 
 @inject('UI') @observer
 class Sider extends Component<IProps & RouteComponentProps> {
-  state = { openKeys: [], selectedKeys: [] }
+  state = {openKeys: [], selectedKeys: []}
   openChange = (openKeys: string[]) => {
-    this.setState({ openKeys: openKeys })
+    this.setState({openKeys: openKeys})
   }
   urlSetKey = () => {
-    const { location: { pathname } } = this.props
-    const { openKeys } = this.state
+    const {location: {pathname}} = this.props
+    const {openKeys} = this.state
     const newPathname = pathname.replace(/(edit|add|detail)$/, 'list')
     const tmpArr = newPathname.replace(/^\//, '').split('/')
     const top = `/${tmpArr[0]}`
@@ -30,7 +31,7 @@ class Sider extends Component<IProps & RouteComponentProps> {
     const tmpKeys = selectedKeys.concat(openKeys)
     const tmpMap = {}
     tmpKeys.forEach((item) => tmpMap[item] = 1)
-    this.setState({ selectedKeys, openKeys: Object.keys(tmpMap) })
+    this.setState({selectedKeys, openKeys: Object.keys(tmpMap)})
   }
 
   componentDidMount() {
@@ -38,16 +39,21 @@ class Sider extends Component<IProps & RouteComponentProps> {
   }
 
   componentDidUpdate(prevProps: any) {
-    const { location: { pathname, search } } = this.props
-    const { location: { pathname: prevPathname, search: prevSearch } } = prevProps
+    const {location: {pathname, search}} = this.props
+    const {location: {pathname: prevPathname, search: prevSearch}} = prevProps
     if (pathname + search !== prevPathname + prevSearch) {
       this.urlSetKey()
     }
   }
 
+  onClick = (props: any) => {
+    const {onClick} = this.props;
+    onClick && onClick(props);
+  };
+
   render() {
-    const { selectedKeys, openKeys } = this.state
-    const { UI: { leftMenuMap, layout: { clientWidth }, mobileWidth } = UI, location: { pathname } } = this.props
+    const {selectedKeys, openKeys} = this.state
+    const {UI: {leftMenuMap, layout: {clientWidth}, mobileWidth} = UI, location: {pathname}} = this.props
     const tmpArr = pathname.replace(/^\//, '').split('/')
     const top = `/${tmpArr[0]}`
     const menu = leftMenuMap[top] || []
@@ -55,7 +61,7 @@ class Sider extends Component<IProps & RouteComponentProps> {
     return <div className="b-sider">
       <Menu theme="dark" selectedKeys={selectedKeys} openKeys={openKeys}
             onOpenChange={this.openChange}
-            mode="inline"
+            mode="inline" onClick={this.onClick}
             inlineCollapsed={isMobile}>
         {menu.map((item: any) => displayMenu(item, isMobile))}
       </Menu>
@@ -64,7 +70,7 @@ class Sider extends Component<IProps & RouteComponentProps> {
 }
 
 function displayMenu(item: any, isMobile: boolean) {
-  const { path = '', child = [], name = '', icon = 'img' } = item || {}
+  const {path = '', child = [], name = '', icon = 'img', useIframe} = item || {}
   if (child.length > 0) {
     return (
       <Menu.SubMenu key={path}
@@ -74,7 +80,7 @@ function displayMenu(item: any, isMobile: boolean) {
     )
   }
   return <Menu.Item key={path}>
-    <Link href={path}><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'}/>{name}</Link>
+    <Link href={path} useIframe={useIframe}><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'}/>{name}</Link>
   </Menu.Item>
 }
 
