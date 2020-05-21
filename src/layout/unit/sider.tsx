@@ -70,7 +70,7 @@ class Sider extends Component<IProps & RouteComponentProps> {
 }
 
 function displayMenu(item: any, isMobile: boolean) {
-  const {path = '', child = [], name = '', icon = 'img', useIframe} = item || {}
+  const {path = '', child = [], name = '', icon = 'img', useiframe} = item || {}
   if (child.length > 0) {
     return (
       <Menu.SubMenu key={path}
@@ -80,7 +80,7 @@ function displayMenu(item: any, isMobile: boolean) {
     )
   }
   return <Menu.Item key={path}>
-    <Link href={path} useIframe={useIframe}><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'}/>{name}</Link>
+    <Link href={path} useiframe={useiframe}><Svg className={isMobile ? 'z-m' : ''} src={icon || 'img'}/>{name}</Link>
   </Menu.Item>
 }
 
