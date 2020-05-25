@@ -33,7 +33,7 @@ export default class extends Component<IProps> {
     if (onChange) {
       if (!valFormat) return onChange(val);
       if (mode === 'multiple' && (typeof value === 'string' || value === null)) {
-        onChange(val.join(splitKey))
+        onChange(Array.isArray(val)? val.join(splitKey) : val);
       } else {
         onChange(val)
       }
