@@ -50,7 +50,7 @@ export default class extends Component<IProps> {
   }
 
   render() {
-    const {data, labelKey = 'name', valKey = 'id', disabledKey = '', showSearch = false, isNull = true, placeholder = '请选择', splitKey = ',', value = '', vToString = true, mode, ...args} = this.props
+    const {data, labelKey = 'name', valKey = 'id', disabledKey = '', showSearch = false, isNull = true, placeholder = '请选择', splitKey = ',', value = '', vToString = true, ...args} = this.props
     const dfProps: { optionFilterProp?: string, filterOption?: (input: any, option: any) => any } = {}
     if (showSearch) {
       dfProps.optionFilterProp = labelKey
@@ -59,7 +59,7 @@ export default class extends Component<IProps> {
     let newValue: string[] | string | number[] | number = (value === null) ? '' : value
     let isToString = vToString
 
-    if (mode === 'multiple') {
+    if (this.props.mode === 'multiple') {
       if (typeof value === 'string' || value === null) {
         newValue = value ? value.split(splitKey) : []
       }
