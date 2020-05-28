@@ -15,7 +15,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   if (!typeConf) {
     return null
   }
-  const { fields } = store
+  const { fieldsConf: fields } = store
   const { form = {}, page, status, errs } = typeConf
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
   const { isMobile } = useContext(UIContext)
@@ -33,14 +33,18 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
     })
     store.setErrs({ name, errs: errsObj })
   }
+  const getFieldConf = (field: string) => {
+    const { type = '', dependencies = [], rules = [], props = {} } = fields[field] || {}
+    return { type, dependencies, rules, props }
+  }
   useEffect(() => {
     const tmpFieldsConf: any[] = []
     page?.form?.forEach((item: any) => {
       let fieldItem: { [key: string]: any } = {}
       if (typeof item === 'string') {
-        fields[item] && (fieldItem = { field: item, ...fields[item] })
+        fields[item] && (fieldItem = { field: item, ...(getFieldConf(item)) })
       } else if (item.field) {
-        fieldItem = { ...(item.conf ? fields[item.conf] : fields[item.field] || {}), ...item }
+        fieldItem = { ...(item.conf ? getFieldConf(item.conf) : getFieldConf(item.field) || {}), ...item }
       }
       if (fieldItem.rules) {
         const newRules: Array<{ [key: string]: any }> = []

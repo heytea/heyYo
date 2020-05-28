@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx'
 import React from 'react';
+import { IntlShape } from 'react-intl'
 
 export interface IUI {
   mobileWidth: number
@@ -35,10 +36,10 @@ export class UI implements IUI {
     }
   }
 
-  // intl
-  // setIntl = (intl) => {
-  //   this.intl = intl
-  // }
+  intl: IntlShape | undefined
+  setIntl = (intl: IntlShape) => {
+    this.intl = intl
+  }
 
   mobileWidth = 720
   @observable pageTitle = ''

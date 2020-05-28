@@ -11,5 +11,5 @@ export default function (props: {
 }) {
   const intl = useIntl()
   const { values, ...args } = props
-  return <span>{intl.formatMessage(args, values)}</span>
+  return <>{intl.formatMessage(args, values)}</>
 }
