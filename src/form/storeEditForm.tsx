@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import EditFrom from './editForm'
-import { Form } from 'antd'
 import { UIContext } from '../index'
+import ruleMap from '../unit/validators'
+import { FormInstance } from 'antd/lib/form'
+
+const ruleKeys = Object.keys(ruleMap)
 
 const StoreEditForm = observer(function ({ store, name, onSubmit, children = null }: any) {
-  const [formInstance] = Form.useForm()
   if (!name) {
     return null
   }
@@ -34,18 +36,38 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   useEffect(() => {
     const tmpFieldsConf: any[] = []
     page?.form?.forEach((item: any) => {
+      let fieldItem: { [key: string]: any } = {}
       if (typeof item === 'string') {
-        fields[item] && tmpFieldsConf.push({ field: item, ...fields[item] })
+        fields[item] && (fieldItem = { field: item, ...fields[item] })
       } else if (item.field) {
-        tmpFieldsConf.push({ ...(item.conf ? fields[item.conf] : fields[item.field] || {}), ...item })
+        fieldItem = { ...(item.conf ? fields[item.conf] : fields[item.field] || {}), ...item }
       }
+      if (fieldItem.rules) {
+        const newRules: Array<{ [key: string]: any }> = []
+        fieldItem.rules.forEach((rule: { [key: string]: any }) => {
+          let ruleKey = ''
+          for (let i = 0; i < ruleKeys.length; i += 1) {
+            const tmpKey = ruleKeys[i]
+            if (rule[tmpKey]) {
+              ruleKey = tmpKey
+              break
+            }
+          }
+          if (!ruleKey) {
+            newRules.push(rule)
+          } else {
+            newRules.push(typeof ruleMap[ruleKey] === 'function' ? (form: FormInstance) => ruleMap[ruleKey](form, rule) : ruleMap[ruleKey])
+          }
+        })
+        fieldItem.rules = newRules
+      }
+      tmpFieldsConf.push(fieldItem)
     })
     setFieldsConf(tmpFieldsConf)
   }, [fields, page?.form])
   return (
     <EditFrom
       onFieldsChange={fieldsChange}
-      form={formInstance}
       data={store.dict}
       layout={isMobile ? 'vertical' : 'horizontal'}
       {...formProps}

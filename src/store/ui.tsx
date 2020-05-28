@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx'
-import React from "react";
+import React from 'react';
 
 export interface IUI {
   mobileWidth: number
@@ -34,6 +34,11 @@ export class UI implements IUI {
       }
     }
   }
+
+  // intl
+  // setIntl = (intl) => {
+  //   this.intl = intl
+  // }
 
   mobileWidth = 720
   @observable pageTitle = ''

@@ -157,6 +157,12 @@ module.exports = function (webpackEnv) {
         commonjs: "mobx-react",
         amd: "mobx-react"
       },
+      'react-intl': {
+        root: "ReactIntl",
+        commonjs2: "react-intl",
+        commonjs: "react-intl",
+        amd: "react-intl"
+      },
       'mobx-react-lite': {
         root: "mobxReactLite",
         commonjs2: "mobx-react-lite",
