@@ -5,14 +5,15 @@ import Input, { IProps as IInputProps } from './input'
 interface IProps extends IInputProps {
   isActive?: boolean,
   onGetCode?: Function,
-  className?: string
+  className?: string,
+  btnText?: string,
 }
 
 export default function Captcha(props: IProps) {
   const [remain, setRemain] = useState(0)
   const [loading, setLoading] = useState(false)
   const [intervalID, setIntervalID] = useState(0)
-  const { isActive, className, onGetCode, ...args } = props
+  const { isActive, className, onGetCode, btnText = '获取验证码', ...args } = props
   let isUnmount = false
   useEffect(() => {
     return () => {
@@ -41,7 +42,6 @@ export default function Captcha(props: IProps) {
       }
     }
   }
-  console.log(args);
   return (
     <Input
       autoComplete="off"
@@ -50,7 +50,7 @@ export default function Captcha(props: IProps) {
       addonAfter={
         <a className={`c-captcha-btn ${!loading && remain < 1 && isActive ? 'z-active' : ''}`}
            onClick={getCode}>
-          {loading ? <LoadingOutlined /> : (remain > 0 ? `${remain}S` : `获取验证码`)}
+          {loading ? <LoadingOutlined /> : (remain > 0 ? `${remain}S` : btnText)}
         </a>
       }
     />)
