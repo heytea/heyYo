@@ -1,12 +1,13 @@
 @import '~antd/lib/style/themes/default';
 
-@w-account: 140px;
+@w-right: 200px;
+@w-lang: 66px;
 #b-header {
   position: relative;
   height: @layout-header-height;
   //background: rgba(@layout-header-background, 0.8);
   z-index: 99;
-  padding: 0 @w-account 0 @layout-sider-width;
+  padding: 0 @w-right 0 @layout-sider-width;
   background: @layout-header-background;
 
   .logo {
@@ -28,7 +29,7 @@
     overflow: hidden;
   }
 
-  .m-account {
+  .m-top-menu-right {
     position: absolute;
     height: @layout-header-height;
     line-height: @layout-header-height;
@@ -37,21 +38,41 @@
     padding-right: 20px;
     z-index: 2;
     color: rgba(255, 255, 255, 0.65);
-    max-width: @w-account;
+    max-width: @w-right;
 
-    &:hover {
-      > .u-drop-menu {
-        display: block;
+    .m-lang {
+      float: right;
+      width: @w-lang;
+    }
+
+    .m-account {
+      float: right;
+      max-width: @w-right - @w-lang - 20;
+
+      &:hover {
+        > .u-drop-menu {
+          display: block;
+        }
+      }
+
+      > .avatar {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
-
-    > .avatar {
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
   }
+
+  //.m-lang {
+  //  position: absolute;
+  //  top: 0;
+  //  right: 0;
+  //
+  //  .ant-select-selection-item {
+  //    color: @text-color-dark;
+  //  }
+  //}
 
   .m-top-menu {
 
@@ -68,7 +89,7 @@
 
 @media screen and (max-width: 768px) {
   #b-header {
-    padding: 0 @w-account 0 @layout-header-height;
+    padding: 0 @w-right 0 @layout-header-height;
 
     .logo {
       width: @layout-header-height;

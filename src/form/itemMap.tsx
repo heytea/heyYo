@@ -1,4 +1,5 @@
 import Input from './item/input'
+import Password from './item/password'
 import { InputNumber } from 'antd'
 import Checkbox from './item/checkbox'
 import Radio from './item/radio'
@@ -7,11 +8,12 @@ import SelectRemote from './item/selectRemote'
 import TextArea from './item/textArea'
 import ImgCaptcha from './item/imgCaptcha'
 import Captcha from './item/captcha'
-import SelectTree from "./item/selectTree";
-import Tree from "./item/tree";
+import SelectTree from './item/selectTree'
+import Tree from './item/tree'
 
 const itemMap: { [key: string]: any } = {
   input: Input,
+  password: Password,
   inputNumber: InputNumber,
   checkbox: Checkbox,
   radio: Radio,

@@ -41,9 +41,9 @@ export default function Captcha(props: IProps) {
       }
     }
   }
+  console.log(args);
   return (
     <Input
-      placeholder="验证码"
       autoComplete="off"
       {...args}
       className={`c-captcha ${className || ''} `}

@@ -36,9 +36,12 @@ export class UI implements IUI {
     }
   }
 
-  intl: IntlShape | undefined
-  setIntl = (intl: IntlShape) => {
-    this.intl = intl
+  dfLang = 'zh-CN'
+  langList = ['zh-CN', 'en-US']
+  @observable lang = 'zh-CN'
+  @action
+  setLang = (v: string) => {
+    this.lang = this.langList.indexOf(v) >= 0 ? v : this.dfLang
   }
 
   mobileWidth = 720

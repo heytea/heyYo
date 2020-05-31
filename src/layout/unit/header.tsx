@@ -8,10 +8,11 @@ import AuthContext from '../../store/auth'
 import { ConfigContext } from '../../config'
 import Link from '../../display/link'
 import Svg from '../../display/svg'
+import HySelect from '../../form/item/select'
 
 const Header = observer(function () {
   const { logout, user } = useContext(AuthContext)
-  const { clearMyMenu, myMenu, site: { name } } = useContext(UIContext)
+  const { clearMyMenu, myMenu, site: { name }, lang, langList = [], setLang } = useContext(UIContext)
   const { config: { codeSuccess, apiFormat: { code }, topAccountMenu } } = useContext(ConfigContext)
   const history = useHistory()
   const { pathname } = useLocation()
@@ -47,21 +48,32 @@ const Header = observer(function () {
         </Menu>
       </div>
       }
-      {user.id ?
-        <div className="m-account">
-          <Dropdown overlay={(
-            <Menu theme="dark" onClick={menuClick}>
-              {topAccountMenu && topAccountMenu.map((item: any) => <Menu.Item key={item.key}>{item.name}</Menu.Item>)}
-              <Menu.Item key="logout">退出</Menu.Item>
-            </Menu>
-          )}>
-            <p className="avatar">
-              <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
-              {' ' + user.name}
-            </p>
-          </Dropdown>
-        </div> : null
-      }
+      <div className="m-top-menu-right">
+        {user.id ?
+          <div className="m-account">
+            <Dropdown overlay={(
+              <Menu theme="dark" onClick={menuClick}>
+                {topAccountMenu && topAccountMenu.map((item: any) => <Menu.Item key={item.key}>{item.name}</Menu.Item>)}
+                <Menu.Item key="logout">退出</Menu.Item>
+              </Menu>
+            )}>
+              <p className="avatar">
+                <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
+                {' ' + user.name}
+              </p>
+            </Dropdown>
+          </div> : null
+        }
+        {langList?.length > 0 &&
+        <div className="m-lang">
+          <HySelect
+            style={{ minWidth: 60 }}
+            dropdownMatchSelectWidth={80}
+            showArrow={false}
+            allowClear={false} isNull={false} data={langList} onChange={(lang: string) => setLang(lang)}
+            size="small" value={lang} />
+        </div>}
+      </div>
     </div>
   )
 })
