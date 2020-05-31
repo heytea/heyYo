@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Input, { IProps as IInputProps } from './input'
-import { Button } from 'antd'
 
 interface IProps extends IInputProps {
   value?: string,
   data?: { img: '' },
-  onGetImg?: Function
+  onGetImg?: Function,
+  btnText?: string,
 }
 
 export default function ImgCaptcha(props: IProps) {
-  const { onGetImg, data: { img = '' } = {}, className = '', ...args } = props
+  const { onGetImg, data: { img = '' } = {}, btnText = '获取验证码', className = '', ...args } = props
   const reClassName = `c-img-captcha ${className || ''}`
   const [aProps, setAProps] = useState({})
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function ImgCaptcha(props: IProps) {
     if (isSvg) {
       tmpAProps.dangerouslySetInnerHTML = { __html: img }
     } else {
-      tmpAProps.children = img ? <img className="c-img-captcha-img" src={img} alt="验证码" /> : '获取验证码'
+      tmpAProps.children = img ? <img className="c-img-captcha-img" src={img} alt="验证码" /> : btnText
     }
     setAProps(tmpAProps)
   }, [img])
