@@ -1,5 +1,6 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Radio } from 'antd'
+import LangContent from "../../lang";
 
 const OptionComponents = {
   radio: Radio,
@@ -22,12 +23,13 @@ interface IProps {
 // data = { 1: { id: 1, name: 'name1' }, 2: { id: 2, name: 'name2' } } // valKey = 'id' labelKey = 'name'
 // data = [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }] // valKey = 'id' labelKey = 'name'
 export default function HyRadio(props: IProps) {
+  const lang = useContext(LangContent)
   const { value = '', data = [], isAll = false, onChange = () => '', type = 'radio', valKey = 'id', labelKey = 'name' } = props
   const [c, setC]: [ReactNode, Function] = useState(null)
   useEffect(() => {
     const OptionComponent = OptionComponents[type] || Radio
     const tmpC = (<>
-      {isAll && <OptionComponent key={''} value="">全部</OptionComponent>}
+      {isAll && <OptionComponent key={''} value="">{lang.all}</OptionComponent>}
       {(data && typeof data === 'object') && (data instanceof Array ?
         data.map((item) => { // 数组
           const value = item[valKey || 'id']

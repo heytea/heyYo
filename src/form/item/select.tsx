@@ -1,7 +1,8 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import { Select } from 'antd'
 import { SelectProps } from 'antd/lib/select'
-import { observer } from "mobx-react-lite";
+import { observer } from 'mobx-react-lite';
+import LangContent from "../../lang";
 
 const Option = Select.Option
 
@@ -27,7 +28,8 @@ export interface IProps extends SelectProps<any> {
 // data = { 1: { id: 1, name: 'name1' }, 2: { id: 2, name: 'name2' } } // valKey = 'id' labelKey = 'name'
 // data = [{ id: 1, name: 'name1' }, { id: 2, name: 'name2' }] // valKey = 'id' labelKey = 'name'
 const HySelect = observer(function HySelect(props: IProps) {
-  const { onChange, data, labelKey = 'name', valKey = 'id', showSearch = false, isNull = true, placeholder = '请选择', splitKey = ',', value = '', vToString = true, mode, ...args } = props
+  const lang = useContext(LangContent)
+  const { onChange, data, labelKey = 'name', valKey = 'id', showSearch = false, isNull = true, placeholder = lang.please_choose, splitKey = ',', value = '', vToString = true, mode, ...args } = props
   const change = (val: any) => {
     if (onChange) {
       if (mode === 'multiple' && (typeof value === 'string' || value === null)) {

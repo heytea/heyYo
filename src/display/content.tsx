@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { Spin } from 'antd'
 import AuthContext from '../store/auth'
 import Conf from '../config'
+import LangContent from "../lang";
 
 const { codeSuccess, codeUnauthorized } = Conf
 
@@ -16,6 +17,7 @@ interface IProps {
 
 function Content(props: IProps) {
   const Auth = useContext(AuthContext)
+  const lang = useContext(LangContent)
   const { pathname, search } = useLocation()
   const errArr: string[] = []
   const { code = '', msg = '', loading = false, children = null } = props
@@ -40,12 +42,12 @@ function Content(props: IProps) {
     <Spin spinning={loading} delay={400} tip="loading……">
       {code !== codeSuccess && code !== '' ?
         <div className="m-error">
-          <h2>页面出错了：{code}</h2>
-          <h4>错误信息：</h4>
+          <h2>{lang.page_error}：{code}</h2>
+          <h4>{lang.error_message}：</h4>
           {errArr.map((item, index) => (
             <p key={index}>{item}</p>
           ))}
-          <p>请联系系统管理员 </p>
+          <p>{lang.contact_admin}</p>
         </div> :
         children
       }

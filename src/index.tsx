@@ -1,9 +1,11 @@
 import { typeProps } from './display/itemMap'
 import { Auth } from './store/auth'
 import { UI } from './store/ui'
+import { lang } from './lang'
 
 export const DfAuth = Auth
 export const DfUI = UI
+export const dfLang = lang
 
 export const displayTypeProps = typeProps
 export { default as Content } from './display/content'
@@ -55,6 +57,7 @@ export { default as Form } from './store/form'
 export { default as Store } from './store/store'
 export { default as AuthContext } from './store/auth'
 export { default as UIContext } from './store/ui'
+export { default as LangContext } from './lang'
 export { default as Footer } from './layout/unit/footer'
 export { default as Header } from './layout/unit/header'
 export { default as Sider } from './layout/unit/sider'

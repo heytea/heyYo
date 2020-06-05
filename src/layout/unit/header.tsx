@@ -9,11 +9,13 @@ import { ConfigContext } from '../../config'
 import Link from '../../display/link'
 import Svg from '../../display/svg'
 import HySelect from '../../form/item/select'
+import LangContent from "../../lang";
 
 const Header = observer(function () {
   const { logout, user } = useContext(AuthContext)
   const { clearMyMenu, myMenu, site: { name }, lang, langList = [], setLang } = useContext(UIContext)
   const { config: { codeSuccess, apiFormat: { code }, topAccountMenu } } = useContext(ConfigContext)
+  const langObj = useContext(LangContent)
   const history = useHistory()
   const { pathname } = useLocation()
 
@@ -54,7 +56,7 @@ const Header = observer(function () {
             <Dropdown overlay={(
               <Menu theme="dark" onClick={menuClick}>
                 {topAccountMenu && topAccountMenu.map((item: any) => <Menu.Item key={item.key}>{item.name}</Menu.Item>)}
-                <Menu.Item key="logout">退出</Menu.Item>
+                <Menu.Item key="logout">{langObj.out}</Menu.Item>
               </Menu>
             )}>
               <p className="avatar">

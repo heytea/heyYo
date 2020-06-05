@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import XSS, { FilterXSS } from 'xss'
-import { dfDataObj, dfData, dfDataPage } from "../unit/http";
+import { dfDataObj, dfData, dfDataPage } from '../unit/http'
 
 export const dfWhiteList: { [key: string]: any } = XSS.whiteList
 dfWhiteList.embed = ['src', 'allowfullscreen', 'quality', 'width', 'height', 'align', 'type', 'allowscriptaccess']

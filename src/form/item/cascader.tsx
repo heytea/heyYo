@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { toJS } from 'mobx'
 import { Cascader } from 'antd'
+import LangContent from "../../lang";
 
 interface IProps {
   value?: string | string[],
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 export default function (props: IProps) {
+  const lang = useContext(LangContent)
   const { onChange, value = '', valIsArr = false, data = [], split = '/', changeOnSelect = true, ...args } = props
   const change = (e: string[]) => {
     if (onChange) {
@@ -30,7 +32,7 @@ export default function (props: IProps) {
   const newData = toJS(data)
   return (
     <Cascader
-      placeholder="请选择"
+      placeholder={lang.please_choose}
       allowClear={true}
       {...args}
       value={newValue}

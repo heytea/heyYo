@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined'
 import Input, { IProps as IInputProps } from './input'
+import LangContent from '../../lang'
 
 interface IProps extends IInputProps {
   isActive?: boolean,
@@ -10,10 +11,11 @@ interface IProps extends IInputProps {
 }
 
 export default function Captcha(props: IProps) {
+  const lang = useContext(LangContent)
   const [remain, setRemain] = useState(0)
   const [loading, setLoading] = useState(false)
   const [intervalID, setIntervalID] = useState(0)
-  const { isActive, className, onGetCode, btnText = '获取验证码', ...args } = props
+  const { isActive, className, onGetCode, btnText = lang.get_captcha, ...args } = props
   let isUnmount = false
   useEffect(() => {
     return () => {
