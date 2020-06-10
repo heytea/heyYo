@@ -1,20 +1,40 @@
-export interface IRule {
-  fn?: Function,
-  msg?: Function | string,
+import moment from 'moment';
+
+interface IRule {
+  fn?: Function
+  msg: Function | string
   reg?: RegExp
 }
 
-export interface IVal {
-  rules: { [key: string]: IRule },
+interface IVal {
+  rules: { [key: string]: IRule }
 
   checkRule({}): string
 }
 
 const getDfMsg = (name: string) => `${name} 格式不正确`
 export default class Validator implements IVal {
-  rules: { [key: string]: IRule, name: { reg: RegExp, msg: string }, phone: { reg: RegExp, msg: string }, mail: { reg: RegExp, msg: string } } = {
+  rules: {
+    [key: string]: IRule
+    name: { reg: RegExp; msg: string }
+    phone: { reg: RegExp; msg: string }
+    mail: { reg: RegExp; msg: string }
+  } = {
     required: {
-      fn: ({ value = '' }: any = {}) => !(value === null || value === undefined || value === ''),
+      fn: ({ value = '' }) =>
+        !(value === null || value === undefined || value === ''),
+      msg: '{name} 不能为空'
+    },
+    time: {
+      fn: ({ value = '' }) => {
+        return moment(value).isValid();
+      },
+      msg: getDfMsg('时间')
+    },
+    array: {
+      fn: ({ value = [] }) => {
+        return Array.isArray(value) && value.length;
+      },
       msg: '{name} 不能为空'
     },
     name: {
@@ -26,7 +46,14 @@ export default class Validator implements IVal {
       msg: getDfMsg('姓名')
     },
     phone: {
-      reg: /(13\d|14[57]|15[^4,\D]|17[13678]|18\d)\d{8}$|170[0589]\d{7}$/,
+      reg: /(13\d|14[579]|15[^4\D]|16\d|17[^49\D]|18\d|19\d)\d{8} $|170[0589]\d{7}$/,
+      msg: getDfMsg('手机号')
+    },
+    chinaPhone: {
+      //  /^[09]\d{8}$/ Taiwan
+      //  /^(5|6|8|9)\d{7}$/ HK MO
+      reg: /(13\d|14[579]|15[^4\D]|16\d|17[^49\D]|18\d|19\d)\d{8}$|170[0589]\d{7}$|^[09]\d{8}$|^([5689])\d{7}$/,
+      // reg: /^\d{8,11}$/,
       msg: getDfMsg('手机号')
     },
     mail: {
@@ -37,12 +64,14 @@ export default class Validator implements IVal {
       fn: ({ value = '' }: { value?: string } = {}) => {
         const { name, phone, mail } = this.rules
 
-        return name.reg.test(value) || phone.reg.test(value) || mail.reg.test(value)
+        return (
+          name.reg.test(value) || phone.reg.test(value) || mail.reg.test(value)
+        )
       },
       msg: getDfMsg('用户名/手机/邮箱')
     },
     phoneOrMail: {
-      fn: ({ value = '' }: any = {}) => {
+      fn: ({ value = '' } = {}) => {
         const { phone, mail } = this.rules
         return phone.reg.test(value) || mail.reg.test(value)
       },
@@ -62,16 +91,26 @@ export default class Validator implements IVal {
       msg: getDfMsg('链接')
     },
     number: { reg: /^[\d]+$/, msg: '只允许数字' },
+    number2: {
+      // reg: /^-?\d+(\.\d{1,5})?$/,
+      reg: /^\d+(\.\d{1,2})?$/,
+      msg: '只允许数字,且保留两位小数'
+    },
     chinese: { reg: /^[\u4e00-\u9fa5]+$/, msg: '只允许中文' },
     amount: { reg: /^\d+(\.\d{1,2})?$/, msg: getDfMsg('金额') },
     length: {
-      fn: ({ value = '', param = {} }: { value?: string, param?: { min?: number, max?: number } } = {}) => {
+      fn: ({
+        value = '',
+        param = {}
+      }: { value?: string; param?: { min?: number; max?: number } } = {}) => {
         const { min, max } = param
         const isMin = !(typeof min === 'number' && value.length < min)
         const isMax = !(typeof max === 'number' && value.length > max)
         return isMin && isMax
       },
-      msg: ({ param = {} }: { param?: { min?: number, max?: number } } = {}) => {
+      msg: ({
+        param = {}
+      }: { param?: { min?: number; max?: number } } = {}) => {
         if (typeof param === 'number') {
           return `长度需要等于${param}`
         }
@@ -91,10 +130,44 @@ export default class Validator implements IVal {
       }
     },
     equals: {
-      fn: ({ value = '', form = {}, param = { field: '' } }: { value?: string, form?: { [key: string]: any }, param?: { field: string } } = {}) => {
+      fn: ({
+        value = '',
+        form = {},
+        param = { field: '' }
+      }: {
+        value?: string
+        form?: { [key: string]: any }
+        param?: { field: string }
+      } = {}) => {
         return param.field && value === form[param.field]
       },
-      msg: ({ param = { enter: '输入', equal: '确认字段', original: '' } }: any = {}) => `${param.original}与${param.equal}不一致`
+      msg: ({
+        param = { enter: '输入', equal: '确认字段', original: '' }
+      } = {}) => `${param.original}与${param.equal}不一致`
+    },
+    validator: {
+      fn: ({
+        value = '',
+        form = {},
+        param = () => ''
+      }: {
+        value?: string
+        form?: { [key: string]: any }
+        param?: (value: any, form: { [key: string]: any }) => string
+      } = {}) => {
+        return !param(value, form)
+      },
+      msg: ({
+        value = '',
+        form = {},
+        param = () => ''
+      }: {
+        value?: string
+        form?: { [key: string]: any }
+        param?: (value: any, form: { [key: string]: any }) => string
+      } = {}) => {
+        return param(value, form)
+      }
     }
   }
 
@@ -105,7 +178,19 @@ export default class Validator implements IVal {
     }
   }
 
-  checkRule = ({ rule = '', value, form, param, aliasName }: { rule?: string, value?: string | number, form?: Object, param?: Object, aliasName?: string }) => {
+  checkRule = ({
+    rule = '',
+    value,
+    form,
+    param,
+    aliasName
+  }: {
+    rule?: string
+    value?: string | number
+    form?: Object
+    param?: Object
+    aliasName?: string
+  }) => {
     let isErr = false
     const ruleObj = this.rules[rule]
     if (ruleObj) {
@@ -115,7 +200,16 @@ export default class Validator implements IVal {
           isErr = true
         }
       }
-      if (reg && reg.test && !reg.test((value || '') + '')) {
+      // if (reg && reg.test && !reg.test((value || '') + '')) {
+      //   isErr = true
+      // }
+
+      const isNull = [undefined, null, '']
+      if (
+        reg &&
+        reg.test &&
+        !reg.test((isNull.includes(value as any) ? '' : value) + '')
+      ) {
         isErr = true
       }
       if (isErr) {
@@ -123,15 +217,26 @@ export default class Validator implements IVal {
           return msg.replace('{name}', aliasName || '')
         }
         if (typeof msg === 'function') {
-          return msg({ param })
+          return msg({ param, value, form })
         }
       }
-
     }
     return ''
   }
 
-  check = ({ value, ruleObj = {}, form = {} }: { value?: string | number, ruleObj?: { aliasName?: string, [key: string]: any }, form?: { [key: string]: string | number } } = {}) => {
+  check = ({
+    value,
+    ruleObj = {},
+    form = {}
+  }: {
+    value?: string | number
+    ruleObj?: { aliasName?: string; [key: string]: any }
+    form?: { [key: string]: string | number }
+  } = {}) => {
+    if (ruleObj.defined && ruleObj.defined instanceof Function) {
+      // defined 为函数时自定义错误检测
+      return ruleObj.defined(value, ruleObj, form)
+    }
     let err = ''
     let ruleArr = []
     const { rules, aliasName = '' } = ruleObj
