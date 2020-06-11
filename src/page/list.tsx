@@ -12,7 +12,7 @@ import UI, { IUI } from "../store/ui";
 import { IAuth } from "../store/auth";
 import ListOperateC from './_unit/listOperate'
 import { ConfigContext } from '../config'
-
+import AuthButton from './AuthButton'
 
 interface IProps extends RouteComponentProps {
   UI?: IUI
@@ -43,6 +43,7 @@ class List extends Component<IProps> {
   }
 
   componentDidMount(): void {
+    console.log('componentDidMount4')
     this.fetchData()
     this.setTitle()
     const { Store, location, name = 'list', Auth } = this.props
@@ -145,6 +146,7 @@ class List extends Component<IProps> {
     if (Customized) return <Customized/>;
     let isArray = Object.prototype.toString.call(conf).includes('Array');
     let maps = isArray ? Array.from(conf) : [conf];
+    console.log(maps,'listAddConf1')
     return (
       <div className="add-link">
         {
@@ -157,8 +159,8 @@ class List extends Component<IProps> {
                 <Link key={listAddConf.name}
                       href={listAddConf.url ? (typeof listAddConf.url === 'function' ? listAddConf.url() : listAddConf.url) : 'javascript:;'}
                       style={{marginLeft: 8}}>
-                  <Button type="primary" {...listAddConf.props}>{listAddConf.name}</Button>
-                </Link> : <Button key={listAddConf.name} style={{marginLeft: 8}} type="primary" {...listAddConf.props}>{listAddConf.name}</Button>
+                  <AuthButton type="primary" {...listAddConf.props}>{listAddConf.name}</AuthButton>
+                </Link> : <AuthButton key={listAddConf.name} style={{marginLeft: 8}} type="primary" {...listAddConf.props}>{listAddConf.name}</AuthButton>
             )
           })
         }
@@ -242,7 +244,7 @@ class List extends Component<IProps> {
           <Breadcrumb data={breadcrumb} dfTitle={title && title.split('-') && title.split('-')[0]}/>
           {this.getListAddConfInner(listAddConf)}
         </div>
-        <Divider/>
+        <Divider/> 
         {listTips && <PageTips {...listTips}/>}
         {listPageFormBeforeNode}
         {tabs && tabs.map &&
@@ -258,12 +260,12 @@ class List extends Component<IProps> {
           {isSearch &&
           <Button htmlType="submit" type="primary" icon={loading ? '' : 'search'} loading={loading}>查询</Button>}
           {isExport &&
-          <Button htmlType="button" loading={exportLoading} type="primary" ghost
-                  icon={exportLoading ? '' : 'download'}
-                  style={{ marginLeft: '10px' }}
-                  onClick={this.exportList}>
+          <AuthButton htmlType="button" loading={exportLoading} type="primary" ghost
+            icon={exportLoading ? '' : 'download'}
+            style={{marginLeft: '10px'}}
+            onClick={this.exportList}>
               导出
-          </Button>
+          </AuthButton>
           }
         </EditForm>
         {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import Link from '../../display/link'
 import { Button, Modal } from 'antd'
-
+import AuthButton from '../AuthButton';
 const confirm = Modal.confirm
 
 @observer
@@ -37,7 +37,7 @@ export default class listOperate extends Component<{ Store?: object, type?: 'row
           if (url) {
             return (
               <Link key={itemIndex} href={url}>
-                <Button size={btnSize} {...props} >{actionName}</Button>
+                <AuthButton size={btnSize} {...props} >{actionName}</AuthButton>
               </Link>
             )
           }
@@ -107,7 +107,7 @@ class Operate extends Component<{ Store?: any, name: string, btnProps?: object, 
       }
     }
     return (
-      <Button
+      <AuthButton
         htmlType="button"
         size={type === 'row' ? 'small' : 'default'}
         loading={operateStatus && operateStatus[`${actionName}-${type === 'row' ? index : type}`]}
@@ -115,7 +115,7 @@ class Operate extends Component<{ Store?: any, name: string, btnProps?: object, 
         {...btnProps}
       >
         {actionName}
-      </Button>
+      </AuthButton>
     )
   }
 }

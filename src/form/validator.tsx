@@ -21,18 +21,18 @@ export default class Validator implements IVal {
     mail: { reg: RegExp; msg: string }
   } = {
     required: {
-      fn: ({ value = '' }) =>
+      fn: ({ value = '' }:any) =>
         !(value === null || value === undefined || value === ''),
       msg: '{name} 不能为空'
     },
     time: {
-      fn: ({ value = '' }) => {
+      fn: ({ value = '' }:any) => {
         return moment(value).isValid();
       },
       msg: getDfMsg('时间')
     },
     array: {
-      fn: ({ value = [] }) => {
+      fn: ({ value = [] }:any) => {
         return Array.isArray(value) && value.length;
       },
       msg: '{name} 不能为空'
@@ -71,7 +71,7 @@ export default class Validator implements IVal {
       msg: getDfMsg('用户名/手机/邮箱')
     },
     phoneOrMail: {
-      fn: ({ value = '' } = {}) => {
+      fn: ({ value = '' }:any = {}) => {
         const { phone, mail } = this.rules
         return phone.reg.test(value) || mail.reg.test(value)
       },
@@ -143,7 +143,7 @@ export default class Validator implements IVal {
       },
       msg: ({
         param = { enter: '输入', equal: '确认字段', original: '' }
-      } = {}) => `${param.original}与${param.equal}不一致`
+      }:any = {}) => `${param.original}与${param.equal}不一致`
     },
     validator: {
       fn: ({
