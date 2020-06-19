@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Form, Row, Col } from 'antd'
+import React, { useContext, useEffect, useState } from 'react'
+import { Form, Row, Col, } from 'antd'
 import { observer } from 'mobx-react-lite'
 import ItemType from './itemType'
 import { FormProps } from 'antd/lib/form/Form'
+import LangContext from '../lang'
 
 const FormItem = Form.Item
 
@@ -20,6 +21,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
     const { onSubmit, fields = [], onChange = () => '', values = {}, data, errs, loading, children, isGrid = false, ...args } = props
     const [rowArr, setRowArr] = useState([[]])
     const [lengthMap, setLengthMap]: [{ [key: string]: any }, Function] = useState({})
+    const lang = useContext(LangContext)
     let formFields: string | any[] = []
     if (fields && fields.length > 0) { // 字段可自定义
       formFields = fields
@@ -60,7 +62,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
       }
     }, [formFields, isGrid])
     return (
-      <Form className="m-edit-form" {...args}>
+      <Form className="m-edit-form" {...args} validateMessages={lang.validateMessages}>
         {isGrid ? rowArr.map((row, index) => (
           <Row key={index} gutter={20}>
             {row.map((item: any, cI: number) => (

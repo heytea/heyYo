@@ -4,6 +4,7 @@ import EditFrom from './editForm'
 import { UIContext } from '../index'
 import ruleMap from '../unit/validators'
 import { FormInstance } from 'antd/lib/form'
+import LangContext from "../lang";
 
 const ruleKeys = Object.keys(ruleMap)
 
@@ -18,6 +19,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   const { fieldsConf: fields } = store
   const { form = {}, page, status, errs } = typeConf
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
+  const lang = useContext(LangContext)
   const { isMobile } = useContext(UIContext)
   const { formProps = {} } = page
   const onChange = (valObj: { [key: string]: any }) => {
@@ -60,7 +62,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
           if (!ruleKey) {
             newRules.push(rule)
           } else {
-            newRules.push(typeof ruleMap[ruleKey] === 'function' ? (form: FormInstance) => ruleMap[ruleKey](form, rule) : ruleMap[ruleKey])
+            newRules.push(typeof ruleMap[ruleKey] === 'function' ? (form: FormInstance) => ruleMap[ruleKey](form, rule, lang.validateMessages) : ruleMap[ruleKey])
           }
         })
         fieldItem.rules = newRules
