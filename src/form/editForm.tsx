@@ -18,24 +18,19 @@ interface IProps {
 }
 
 const EditFrom = observer(function (props: IProps & FormProps) {
-    const { onSubmit, fields = [], onChange = () => '', values = {}, data, errs, loading, children, isGrid = false, ...args } = props
+    const { onSubmit, fields = [], onChange = () => '', values = {}, data, errs, loading, children, isGrid = true, ...args } = props
     const [rowArr, setRowArr] = useState([[]])
     const [lengthMap, setLengthMap]: [{ [key: string]: any }, Function] = useState({})
     const lang = useContext(LangContext)
-    let formFields: string | any[] = []
-    if (fields && fields.length > 0) { // 字段可自定义
-      formFields = fields
-    }
     const itemProps: { [key: string]: any } = { values, data, loading }
-
     useEffect(() => {
       const rowArr: Array<any> = [[]]
       if (isGrid) {
         const lengthMap: { [key: string]: any } = {}
         let lengthMapKey = 0
         let spanLength = 0
-        for (let i = 0; i < formFields.length; i += 1) {
-          const item = formFields[i]
+        for (let i = 0; i < fields.length; i += 1) {
+          const item = fields[i]
           if (item.type === 'none') {
             continue
           }
@@ -60,7 +55,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
         setRowArr(rowArr)
         setLengthMap(lengthMap)
       }
-    }, [formFields, isGrid])
+    }, [fields, isGrid])
     return (
       <Form className="m-edit-form" {...args} validateMessages={lang.validateMessages}>
         {isGrid ? rowArr.map((row, index) => (
@@ -71,7 +66,7 @@ const EditFrom = observer(function (props: IProps & FormProps) {
               </Col>
             ))}
           </Row>
-        )) : formFields.map((item: any) => item.type && item.type !== 'none' ?
+        )) : fields.map((item: any) => item.type && item.type !== 'none' ?
           <HyFormItem key={item.field} errs={errs} item={item} itemProps={itemProps} onFieldChange={onChange} /> : null)}
         {children}
       </Form>

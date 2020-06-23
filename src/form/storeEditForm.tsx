@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { toJS } from 'mobx'
+import { observer, } from 'mobx-react-lite'
 import EditFrom from './editForm'
 import { UIContext } from '../index'
 import ruleMap from '../unit/validators'
 import { FormInstance } from 'antd/lib/form'
-import LangContext from "../lang";
+import LangContext from '../lang'
 
 const ruleKeys = Object.keys(ruleMap)
 
@@ -16,12 +17,13 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   if (!typeConf) {
     return null
   }
-  const { fieldsConf: fields } = store
-  const { form = {}, page, status, errs } = typeConf
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
   const lang = useContext(LangContext)
   const { isMobile } = useContext(UIContext)
-  const { formProps = {} } = page
+  const [layout, setLayout] = useState('horizontal')
+  const { fieldsConf: fields } = store
+  const { form = {}, page, status, errs } = typeConf
+  const { formProps = {}, pageForm = [] } = page
   const onChange = (valObj: { [key: string]: any }) => {
     store.setForm({ name, valObj })
   }
@@ -36,12 +38,15 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
     store.setErrs({ name, errs: errsObj })
   }
   const getFieldConf = (field: string) => {
-    const { type = '', dependencies = [], rules = [], props = {} } = fields[field] || {}
-    return { type, dependencies, rules, props }
+    const { type = '', dependencies = [], rules = [], props = {}, span, data = '', title = '' } = fields && fields[field] || {}
+    return { type, dependencies, rules, props, span, data, title }
   }
   useEffect(() => {
+    setLayout(isMobile ? 'vertical' : 'horizontal')
+  }, [isMobile])
+  useEffect(() => {
     const tmpFieldsConf: any[] = []
-    page?.form?.forEach((item: any) => {
+    page?.form.forEach((item: any) => {
       let fieldItem: { [key: string]: any } = {}
       if (typeof item === 'string') {
         fields[item] && (fieldItem = { field: item, ...(getFieldConf(item)) })
@@ -75,7 +80,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
     <EditFrom
       onFieldsChange={fieldsChange}
       data={store.dict}
-      layout={isMobile ? 'vertical' : 'horizontal'}
+      layout={layout}
       {...formProps}
       values={form}
       errs={errs}

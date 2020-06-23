@@ -33,23 +33,29 @@ Object.keys(patternMap).forEach((key: string) => {
 export default {
   ...partFnMap,
   equals: (form: FormInstance, rule: { [key: string]: any }, messages: IMessages) => {
-    validator: async (r: any, v: any,) => {
-      if (typeof form.getFieldValue(rule.field) !== 'undefined' && form.getFieldValue(rule.field) !== v) {
-        throw new Error(messages.equals)
+    return {
+      validator: async (r: any, v: any,) => {
+        if (typeof form.getFieldValue(rule.field) !== 'undefined' && form.getFieldValue(rule.field) !== v) {
+          throw new Error(messages.equals)
+        }
       }
     }
   },
   phoneOrMail: (form: FormInstance, rule: { [key: string]: any }, messages: IMessages) => {
-    validator: async (r: any, v: any,) => {
-      if (!(patternMap.phone.test(v) || patternMap.mail.test(v))) {
-        throw new Error(messages.phoneOrMail)
+    return {
+      validator: async (r: any, v: any,) => {
+        if (!(patternMap.phone.test(v) || patternMap.mail.test(v))) {
+          throw new Error(messages.phoneOrMail)
+        }
       }
     }
   },
   nameOrPhoneOrMail: (form: FormInstance, rule: { [key: string]: any }, messages: IMessages) => {
-    validator: async (r: any, v: any,) => {
-      if (!(patternMap.name.test(v) || patternMap.phone.test(v) || patternMap.mail.test(v))) {
-        throw new Error(messages.nameOrPhoneOrMail)
+    return {
+      validator: async (r: any, v: any,) => {
+        if (!(patternMap.name.test(v) || patternMap.phone.test(v) || patternMap.mail.test(v))) {
+          throw new Error(messages.nameOrPhoneOrMail)
+        }
       }
     }
   }
