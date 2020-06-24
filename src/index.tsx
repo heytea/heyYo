@@ -1,3 +1,4 @@
+import { ConfigProvider } from 'antd'
 import { typeProps } from './display/itemMap'
 import { Auth } from './store/auth'
 import { UI } from './store/ui'
@@ -6,6 +7,7 @@ import { lang } from './lang'
 export const DfAuth = Auth
 export const DfUI = UI
 export const dfLang = lang
+export const AntdConfigProvider = ConfigProvider
 
 export const displayTypeProps = typeProps
 export { default as Content } from './display/content'

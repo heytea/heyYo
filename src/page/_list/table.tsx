@@ -12,10 +12,12 @@ export interface IProps {
   onRoutePush: Function
 }
 
+const sorterMap = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend' }
+
 const ListTable = (props: IProps) => {
   const { config: { apiFormat, codeSuccess } } = useContext(ConfigContext)
   const { store, name, onRoutePush } = props
-  const { pageData: listData, status: { loading }, page } = store.getTypeConf(name)
+  const { pageData: listData, status: { loading }, page, form } = store.getTypeConf(name)
   const { fieldsConf = {} } = store
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
@@ -25,7 +27,8 @@ const ListTable = (props: IProps) => {
     const { dataIndex = field, title = '' } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title }
     if (sorterFields.indexOf(field) >= 0) {
-      conf.sorter = () => ''
+      conf.sorter = true
+      conf.sortOrder = form._sorterField === field ? sorterMap[form._sorterVal] || '' : ''
     }
     return conf
   }
@@ -42,7 +45,7 @@ const ListTable = (props: IProps) => {
       arr.push(fieldItem)
     }
     setTableCol(arr)
-  }, [columns, fieldsConf])
+  }, [columns, fieldsConf, form?._sorterField, form?._sorterVal])
 
   const pageSizeChange = (_cur: number, size: number) => {
     store.urlSetForm({ name, url: location.search })
@@ -77,9 +80,10 @@ const ListTable = (props: IProps) => {
     const { field, order } = sorter
     if (field) {
       const { field: oldField = '', val: OldVal = '' } = tableSorter
-      if (oldField !== field || OldVal !== order) {
+      const orderVal = sorterMap[order]
+      if (oldField !== field || OldVal !== orderVal) {
         store.urlSetForm({ name, url: location.search })
-        store.setForm({ name, valObj: { _sorterField: field, _sorterVal: order || '' } })
+        store.setForm({ name, valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
         const queryStr = `?${store.getUrlParamsStr({ name, page: false, sorter: true })}`
         onRoutePush(queryStr)
       }
