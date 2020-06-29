@@ -34,9 +34,9 @@ const Action = observer(({ store, name, isConfirm, action }: IActionProps) => {
       execute()
     }
   }
-  const { listActionsBatchStatus } = store
+  const { listActionsBatchStatus, listRowSelection: { selectedRowKeys } } = store
   const loading = listActionsBatchStatus.name === name && listActionsBatchStatus.loading
-  const disabled = listActionsBatchStatus.name !== name && listActionsBatchStatus.loading
+  const disabled = selectedRowKeys < 1 || (listActionsBatchStatus.name !== name && listActionsBatchStatus.loading)
   return <Button onClick={click} disabled={disabled} loading={loading} htmlType="button">{name}</Button>
 })
 

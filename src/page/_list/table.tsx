@@ -114,10 +114,9 @@ const ListTable = (props: IProps) => {
     const dfOnChange = (selectedRowKeys: Array<string | number>) => {
       store.setSelectedRowKeys(selectedRowKeys)
     }
-    const { columnWidth = 60, columnTitle = '全选', fixed = true, hideSelectAll = false, selectedRowKeys = [], selections = true, type = 'checkbox', onChange = dfOnChange, onSelect = () => '', onSelectAll = () => '' } = listRowSelection
+    const { columnWidth = 60, fixed = true, hideSelectAll = false, selectedRowKeys = [], selections = true, type = 'checkbox', onChange = dfOnChange, onSelect = () => '', onSelectAll = () => '' } = listRowSelection
     computeProps.rowSelection = {
       columnWidth,
-      // columnTitle,
       fixed,
       hideSelectAll,
       selectedRowKeys,
