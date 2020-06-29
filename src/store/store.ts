@@ -10,7 +10,7 @@ Object.keys(dfWhiteList).forEach(key => {
 const OrderMap: { [key: string]: string } = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descend' }
 
 interface ISetFormOpt {
-  name: 'list' | 'add' | 'detail' | 'edit'
+  form: { [key: string]: any }
   valObj?: { [key: string]: any },
   isXss?: boolean,
   trimType?: 'left' | 'right' | true | false,
@@ -18,15 +18,25 @@ interface ISetFormOpt {
 }
 
 interface IUrlSetForm extends ISetFormOpt {
+  dfForm: { [key: string]: any },
   url: string
 }
 
+export interface iSetErrsOpt {
+  [key: string]: string[] | string
+}
+
+
 export interface IStore {
+  fieldsConf?: { [key: string]: { [key: string]: any } }
+
   [key: string]: any
 }
 
 export default class Store implements IStore {
   xss: FilterXSS
+
+  // fieldsConf: { [key: string]: { [key: string]: any } } | undefined;
 
   constructor({ whiteList = dfWhiteList } = {}) {
     this.xss = new XSS.FilterXSS({ whiteList })
@@ -35,7 +45,7 @@ export default class Store implements IStore {
   @observable dict: { [key: string]: object | any[] } = {}
 
   // 字段配置
-  fields: { [key: string]: { [key: string]: any } } = {}
+  // fieldsConf: { [key: string]: { [key: string]: any } } = {}
 
   // 列表
   listDfForm: { [key: string]: any } = {}
@@ -77,6 +87,7 @@ export default class Store implements IStore {
 
   // 详情
   @observable detailStatus = { submit: true, loading: false }
+  detailDfForm = {}
   @observable detailForm = { id: '' }
   detailPage = {
     title: '详情',
@@ -103,124 +114,143 @@ export default class Store implements IStore {
   editRequestAfterFn?: Function
   @observable editData = { ...dfDataObj }
 
-  getTypeConf = (name: string) => {
-    if (this[`${name}Page`] && this[`${name}Form`]) {
-      return {
-        form: this[`${name}Form`] || {},
-        errs: this[`${name}Errs`] || {},
-        dfForm: this[`${name}DfForm`] || {},
-        status: this[`${name}Status`] || {},
-        page: this[`${name}Page`] || {},
-        initData: this[`${name}InitData`],
-        apiFn: this[`${name}ApiFn`],
-        requestBeforeFn: this[`${name}RequestBeforeFn`],
-        requestAfterFn: this[`${name}RequestAfterFn`],
-        pageData: this[`${name}Data`] || {},
+  // @action
+  // setListStatus = (status: { loading?: boolean, submit?: boolean }) => {
+  //   this.listStatus = { ...this.listStatus, ...status }
+  // }
+  // @action
+  // setAddStatus = (status: { loading?: boolean, submit?: boolean }) => {
+  //   this.addStatus = { ...this.addStatus, ...status }
+  // }
+  // @action
+  // setDetailStatus = (status: { loading?: boolean, submit?: boolean }) => {
+  //   this.detailStatus = { ...this.detailStatus, ...status }
+  // }
+  // @action
+  // setEditStatus = (status: { loading?: boolean, submit?: boolean }) => {
+  //   this.editStatus = { ...this.editStatus, ...status }
+  // }
+
+
+  @action
+  setForm = ({ form, valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+    Object.keys(valObj).forEach((key) => {
+      let tmpValue = valObj[key]
+      // @ts-ignore
+      const fieldsConf = this?.fieldsConf || {}
+      if (typeof tmpValue === 'string') {
+        if (isXss && !fieldsConf[key]?.isHtml) {
+          tmpValue = this.xss.process(tmpValue)
+        }
+        if (trimType === 'left') {
+          tmpValue = tmpValue.replace(/^[\s\uFEFF\xA0]+/, '')
+        } else if (trimType === 'right') {
+          tmpValue = tmpValue.replace(/[\s\uFEFF\xA0]+$/, '')
+        } else if (trimType === true) {
+          tmpValue.trim()
+        }
       }
-    }
-    console.error('type找不到对应的配置')
-    return null
-  }
-
-
-  // 基础方法
-
-  @action
-  setStatus = ({ name, status }: { name: string, status: { loading?: boolean, submit?: boolean } }) => {
-    const typeConf = this.getTypeConf(name)
-    if (typeConf) {
-      const { status: oldStatus } = typeConf
-      Object.keys(status)?.forEach((key: string) => oldStatus[key] = status[key])
-    }
+      form[key] = tmpValue
+    })
   }
 
   @action
-  setForm = ({ name, valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
-    const type = this.getTypeConf(name)
-    if (type) {
-      const { form } = type
-      Object.keys(valObj).forEach((key) => {
-        let tmpValue = valObj[key]
-        if (typeof tmpValue === 'string') {
-          if (isXss && !this.fields[key]?.isHtml) {
-            tmpValue = this.xss.process(tmpValue)
-          }
-          if (trimType === 'left') {
-            tmpValue = tmpValue.replace(/^[\s\uFEFF\xA0]+/, '')
-          } else if (trimType === 'right') {
-            tmpValue = tmpValue.replace(/[\s\uFEFF\xA0]+$/, '')
-          } else if (trimType === true) {
-            tmpValue.trim()
+  setListForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+    this.setForm({ form: this.listForm, valObj, isXss, trimType })
+  }
+  @action
+  setDetailForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+    this.setForm({ form: this.detailForm, valObj, isXss, trimType })
+  }
+  @action
+  setAddForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+    this.setForm({ form: this.addForm, valObj, isXss, trimType })
+  }
+  @action
+  setEditForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+    this.setForm({ form: this.editForm, valObj, isXss, trimType })
+  }
+  getIsSubmit = ({ errs, form, page }: { errs: iSetErrsOpt, form: { [key: string]: any }, page: { [key: string]: any } }) => {
+    let isSubmit = true
+    // 判断能否提交
+    const fieldsConf: any = {}
+    const fields = Object.keys(errs)
+    for (let i = 0; i < fields.length; i += 1) {
+      const field = fields[i]
+      const err = errs[field]
+      if (err?.length > 0) {
+        isSubmit = false
+        break
+      }
+      // 判断空值与必填
+      if (typeof form[field] === 'undefined' || form[field] === '') {
+        // @ts-ignore
+        const selfFieldsConf = this?.fieldsConf || {}
+        let fieldConf = fieldsConf[field]
+        if (!fieldConf) {
+          page.form?.forEach((fField: string | { [key: string]: any }) => {
+            if (typeof fField === 'string') {
+              fieldsConf[fField] = { field: fField, ...selfFieldsConf[fField] }
+            } else if (fField.field && typeof fField.field === 'string') {
+              fieldsConf[fField.field] = { ...(fField.conf ? selfFieldsConf[fField.conf] : selfFieldsConf[fField.field] || {}), ...fField }
+            }
+          })
+        }
+        fieldConf = fieldsConf[field]
+        const rules = fieldConf?.rules || []
+        if (fieldConf?.type !== 'none') {
+          for (let j = 0; j < rules.length; j += 1) {
+            if (rules[j].required) {
+              isSubmit = false
+              break
+            }
           }
         }
-        form[key] = tmpValue
+      }
+    }
+    return isSubmit
+  }
+  @action
+  setErrs = (name: string, errs: iSetErrsOpt) => {
+    if (this[`${name}Errs`]) {
+      this[`${name}Errs`] = Object.assign(this[`${name}Errs`], errs)
+      this[`${name}Status`].submit = this.getIsSubmit({
+        errs: this[`${name}Errs`],
+        form: this[`${name}Form`],
+        page: this[`${name}Page`]
       })
     }
   }
+  @action
+  setAddErrs = (errs: iSetErrsOpt) => {
+    this.addErrs = Object.assign(this.addErrs, errs)
+    this.addStatus.submit = this.getIsSubmit({ errs: this.addErrs, form: this.addForm, page: this.addPage })
+  }
+  @action
+  setEditErrs = (errs: iSetErrsOpt) => {
+    this.addErrs = Object.assign(this.editErrs, errs)
+    this.editStatus.submit = this.getIsSubmit({ errs: this.editErrs, form: this.editForm, page: this.editPage })
+  }
 
   @action
-  setErrs = ({ name, errs }: { name: string, errs: { [key: string]: string[] | string } }) => {
-    const typeConf = this.getTypeConf(name)
-    if (typeConf) {
-      let isSubmit = true
-      let { errs: thisErrs, status, form, page } = typeConf
-      if (Object.keys(errs).length > 0 && thisErrs) {
-        thisErrs = Object.assign(thisErrs, errs)
-        // 判断能否提交
-        const fieldsConf: any = {}
-        const fields = Object.keys(thisErrs)
-        for (let i = 0; i < fields.length; i += 1) {
-          const field = fields[i]
-          const err = errs[field]
-          if (err?.length > 0) {
-            isSubmit = false
-            break
-          }
-          // 判断空值与必填
-          if (typeof form[field] === 'undefined' || form[field] === '') {
-            let fieldConf = fieldsConf[field]
-            if (!fieldConf) {
-              page.form?.forEach((fField: string | { [key: string]: any }) => {
-                if (typeof fField === 'string') {
-                  fieldsConf[fField] = { field: fField, ...this.fields[fField] }
-                } else if (fField.field && typeof fField.field === 'string') {
-                  fieldsConf[fField.field] = { ...(fField.conf ? this.fields[fField.conf] : this.fields[fField.field] || {}), ...fField }
-                }
-              })
-            }
-            fieldConf = fieldsConf[field]
-            const rules = fieldConf?.rules || []
-            if (fieldConf?.type !== 'none') {
-              for (let j = 0; j < rules.length; j += 1) {
-                if (rules[j].required) {
-                  isSubmit = false
-                  break
-                }
-              }
-            }
-          }
+  urlSetForm = ({ form, dfForm, url = '' }: IUrlSetForm) => {
+    const newForm: { [key: string]: any } = {}
+    if (typeof form === 'object') {
+      const searchParams = new URLSearchParams(url.replace(/$\?/, ''))
+      Object.keys(form).forEach((key) => {
+        if (searchParams.has(key)) {
+          newForm[key] = this.xss.process(searchParams.get(key) || '')
         }
-        status.submit = isSubmit
-      }
+      })
+
+      this.setForm({ form, valObj: { ...dfForm, ...newForm } })
     }
   }
 
-  urlSetForm = ({ name = 'list', url = '' }: IUrlSetForm) => {
-    const type = this.getTypeConf(name)
-    if (type) {
-      const { form, dfForm } = type
-      const newForm: { [key: string]: any } = {}
-      if (typeof form === 'object') {
-        const searchParams = new URLSearchParams(url.replace(/$\?/, ''))
-        Object.keys(form).forEach((key) => {
-          if (searchParams.has(key)) {
-            newForm[key] = this.xss.process(searchParams.get(key) || '')
-          }
-        })
-      }
-      this.setForm({ name, valObj: { ...dfForm, ...newForm } })
-    }
-  }
+  urlSetListForm = (url: string) => this.urlSetForm({ form: this.listForm, dfForm: this.listDfForm, url })
+  urlSeDetailForm = (url: string) => this.urlSetForm({ form: this.addForm, dfForm: this.addDfForm, url })
+  urlSetAddForm = (url: string) => this.urlSetForm({ form: this.detailForm, dfForm: this.detailDfForm, url })
+  urlSetEditForm = (url: string) => this.urlSetForm({ form: this.editForm, dfForm: this.editDfForm, url })
 
   getUrlParams = ({ fields = [], url = '' }: { fields?: Array<string>, url?: string } = {}) => {
     const valObj: { [key: string]: any } = {}
@@ -242,11 +272,8 @@ export default class Store implements IStore {
   //   }
   // }
   getUrlParamsStr = ({ name = '', page = false, sorter = false } = {}) => {
-    const typeConf = this.getTypeConf(name)
-    if (!typeConf) {
-      return ''
-    }
-    const { form = {}, page: { emptyValSetUrl = [] } = {} } = typeConf
+    const form = this[`${name}Form`]
+    const { emptyValSetUrl = [] } = this[`${name}Page`]
     const searchParams = new URLSearchParams()
     Object.keys(form).forEach((field: string) => {
       const value = form[field]
@@ -271,25 +298,25 @@ export default class Store implements IStore {
   }
   @action
   executeDataFn = async ({ form = {}, name = '' }: any) => {
-    const typeConf = this.getTypeConf(name)
-    if (typeConf) {
-      const { requestAfterFn, requestBeforeFn, apiFn = () => '' } = typeConf
-      const tmpForm = typeof requestBeforeFn === 'function' ? await requestBeforeFn(form) : form
-      const isQuery = /[Dd]etail|[Ll]ist|[Tt]ree$/.test(name)
-      const reqForm: { [key: string]: any } = {}
-      Object.keys(tmpForm).forEach((key: any) => {
-        const val = tmpForm[key]
-        if (typeof val !== 'undefined' && !(isQuery && val === '')) {
-          reqForm[key] = val
-        }
-      })
-      const data = await apiFn(reqForm)
-      if (typeof requestAfterFn === 'function') {
-        const afterObj = await requestAfterFn({ data, form })
-        return afterObj.data
+    const requestAfterFn = this[`${name}RequestAfterFn`]
+    const requestBeforeFn = this[`${name}RequestBeforeFn`]
+    const apiFn = this[`${name}ApiFn`]
+    const tmpForm = typeof requestBeforeFn === 'function' ? await requestBeforeFn(form) : form
+    const isQuery = /[Dd]etail|[Ll]ist|[Tt]ree$/.test(name)
+    const reqForm: { [key: string]: any } = {}
+    Object.keys(tmpForm).forEach((key: any) => {
+      const val = tmpForm[key]
+      if (typeof val !== 'undefined' && !(isQuery && val === '')) {
+        reqForm[key] = val
       }
-      return data
+    })
+    const data = await apiFn(reqForm)
+    if (typeof requestAfterFn === 'function') {
+      const afterObj = await requestAfterFn({ data, form })
+      return afterObj.data
     }
+    return data
+
   }
   @action
   resetListTable = () => {

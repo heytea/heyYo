@@ -17,18 +17,18 @@ const sorterMap = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descen
 const ListTable = (props: IProps) => {
   const { config: { apiFormat, codeSuccess } } = useContext(ConfigContext)
   const { store, name, onRoutePush } = props
-  const { pageData: listData, status: { loading }, page, form } = store.getTypeConf(name)
+  const { listData, listStatus: { loading }, listPage, listForm } = store
   const { fieldsConf = {} } = store
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
   const [tableCol, setTableCol] = useState([])
-  const { table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = page
+  const { table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '' } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title }
     if (sorterFields.indexOf(field) >= 0) {
       conf.sorter = true
-      conf.sortOrder = form._sorterField === field ? sorterMap[form._sorterVal] || '' : ''
+      conf.sortOrder = listForm._sorterField === field ? sorterMap[listForm._sorterVal] || '' : ''
     }
     return conf
   }
@@ -45,7 +45,7 @@ const ListTable = (props: IProps) => {
       arr.push(fieldItem)
     }
     setTableCol(arr)
-  }, [columns, fieldsConf, form?._sorterField, form?._sorterVal])
+  }, [columns, fieldsConf, listForm?._sorterField, listForm?._sorterVal])
 
   const pageSizeChange = (_cur: number, size: number) => {
     store.urlSetForm({ name, url: location.search })

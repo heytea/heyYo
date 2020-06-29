@@ -17,7 +17,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const history = useHistory()
   const [dfTitle, setDfTitle] = useState('')
   const { setPageTitle } = UI
-  const { page: listPage, form: listForm, status: listStatus } = store.getTypeConf(name)
+  const { listStatus, listPage, listForm } = store
   const {
     isExport = false,
     isSearch = true,
@@ -33,7 +33,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   } = listPage
 
   const fetchData = async () => {
-    store.urlSetForm({ name, url: location.search })
+    store.urlSetListForm(location.search)
     const initDataFn = store.listInitData
     typeof initDataFn === 'function' && initDataFn({ location, Auth })
     store.getList()

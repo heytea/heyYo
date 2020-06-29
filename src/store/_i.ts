@@ -101,7 +101,7 @@ export default interface IStore {
   dict?: IDict,
   dataFn?: IDataFn
   listLoading?: boolean,
-  listData?: IResult,
+  listData: IResult,
   listAddConf?: IListAddConf,
   listFormConf?: IListFormConf,
   listTableActions?: IListTableActions,

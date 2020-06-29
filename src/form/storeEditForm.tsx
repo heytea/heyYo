@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { toJS } from 'mobx'
 import { observer, } from 'mobx-react-lite'
 import EditFrom from './editForm'
 import { UIContext } from '../index'
@@ -10,22 +9,18 @@ import LangContext from '../lang'
 const ruleKeys = Object.keys(ruleMap)
 
 const StoreEditForm = observer(function ({ store, name, onSubmit, children = null }: any) {
-  if (!name) {
-    return null
-  }
-  const typeConf = store?.getTypeConf(name)
-  if (!typeConf) {
-    return null
-  }
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
   const lang = useContext(LangContext)
   const { isMobile } = useContext(UIContext)
   const [layout, setLayout] = useState('horizontal')
   const { fieldsConf: fields } = store
-  const { form = {}, page, status, errs } = typeConf
-  const { formProps = {}, pageForm = [] } = page
+  const form = store[`${name}Form`]
+  const page = store[`${name}Page`]
+  const status = store[`${name}Status`]
+  const errs = store[`${name}Errs`]
+  const { formProps = {} } = page
   const onChange = (valObj: { [key: string]: any }) => {
-    store.setForm({ name, valObj })
+    store.setForm({ form, valObj })
   }
   const fieldsChange = (fields: any) => {
     const errsObj: { [key: string]: string[] | string } = {}
@@ -35,7 +30,7 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
         errsObj[key] = errors
       })
     })
-    store.setErrs({ name, errs: errsObj })
+    store.setErrs(name, errsObj)
   }
   const getFieldConf = (field: string) => {
     const { type = '', dependencies = [], rules = [], props = {}, span, data = '', title = '' } = fields && fields[field] || {}
