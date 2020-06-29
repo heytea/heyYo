@@ -62,14 +62,26 @@ export default class Store implements IStore {
     table: {
       dataKey: 'data',
       columns: []
-    }
+    },
+    actions: []
   }
   listInitData?: Function
   listApiFn?: Function
   listRequestBeforeFn?: Function
   listRequestAfterFn?: Function
   @observable listData = { ...dfDataPage }
+  @observable listActionsBatchStatus = { name: '', loading: false }
+  @action
+  setListActionsBatchStatus = (name = '', loading = false) => {
+    this.listActionsBatchStatus = { name, loading }
+  }
+  @observable
+  listRowSelection: { [key: string]: any } = { selectedRowKeys: [] }
 
+  @action
+  setSelectedRowKeys = (keys: Array<string | number>) => {
+    this.listRowSelection.selectedRowKeys = keys
+  }
   // 添加
   addDfForm: { [key: string]: any } = {}
   @observable addForm: { [key: string]: any } = {}

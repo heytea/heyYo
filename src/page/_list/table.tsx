@@ -5,6 +5,7 @@ import IStore from '../../store/_i'
 import { useContext } from 'react'
 import { ConfigContext } from '../../config'
 import Content from '../../display/content'
+import ListActionsBatch from './actionsBatch'
 
 export interface IProps {
   store: IStore,
@@ -16,13 +17,14 @@ const sorterMap = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descen
 
 const ListTable = (props: IProps) => {
   const { config: { apiFormat, codeSuccess } } = useContext(ConfigContext)
+  const [tableCol, setTableCol] = useState([])
+  const [actionsConf, setActionsConf] = useState({ isShowRow: false, batchItems: [], rowItems: [] })
   const { store, name, onRoutePush } = props
-  const { listData, listStatus: { loading }, listPage, listForm } = store
+  const { listData, listStatus: { loading }, listPage, listForm, listRowSelection } = store
   const { fieldsConf = {} } = store
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
-  const [tableCol, setTableCol] = useState([])
-  const { table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
+  const { actions, table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '' } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title }
@@ -46,7 +48,22 @@ const ListTable = (props: IProps) => {
     }
     setTableCol(arr)
   }, [columns, fieldsConf, listForm?._sorterField, listForm?._sorterVal])
-
+  useEffect(() => {
+    const batchArr: any[] = []
+    const rowArr: any[] = []
+    actions?.forEach((item: any) => {
+      const { type } = item
+      if (type === 'all') {
+        batchArr.push(item)
+        rowArr.push(item)
+      } else if (type === 'batch') {
+        batchArr.push(item)
+      } else if (type === 'row') {
+        rowArr.push(item)
+      }
+    })
+    setActionsConf({ isShowRow: batchArr.length > 0, batchItems: batchArr, rowItems: rowArr })
+  }, [actions])
   const pageSizeChange = (_cur: number, size: number) => {
     store.urlSetForm({ name, url: location.search })
     const valObj: { [key: string]: any } = {}
@@ -83,7 +100,7 @@ const ListTable = (props: IProps) => {
       const orderVal = sorterMap[order]
       if (oldField !== field || OldVal !== orderVal) {
         store.urlSetForm({ name, url: location.search })
-        store.setForm({ name, valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
+        store.setForm({ form: listForm, name, valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
         const queryStr = `?${store.getUrlParamsStr({ name, page: false, sorter: true })}`
         onRoutePush(queryStr)
       }
@@ -92,17 +109,38 @@ const ListTable = (props: IProps) => {
   if (code !== '' && code !== codeSuccess) {
     return <Content code={code} msg={msg} loading={loading} />
   }
+  const computeProps: { [key: string]: any } = {}
+  if (actionsConf.isShowRow) {
+    const dfOnChange = (selectedRowKeys: Array<string | number>) => {
+      store.setSelectedRowKeys(selectedRowKeys)
+    }
+    const { columnWidth = 60, columnTitle = '全选', fixed = true, hideSelectAll = false, selectedRowKeys = [], selections = true, type = 'checkbox', onChange = dfOnChange, onSelect = () => '', onSelectAll = () => '' } = listRowSelection
+    computeProps.rowSelection = {
+      columnWidth,
+      // columnTitle,
+      fixed,
+      hideSelectAll,
+      selectedRowKeys,
+      onChange,
+      selections,
+      type,
+      onSelect,
+      onSelectAll,
+    }
+  }
   return (
     <div className='m-list-table'>
       {showPaginationTotal && pagination && pagination.total > 0 ?
         <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(pagination.total / pagination.pageSize)} 页</p> :
         <p>暂无数据</p>
       }
+      <ListActionsBatch store={store} items={actionsConf.batchItems} />
       <Table
         bordered
         size="small"
         rowKey={rowKey}
         {...tableProps}
+        {...computeProps}
         loading={loading}
         columns={tableCol}
         dataSource={listData.data.data}
