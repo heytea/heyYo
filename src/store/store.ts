@@ -75,6 +75,11 @@ export default class Store implements IStore {
   setListActionsBatchStatus = (name = '', loading = false) => {
     this.listActionsBatchStatus = { name, loading }
   }
+  @observable listActionsRowStatus = { name: '', loading: false, index: 0 }
+  @action
+  setListActionsRowStatus = (name = '', loading = false, index: number) => {
+    this.listActionsRowStatus = { name, loading, index }
+  }
   @observable
   listRowSelection: { [key: string]: any } = { selectedRowKeys: [] }
 

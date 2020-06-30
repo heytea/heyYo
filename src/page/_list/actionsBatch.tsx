@@ -5,7 +5,7 @@ import { Button, Modal } from 'antd'
 const confirm = Modal.confirm
 
 export interface IProps {
-  items: [],
+  items: any[],
   store: any
 }
 
@@ -37,7 +37,7 @@ const Action = observer(({ store, name, isConfirm, action }: IActionProps) => {
   const { listActionsBatchStatus, listRowSelection: { selectedRowKeys } } = store
   const loading = listActionsBatchStatus.name === name && listActionsBatchStatus.loading
   const disabled = selectedRowKeys < 1 || (listActionsBatchStatus.name !== name && listActionsBatchStatus.loading)
-  return <Button onClick={click} disabled={disabled} loading={loading} htmlType="button">{name}</Button>
+  return <Button onClick={click} disabled={disabled} loading={loading} htmlType="button" type="primary">{name}</Button>
 })
 
 const ListActions = ({ items, store }: IProps) => {
