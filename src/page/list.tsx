@@ -60,6 +60,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     } else {
       fetchData()
     }
+    store.setSelectedRowKeys([])
   }
   const submit = () => {
     // todo

@@ -1,6 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { Button, Modal } from 'antd'
+import { ButtonProps } from 'antd/lib/button'
 
 const confirm = Modal.confirm
 
@@ -16,6 +17,7 @@ export interface IActionProps {
   store?: any,
   name: string,
   isConfirm: boolean,
+  props?: ButtonProps
   record: any,
   val: any,
   index: number,
@@ -23,7 +25,7 @@ export interface IActionProps {
 }
 
 
-const Action = observer(({ store, name, isConfirm, action, record, val, index }: IActionProps) => {
+const Action = observer(({ store, name, props = {}, isConfirm, action, record, val, index }: IActionProps) => {
   const execute = async () => {
     store.setListActionsRowStatus(name, true, index)
     await action(val, record, index)
@@ -42,7 +44,9 @@ const Action = observer(({ store, name, isConfirm, action, record, val, index }:
   }
   const { listActionsRowStatus } = store
   const loading = listActionsRowStatus.name === name && listActionsRowStatus.index === index && listActionsRowStatus.loading
-  return <Button size="small" onClick={click}  loading={loading} htmlType="button">{name}</Button>
+  return <Button size="small" onClick={click} type="primary" htmlType="button" {...props} loading={loading}>
+    {name}
+  </Button>
 })
 
 const ListActionsRow = ({ items, store, record, val, index }: IProps) => {

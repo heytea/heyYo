@@ -29,7 +29,7 @@ const ListTable = (props: IProps) => {
   const { fieldsConf = {} } = store
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
-  const { actions, table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
+  const { actions, actionRowProps = {}, table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '' } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title }
@@ -54,6 +54,7 @@ const ListTable = (props: IProps) => {
     if (rowItems.length > 0) {
       arr.push({
         title: '操作',
+        ...actionRowProps,
         render: (v: any, record: any, index: number) => (
           <ListActionsRow store={store} items={rowItems} index={index} record={record} val={v} />
         )
@@ -83,7 +84,7 @@ const ListTable = (props: IProps) => {
     valObj[apiFormat.page] = 1
     valObj[apiFormat.currentPage] = 1
     valObj[apiFormat.pageSize] = size
-    store.setForm({ name, valObj })
+    store.setListForm({ valObj })
     const queryStr = `?${store.getUrlParamsStr({ name, page: true, sorter: true })}`
     onRoutePush(queryStr)
   }
@@ -92,7 +93,7 @@ const ListTable = (props: IProps) => {
     const valObj: { [key: string]: any } = {}
     valObj[apiFormat.page] = page
     valObj[apiFormat.currentPage] = page
-    store.setForm({ name, valObj })
+    store.setListForm({ valObj })
     const queryStr = `?${store.getUrlParamsStr({ name, page: true, sorter: true })}`
     onRoutePush(queryStr)
   }
@@ -113,7 +114,7 @@ const ListTable = (props: IProps) => {
       const orderVal = sorterMap[order]
       if (oldField !== field || OldVal !== orderVal) {
         store.urlSetForm({ name, url: location.search })
-        store.setForm({ form: listForm, name, valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
+        store.setListForm({ valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
         const queryStr = `?${store.getUrlParamsStr({ name, page: false, sorter: true })}`
         onRoutePush(queryStr)
       }
