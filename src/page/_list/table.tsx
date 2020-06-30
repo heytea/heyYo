@@ -7,6 +7,7 @@ import { ConfigContext } from '../../config'
 import Content from '../../display/content'
 import ListActionsBatch from './actionsBatch'
 import ListActionsRow from './actionsRow'
+import RenderDisplay from '../../display/renderDisplay'
 
 export interface IProps {
   store: IStore,
@@ -31,8 +32,8 @@ const ListTable = (props: IProps) => {
   const msg = listData[apiFormat.msg]
   const { actions, actionRowProps = {}, table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
   const getFieldConf = (field: string) => {
-    const { dataIndex = field, title = '' } = fieldsConf && fieldsConf[field] || {}
-    const conf: { [key: string]: any } = { dataIndex, title }
+    const { dataIndex = field, title = '', display = '', displayProps } = fieldsConf && fieldsConf[field] || {}
+    const conf: { [key: string]: any } = { dataIndex, title, display, displayProps }
     if (sorterFields.indexOf(field) >= 0) {
       conf.sorter = true
       conf.sortOrder = listForm._sorterField === field ? sorterMap[listForm._sorterVal] || '' : ''
@@ -48,6 +49,12 @@ const ListTable = (props: IProps) => {
         fieldsConf[item] && (fieldItem = getFieldConf(item))
       } else if (item.field) {
         fieldItem = { ...(item.conf ? getFieldConf(item.conf) : getFieldConf(item.field) || {}), ...item }
+      }
+      const { display, data, render, displayProps } = fieldItem
+      if (display && typeof render !== 'function') {
+        fieldItem.render = (v: any, r: any, i: number) => (
+          <RenderDisplay type={display} data={data} props={displayProps} store={store} val={v} record={r} index={i} />
+        )
       }
       arr.push(fieldItem)
     }

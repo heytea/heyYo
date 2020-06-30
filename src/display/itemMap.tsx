@@ -12,7 +12,7 @@ import SelectValues from '../display/selectValues'
 
 function ADC(C: ReactNode, opt: { valProp?: string, dataProp?: string } = {}) {
   const { valProp = 'children', dataProp = '' } = opt
-  return (props: any) => {
+  return (props: any = {}) => {
     const { value, data, ...oldProps } = props
     const newProps: { [key: string]: any } = {}
     newProps[valProp || 'children'] = value
