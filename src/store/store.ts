@@ -92,7 +92,7 @@ export default class Store implements IStore {
   @observable addForm: { [key: string]: any } = {}
   @observable addErrs: { [key: string]: any } = {}
   @observable addStatus = { submit: false, loading: false }
-  addPage = {
+  addPage: { [key: string]: any } = {
     title: '添加',
     form: {}
   }
