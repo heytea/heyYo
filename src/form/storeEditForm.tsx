@@ -33,8 +33,8 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
     store.setErrs(name, errsObj)
   }
   const getFieldConf = (field: string) => {
-    const { type = '', dependencies = [], rules = [], props = {}, span, data = '', title = '' } = fields && fields[field] || {}
-    return { type, dependencies, rules, props, span, data, title }
+    const { dependencies = [], rules = [], in: type = '', inProps = {}, inSpan, data = '', title = '' } = fields && fields[field] || {}
+    return { type, dependencies, rules, props: inProps, span: inSpan, data, title }
   }
   useEffect(() => {
     setLayout(isMobile ? 'vertical' : 'horizontal')

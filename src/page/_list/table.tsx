@@ -32,8 +32,8 @@ const ListTable = (props: IProps) => {
   const msg = listData[apiFormat.msg]
   const { actions, actionRowProps = {}, table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
   const getFieldConf = (field: string) => {
-    const { dataIndex = field, title = '', display = '', displayProps } = fieldsConf && fieldsConf[field] || {}
-    const conf: { [key: string]: any } = { dataIndex, title, display, displayProps }
+    const { dataIndex = field, title = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
+    const conf: { [key: string]: any } = { dataIndex, title, type: out, props: outProps }
     if (sorterFields.indexOf(field) >= 0) {
       conf.sorter = true
       conf.sortOrder = listForm._sorterField === field ? sorterMap[listForm._sorterVal] || '' : ''
@@ -50,10 +50,10 @@ const ListTable = (props: IProps) => {
       } else if (item.field) {
         fieldItem = { ...(item.conf ? getFieldConf(item.conf) : getFieldConf(item.field) || {}), ...item }
       }
-      const { display, data, render, displayProps } = fieldItem
-      if (display && typeof render !== 'function') {
+      const { type, data, render, props } = fieldItem
+      if (type && typeof render !== 'function') {
         fieldItem.render = (v: any, r: any, i: number) => (
-          <RenderDisplay type={display} data={data} props={displayProps} store={store} val={v} record={r} index={i} />
+          <RenderDisplay type={type} data={data} props={props} store={store} val={v} record={r} index={i} />
         )
       }
       arr.push(fieldItem)
@@ -61,6 +61,7 @@ const ListTable = (props: IProps) => {
     if (rowItems.length > 0) {
       arr.push({
         title: '操作',
+        fixed: 'right',
         ...actionRowProps,
         render: (v: any, record: any, index: number) => (
           <ListActionsRow store={store} items={rowItems} index={index} record={record} val={v} />
