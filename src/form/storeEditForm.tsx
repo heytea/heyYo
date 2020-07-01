@@ -8,7 +8,7 @@ import LangContext from '../lang'
 
 const ruleKeys = Object.keys(ruleMap)
 
-const StoreEditForm = observer(function ({ store, name, onSubmit, children = null }: any) {
+const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, children = null }: any) {
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
   const lang = useContext(LangContext)
   const { isMobile } = useContext(UIContext)
@@ -34,7 +34,8 @@ const StoreEditForm = observer(function ({ store, name, onSubmit, children = nul
   }
   const getFieldConf = (field: string) => {
     const { dependencies = [], rules = [], in: type = '', inProps = {}, inSpan, data = '', title = '' } = fields && fields[field] || {}
-    return { type, dependencies, rules, props: inProps, span: inSpan, data, title }
+
+    return { type, dependencies, rules: pageType === 'list' ? [] : rules, props: inProps, span: inSpan, data, title }
   }
   useEffect(() => {
     setLayout(isMobile ? 'vertical' : 'horizontal')

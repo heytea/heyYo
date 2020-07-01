@@ -88,7 +88,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
         {tabs.map((item: any) => <Tabs.TabPane tab={item.name} key={item.value + ''} />)}
       </Tabs>
       }
-      <StoreEditForm store={store} name={name} onSubmit={submit}>
+      <StoreEditForm pageType="list" store={store} name={name} onSubmit={submit}>
         {isSearch &&
         <Button htmlType="submit" type="primary" icon={listStatus.loading ? '' : <Svg src={'search'} />}
                 loading={listStatus.loading}>查询</Button>

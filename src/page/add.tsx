@@ -8,7 +8,7 @@ import PageTips from './_unit/pageTips'
 import ActionBtn from './_unit/actionsBtn'
 import StoreEditForm from '../form/storeEditForm'
 
-const AddPage = ({ Store: store = {}, name = 'list' }: any) => {
+const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
   const UI = useContext(UIContext)
   const Auth = useContext(AuthContext)
   const { config: { codeSuccess, codeValidated, apiFormat } } = useContext(ConfigContext)

@@ -123,7 +123,7 @@ export default class Store implements IStore {
   @observable editStatus = { submit: false, loading: false }
   editPage = {
     title: '编辑',
-    form: {}
+    form: []
   }
   editInitData?: Function
   editApiFn?: Function
