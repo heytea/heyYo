@@ -42,7 +42,8 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
       }
     }
     const addData = await store.add()
-    if (addData.code === codeValidated) {
+    const code = addData[apiFormat.code]
+    if (code === codeValidated) {
       store.setErrs(name, addData.data)
     }
     if (typeof addAfterFn === 'function') {
@@ -50,7 +51,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
         return false
       }
     }
-    if (addData[apiFormat.code] === codeSuccess) {
+    if (code === codeSuccess) {
       const data = addData[apiFormat.data]
       addDfForm && store.setAddForm({ valObj: addDfForm })
       const idKeyVal = addForm[idKey] || (data && data[idKey]) || ''
