@@ -106,9 +106,9 @@ export default class Store implements IStore {
   @observable detailStatus = { submit: true, loading: false }
   detailDfForm = {}
   @observable detailForm = { id: '' }
-  detailPage = {
+  detailPage: { [key: string]: any } = {
     title: '详情',
-    form: {}
+    form: []
   }
   detailInitData?: Function
   detailApiFn?: Function
@@ -121,7 +121,7 @@ export default class Store implements IStore {
   @observable editForm: { [key: string]: any } = {}
   @observable editErrs: { [key: string]: any } = {}
   @observable editStatus = { submit: false, loading: false }
-  editPage = {
+  editPage: { [key: string]: any } = {
     title: '编辑',
     form: []
   }
@@ -265,8 +265,8 @@ export default class Store implements IStore {
   }
 
   urlSetListForm = (url: string) => this.urlSetForm({ form: this.listForm, dfForm: this.listDfForm, url })
-  urlSeDetailForm = (url: string) => this.urlSetForm({ form: this.addForm, dfForm: this.addDfForm, url })
-  urlSetAddForm = (url: string) => this.urlSetForm({ form: this.detailForm, dfForm: this.detailDfForm, url })
+  urlSetDetailForm = (url: string) => this.urlSetForm({ form: this.detailForm, dfForm: this.detailForm, url })
+  urlSetAddForm = (url: string) => this.urlSetForm({ form: this.addForm, dfForm: this.addDfForm, url })
   urlSetEditForm = (url: string) => this.urlSetForm({ form: this.editForm, dfForm: this.editDfForm, url })
 
   getUrlParams = ({ fields = [], url = '' }: { fields?: Array<string>, url?: string } = {}) => {

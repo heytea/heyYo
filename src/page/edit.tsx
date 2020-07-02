@@ -17,23 +17,35 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
   const history = useHistory()
   const { pathname, search = '' } = location
   const { setPageTitle } = UI
-  const { editForm, editDfForm, editStatus, editPage, editBeforeFn, editAfterFn } = store
+  const { editSetFormBeforeFn, editSetFormAfterFn, editDfForm, editStatus, editPage, editBeforeFn, editAfterFn } = store
   const { loading, submit } = editStatus
   const {
     title: pageTitle,
     breadcrumb,
     tips: editTips,
-    idKey = 'id',
     FormBeforeNode = null,
     FormAfterNode = null,
     btnConf = {},
   } = editPage
-  const { isEdit = true, isBack = true, actions: BtnActions = [], editBtnName = '保存' } = btnConf
+  const { isSave = true, isBack = true, actions: BtnActions = [], saveBtnName = '保存' } = btnConf
 
   const fetchData = async () => {
+    store.urlSetDetailForm(location.search)
     store.urlSetEditForm(location.search)
     const initDataFn = store.editInitData
     typeof initDataFn === 'function' && initDataFn({ location, Auth })
+    const detailData = await store.getDetail()
+    if (detailData[apiFormat.code] === codeSuccess) {
+      if (typeof editSetFormBeforeFn === 'function') {
+        const { data } = await editSetFormBeforeFn({ data: detailData, location, history })
+        store.setEditForm({ valObj: data[apiFormat.data] })
+      } else {
+        store.setEditForm({ valObj: detailData[apiFormat.data] })
+      }
+      if (typeof editSetFormAfterFn === 'function') {
+        editSetFormAfterFn({ data: detailData, location, history })
+      }
+    }
   }
   const onSubmit = async () => {
     if (typeof editBeforeFn === 'function') {
@@ -42,7 +54,8 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
       }
     }
     const editData = await store.edit()
-    if (editData.code === codeValidated) {
+    const code = editData[apiFormat.code]
+    if (code === codeValidated) {
       store.setErrs(name, editData.data)
     }
     if (typeof editAfterFn === 'function') {
@@ -50,28 +63,21 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
         return false
       }
     }
-    if (editData[apiFormat.code] === codeSuccess) {
-      const data = editData[apiFormat.data]
+    if (code === codeSuccess) {
       editDfForm && store.setEditForm({ valObj: editDfForm })
-      const idKeyVal = editForm[idKey] || (data && data[idKey]) || ''
-      if (!idKeyVal) {
-        history.goBack()
-      } else {
-        const detailPathname = pathname.replace(/\/edit$/, '/detail')
-        const detailSearch = `?${idKey}=${idKeyVal}${search.replace('?', '&')}`
-        history.replace(detailPathname + detailSearch)
-      }
+      const detailUrl = pathname.replace(/\/edit$/, '/detail') + search
+      history.replace(detailUrl)
     }
     return true
   }
-  if (isEdit) {
+  if (isSave) {
     BtnActions.push({
       onClick: onSubmit,
       htmlType: 'button',
       type: 'primary',
       loading,
       disabled: !submit,
-      children: editBtnName
+      children: saveBtnName
     })
   }
   useEffect(() => {
