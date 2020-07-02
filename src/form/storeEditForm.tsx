@@ -5,11 +5,14 @@ import { UIContext } from '../index'
 import ruleMap from '../unit/validators'
 import { FormInstance } from 'antd/lib/form'
 import LangContext from '../lang'
+import EditForm from "./editForm";
+import PageTips from "../page/_unit/pageTips";
 
 const ruleKeys = Object.keys(ruleMap)
 
 const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, children = null }: any) {
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
+  const [blocksConf, setBlocksConf]: [any[], Function] = useState([])
   const lang = useContext(LangContext)
   const { isMobile } = useContext(UIContext)
   const [layout, setLayout] = useState('horizontal')
@@ -34,15 +37,11 @@ const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, chil
   }
   const getFieldConf = (field: string) => {
     const { dependencies = [], rules = [], in: type = '', inProps = {}, inSpan, data = '', title = '' } = fields && fields[field] || {}
-
     return { type, dependencies, rules: pageType === 'list' ? [] : rules, props: inProps, span: inSpan, data, title }
   }
-  useEffect(() => {
-    setLayout(isMobile ? 'vertical' : 'horizontal')
-  }, [isMobile])
-  useEffect(() => {
+  const getFormConf = (form: any[]) => {
     const tmpFieldsConf: any[] = []
-    page?.form.forEach((item: any) => {
+    form.forEach((item: any) => {
       let fieldItem: { [key: string]: any } = {}
       if (typeof item === 'string') {
         fields[item] && (fieldItem = { field: item, ...(getFieldConf(item)) })
@@ -70,23 +69,63 @@ const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, chil
       }
       tmpFieldsConf.push(fieldItem)
     })
-    setFieldsConf(tmpFieldsConf)
+    return tmpFieldsConf
+  }
+  useEffect(() => {
+    setLayout(isMobile ? 'vertical' : 'horizontal')
+  }, [isMobile])
+  useEffect(() => {
+    setFieldsConf(getFormConf(page?.form))
   }, [fields, page?.form])
+  useEffect(() => {
+    const tmpBlocks: any[] = []
+    page?.blocks?.forEach((item: any) => {
+      const { title, style = {}, form, props = {}, describe = '', tips } = item
+      tmpBlocks.push({ title, style, props, describe, tips, form: getFormConf(form) })
+    })
+    setBlocksConf(tmpBlocks)
+  }, [fields, page?.blocks])
   return (
-    <EditFrom
-      onFieldsChange={fieldsChange}
-      data={store.dict}
-      layout={layout}
-      {...formProps}
-      values={form}
-      errs={errs}
-      fields={fieldsConf}
-      loading={status.loading}
-      onChange={onChange}
-      onFinish={onSubmit}
-    >
-      {children}
-    </EditFrom>
+    <div>
+      {fieldsConf.length > 0 &&
+      <EditFrom
+        onFieldsChange={fieldsChange}
+        data={store.dict}
+        layout={layout}
+        {...formProps}
+        values={form}
+        errs={errs}
+        fields={fieldsConf}
+        loading={status.loading}
+        onChange={onChange}
+        onFinish={onSubmit}
+      >
+        {children}
+      </EditFrom>}
+      {blocksConf.length > 0 && blocksConf.map((item: any, index: number) =>
+        <div className="m-blocks-form" key={index} style={item.style || {}}>
+          {item.title && <h3 className="title">{item.title}
+            {item.describe && <span className="describe">
+              {typeof item.describe === 'function' ? item.describe() : item.describe}
+              </span>}
+          </h3>}
+          {item.tips && <PageTips {...item.tips} />}
+          <div className="u-block-form">
+            <EditForm
+              onFieldsChange={fieldsChange}
+              data={store.dict}
+              layout={layout}
+              {...item.props}
+              values={form}
+              errs={errs}
+              fields={item.form}
+              loading={status.loading}
+              onChange={onChange}
+              onFinish={onSubmit}
+            />
+          </div>
+        </div>)}
+    </div>
   )
 })
 

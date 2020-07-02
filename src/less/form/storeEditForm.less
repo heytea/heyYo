@@ -1,0 +1,24 @@
+@import '~antd/lib/style/themes/default';
+
+.m-blocks-form {
+  .title {
+    .describe {
+      padding-left: 20px;
+      font-size: 0.8em;
+      font-weight: normal;
+      color: @text-color;
+    }
+  }
+
+  .u-block-form {
+    padding: @padding-md @padding-md/2 @padding-md/2;
+    border-top: @border-width-base @border-color-split @border-style-base;
+    //background: @background-color-base;
+  }
+
+  &:last-child {
+    .u-block-form {
+      padding-bottom: 0;
+    }
+  }
+}

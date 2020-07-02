@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import IStore from '../../store/_i'
 import DetailGrid from './grid'
 import { AuthContext, UIContext } from "../../index";
+import PageTips from "../_unit/pageTips";
 
 export interface IProps {
   store: IStore,
@@ -20,7 +21,7 @@ const DetailContent = observer(({ store, data }: IProps) => {
   return <>
     {fields?.length > 0 && <DetailGrid store={store} fields={fields} data={data} />}
     {blocks?.length > 0 && blocks.map((block: any, index: number) => {
-      const { fields = [], dataKey = '', title = '', describe = '', style = {}, contentStyle = {}, show = true } = block
+      const { fields = [], dataKey = '', tips, title = '', describe = '', style = {}, contentStyle = {}, show = true } = block
       const blockData = dataKey && data ? data[dataKey] : data || {}
       const isShow = typeof show === 'function' ? show({ data: blockData, Auth, UI }) : show
       if (!isShow) {
@@ -30,10 +31,11 @@ const DetailContent = observer(({ store, data }: IProps) => {
         <div key={index} className="m-block" style={style}>
           {title &&
           <h3>{title}
-            {describe && <span className="m-block-describe">
+            {describe && <span className="describe">
               {typeof describe === 'function' ? describe() : describe}
               </span>}
           </h3>}
+          {tips && <PageTips {...tips} />}
           <div className="m-block-content" style={contentStyle}>
             <DetailGrid data={blockData} fields={fields} store={store} />
           </div>
