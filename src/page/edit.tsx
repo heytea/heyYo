@@ -7,6 +7,7 @@ import { Divider } from 'antd'
 import PageTips from './_unit/pageTips'
 import ActionBtn from './_unit/actionsBtn'
 import StoreEditForm from '../form/storeEditForm'
+import Content from "../display/content";
 
 const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
   const UI = useContext(UIContext)
@@ -17,8 +18,10 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
   const history = useHistory()
   const { pathname, search = '' } = location
   const { setPageTitle } = UI
-  const { editSetFormBeforeFn, editSetFormAfterFn, editDfForm, editStatus, editPage, editBeforeFn, editAfterFn } = store
+  const { editSetFormBeforeFn, editSetFormAfterFn, editDfForm, editStatus, detailStatus, editPage, editBeforeFn, editAfterFn, detailData } = store
   const { loading, submit } = editStatus
+  const detailCode = detailData[apiFormat.code]
+  const detailMsg = detailData[apiFormat.msg]
   const {
     title: pageTitle,
     breadcrumb,
@@ -76,7 +79,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
       htmlType: 'button',
       type: 'primary',
       loading,
-      disabled: !submit,
+      disabled: detailStatus.loading || !submit,
       children: saveBtnName
     })
   }
@@ -98,7 +101,9 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
       <Divider />
       {editTips && <PageTips {...editTips} />}
       {typeof FormBeforeNode === 'function' && <FormBeforeNode store={store} />}
-      <StoreEditForm store={store} name='edit' onSubmit={onSubmit} />
+      <Content loading={detailStatus.loading} code={detailCode} msg={detailMsg}>
+        <StoreEditForm store={store} name='edit' onSubmit={onSubmit} />
+      </Content>
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
       <ActionBtn actions={BtnActions} isBack={isBack} />
     </div>
