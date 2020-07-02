@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Button, Modal } from 'antd'
 import { ButtonProps } from 'antd/lib/button'
 import template, { templateToBoolean } from '../../unit/template'
+import { Link } from "../../index";
 
 const confirm = Modal.confirm
 
@@ -64,15 +65,12 @@ const Action = observer(({ store, name, props = {}, isConfirm, show = true, acti
       execute()
     }
   }
-
   if (!isShow) {
     return null
   }
-
   const btnProps: ButtonProps = { size: 'small', htmlType: 'button' }
   if (newUrl) {
-    btnProps.href = newUrl
-    btnProps.type = 'link'
+    return <Link href={newUrl}><Button {...btnProps} {...props} >{name}</Button></Link>
   } else {
     const { listActionsRowStatus } = store
     btnProps.loading = listActionsRowStatus.name === name && listActionsRowStatus.index === index && listActionsRowStatus.loading
