@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Button, Divider, Progress, Tooltip, Avatar, Tag } from 'antd'
 import Datetime from './datetime';
-import DetailGrid from '../page/_unit/detailGrid'
+// import DetailGrid from '../page/_unit/detailGrid'
 import PhoneEncrypt from './phoneEncrypt'
 import IdCardEncrypt from './idCardEncrypt'
 import Currency from './currency'
@@ -35,7 +35,7 @@ const itemMap: { [key: string]: any } = {
   link: ADC(Link),
   datetime: Datetime,
   keyToValue: KeyToValue,
-  detailGrid: DetailGrid,
+  // detailGrid: DetailGrid,
   phoneEncrypt: PhoneEncrypt,
   idCardEncrypt: IdCardEncrypt,
   currency: Currency,

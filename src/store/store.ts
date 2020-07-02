@@ -399,7 +399,6 @@ export default class Store implements IStore {
     const listOperateStatus = this.listOperateStatus
     listOperateStatus && (listOperateStatus[`${actionName}-${type === 'row' ? index : type}`] = loading)
   }
-
   downBlob = (blob: any, name: string) => {
     var downloadElement = document.createElement('a')
     var href = window.URL.createObjectURL(blob)

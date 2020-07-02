@@ -28,7 +28,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
     FormAfterNode = null,
     btnConf = {},
   } = addPage
-  const { isAdd = true, isBack = true, actions: BtnActions = [], addBtnName = '添加' } = btnConf
+  const { isAdd = true, isBack = true, actions: btnActions = [], addBtnName = '添加' } = btnConf
 
   const fetchData = async () => {
     store.urlSetAddForm(location.search)
@@ -66,7 +66,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
     return true
   }
   if (isAdd) {
-    BtnActions.push({
+    btnActions.push({
       onClick: onSubmit,
       htmlType: 'button',
       type: 'primary',
@@ -95,7 +95,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
       {typeof FormBeforeNode === 'function' && <FormBeforeNode store={store} />}
       <StoreEditForm store={store} name='add' onSubmit={onSubmit} />
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={BtnActions} isBack={isBack} />
+      <ActionBtn actions={btnActions} isBack={isBack} />
     </div>
   )
 }

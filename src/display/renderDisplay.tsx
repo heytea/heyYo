@@ -8,7 +8,7 @@ export interface IProps {
   store: any,
   record: any,
   val: any,
-  index: number,
+  index?: number,
   type: string,
   data: string
 }
@@ -29,7 +29,7 @@ const RenderDisplay = ({ type, val, data, store, record = {}, props, index }: IP
   }, [props])
   const C = itemMap[type]
   if (!C) {
-    return null
+    return typeof val === 'object' ? null : val
   }
   return <C value={val} data={store.dict[data]} record={record} index={index} {...newProps} />
 }

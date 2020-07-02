@@ -7,7 +7,7 @@ import { Divider } from 'antd'
 import PageTips from './_unit/pageTips'
 import ActionBtn from './_unit/actionsBtn'
 import StoreEditForm from '../form/storeEditForm'
-import Content from "../display/content";
+import Content from '../display/content'
 
 const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
   const UI = useContext(UIContext)
@@ -30,7 +30,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
     FormAfterNode = null,
     btnConf = {},
   } = editPage
-  const { isSave = true, isBack = true, actions: BtnActions = [], saveBtnName = '保存' } = btnConf
+  const { isSave = true, isBack = true, actions: btnActions = [], saveBtnName = '保存' } = btnConf
 
   const fetchData = async () => {
     store.urlSetDetailForm(location.search)
@@ -74,7 +74,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
     return true
   }
   if (isSave) {
-    BtnActions.push({
+    btnActions.push({
       onClick: onSubmit,
       htmlType: 'button',
       type: 'primary',
@@ -105,7 +105,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
         <StoreEditForm store={store} name='edit' onSubmit={onSubmit} />
       </Content>
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={BtnActions} isBack={isBack} />
+      <ActionBtn actions={btnActions} isBack={isBack} />
     </div>
   )
 }
