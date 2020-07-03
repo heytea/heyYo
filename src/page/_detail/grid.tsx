@@ -14,7 +14,7 @@ export interface IProps {
 const DetailGrid = observer(({ store, fields, data }: IProps) => {
   const { isMobile } = useContext(UIContext)
   const [rows, setRows]: [any[], Function] = useState([])
-  const { fieldsConf } = store
+  const { fieldsConf = {} } = store
   const getFieldConf = (field: string) => {
     const { title = '', out = '', outProps, outSpan } = fieldsConf && fieldsConf[field] || {}
     return { field, title, type: out, props: outProps, span: outSpan }

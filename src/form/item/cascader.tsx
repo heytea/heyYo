@@ -15,13 +15,13 @@ interface IProps {
 export default function (props: IProps) {
   const lang = useContext(LangContent)
   const { onChange, value = '', valIsArr = false, data = [], split = '/', changeOnSelect = true, ...args } = props
-  const change = (e: string[]) => {
+  const change: any = (e: string[]) => {
     if (onChange) {
       onChange(valIsArr ? e : (e || []).join(split))
     }
   }
   const newValue: any[] = toJS(valIsArr ? (typeof value === "object" ? value : []) : (typeof value === 'string' ? (value ? value.split(split) : []) : value))
-  if (typeof value === "string" && valIsArr === false) {
+  if (typeof value === 'string' && valIsArr === false) {
     for (let i = 0; i < newValue.length; i += 1) {
       const val = newValue[i]
       if (/^\d+$/.test(val)) {

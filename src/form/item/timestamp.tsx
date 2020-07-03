@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 import { datetime } from '../../unit/date'
-// import 'moment/locale/zh-cn'
-//
-// moment.locale('zh-cn')
 
 interface IProps {
   value?: string | number,
@@ -22,7 +19,8 @@ export default class RangeTimeStamp extends Component<IProps> {
   render() {
     const { format = 'YYYY-MM-DD HH:mm:ss', value = '' } = this.props
     return (
-      <DatePicker showTime format={format} value={moment(datetime(value), format) || null} onChange={this.change}/>
+      // @ts-ignore
+      <DatePicker showTime format={format} value={moment(datetime(value), format) || null} onChange={this.change} />
     )
   }
 }

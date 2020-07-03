@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IStore from '../../store/_i'
 import DetailGrid from './grid'
-import { AuthContext, UIContext } from "../../index";
-import PageTips from "../_unit/pageTips";
+import { AuthContext, UIContext } from '../../index'
+import PageTips from '../_unit/pageTips'
 
 export interface IProps {
   store: IStore,
@@ -13,7 +13,7 @@ export interface IProps {
 const DetailContent = observer(({ store, data }: IProps) => {
   const UI = useContext(UIContext)
   const Auth = useContext(AuthContext)
-  const { detailPage = {} } = store
+  const { detailPage } = store
   const { PageUI, showConf: { blocks = [], fields = [] } = {} } = detailPage
   if (typeof PageUI === 'function') {
     return <PageUI store={store} data={data} />
