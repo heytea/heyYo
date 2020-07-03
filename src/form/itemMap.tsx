@@ -10,6 +10,28 @@ import ImgCaptcha from './item/imgCaptcha'
 import Captcha from './item/captcha'
 import SelectTree from './item/selectTree'
 import Tree from './item/tree'
+import Cascader from './item/cascader'
+import Timestamp from './item/timestamp'
+import RangeDate from "./item/rangeDate";
+import React from "react";
+
+export interface HyRangeDateApProps {
+  conf?: { props?: Object, [key: string]: any },
+  field?: string,
+  onChange: Function,
+  onChangeForm: Function,
+  values: { [key: string]: any }
+}
+
+export const HyRangeDateAp = ({ conf: { props = {} } = {}, field = '', onChangeForm, values }: HyRangeDateApProps) => {
+  const [startKey, endKey] = field.split(',')
+  // @ts-ignore
+  return <RangeDate {...props} start={values[startKey]} end={values[endKey]} onChange={(val: string[]) => {
+    values[startKey] = val[0]
+    values[endKey] = val[1]
+    onChangeForm(values)
+  }} />
+}
 
 const itemMap: { [key: string]: any } = {
   input: Input,
@@ -24,5 +46,8 @@ const itemMap: { [key: string]: any } = {
   captcha: Captcha,
   selectTree: SelectTree,
   tree: Tree,
+  cascader: Cascader,
+  timestamp: Timestamp,
+  rangeDate: HyRangeDateAp
 }
 export default itemMap
