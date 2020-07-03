@@ -8,6 +8,8 @@ import Content from '../../display/content'
 import ListActionsBatch from './actionsBatch'
 import ListActionsRow from './actionsRow'
 import RenderDisplay from '../../display/renderDisplay'
+import { PaginationProps } from 'antd/lib/pagination'
+import { UIContext } from "../../index";
 
 export interface IProps {
   store: IStore,
@@ -19,6 +21,7 @@ const sorterMap = { ascend: 'ASC', descend: 'DESC', ASC: 'ascend', DESC: 'descen
 
 const ListTable = (props: IProps) => {
   const { config: { apiFormat, codeSuccess } } = useContext(ConfigContext)
+  const { isMobile } = useContext(UIContext)
   const [tableCol, setTableCol] = useState([])
   const [{ isShowRow, batchItems, rowItems }, setActionsConf]: [{ isShowRow: boolean, batchItems: any[], rowItems: any }, Function] = useState({
     isShowRow: false,
@@ -30,11 +33,11 @@ const ListTable = (props: IProps) => {
   const { fieldsConf = {} } = store
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
-  const { actions, actionRowProps = {}, table: { rowKey = 'id', columns = [], onSorter, sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
+  const { actions, actionColProps = {}, table: { rowKey = 'id', columns = [], sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title, type: out, props: outProps }
-    if (sorterFields.indexOf(field) >= 0) {
+    if (sorterFields && sorterFields.indexOf(field) >= 0) {
       conf.sorter = true
       conf.sortOrder = listForm._sorterField === field ? sorterMap[listForm._sorterVal] || '' : ''
     }
@@ -61,15 +64,15 @@ const ListTable = (props: IProps) => {
     if (rowItems.length > 0) {
       arr.push({
         title: '操作',
-        fixed: 'right',
-        ...actionRowProps,
+        fixed: isMobile ? false : 'right',
+        ...actionColProps,
         render: (v: any, record: any, index: number) => (
           <ListActionsRow store={store} items={rowItems} index={index} record={record} val={v} />
         )
       })
     }
     setTableCol(arr)
-  }, [columns, fieldsConf, rowItems, listForm?._sorterField, listForm?._sorterVal])
+  }, [isMobile, columns, fieldsConf, rowItems, listForm?._sorterField, listForm?._sorterVal])
   useEffect(() => {
     const batchArr: any[] = []
     const rowArr: any[] = []
@@ -105,20 +108,23 @@ const ListTable = (props: IProps) => {
     const queryStr = `?${store.getUrlParamsStr({ name, page: true, sorter: true })}`
     onRoutePush(queryStr)
   }
-  const pagination = {
+  const current = listData.data[apiFormat.currentPage] || 0
+  const total = listData.data[apiFormat.count] || 0
+  const pageSize = listData.data[apiFormat.pageSize] || 0
+  const pagination: PaginationProps = {
     showQuickJumper: true,
     onChange: pageChange,
     onShowSizeChange: pageSizeChange,
-    current: listData.data[apiFormat.currentPage] || 0,
-    total: listData.data[apiFormat.count] || 0,
-    pageSize: listData.data[apiFormat.pageSize] || 0,
+    current,
+    total,
+    pageSize,
     showSizeChanger: true,
     size: 'small'
   }
   const change = (_pagination: any, _filters: any, sorter: any) => {
     const { field, order } = sorter
     if (field) {
-      const { field: oldField = '', val: OldVal = '' } = tableSorter
+      const { field: oldField = '', val: OldVal = '' } = tableSorter || {}
       const orderVal = sorterMap[order]
       if (oldField !== field || OldVal !== orderVal) {
         store.urlSetForm({ name, url: location.search })
@@ -136,10 +142,10 @@ const ListTable = (props: IProps) => {
     const dfOnChange = (selectedRowKeys: Array<string | number>) => {
       store.setSelectedRowKeys(selectedRowKeys)
     }
-    const { columnWidth = 60, fixed = true, hideSelectAll = false, selectedRowKeys = [], selections = true, type = 'checkbox', onChange = dfOnChange, onSelect = () => '', onSelectAll = () => '' } = listRowSelection
+    const { columnWidth = 60, hideSelectAll = false, selectedRowKeys = [], selections = true, type = 'checkbox', onChange = dfOnChange, onSelect = () => '', onSelectAll = () => '' } = listRowSelection
     computeProps.rowSelection = {
       columnWidth,
-      fixed,
+      fixed: typeof listRowSelection.fixed !== 'undefined' ? listRowSelection.fixed : !isMobile,
       hideSelectAll,
       selectedRowKeys,
       onChange,
@@ -151,8 +157,8 @@ const ListTable = (props: IProps) => {
   }
   return (
     <div className='m-list-table'>
-      {showPaginationTotal && pagination && pagination.total > 0 ?
-        <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(pagination.total / pagination.pageSize)} 页</p> :
+      {showPaginationTotal && total > 0 ?
+        <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(total / pageSize)} 页</p> :
         <p>暂无数据</p>
       }
       <ListActionsBatch store={store} items={batchItems} />

@@ -1,15 +1,45 @@
 import { TableProps } from 'antd/lib/table/Table'
 import { ColumnProps } from 'antd/lib/table/Column'
 import { ButtonProps } from 'antd/lib/button'
+import { FormProps } from 'antd/lib/form'
 import { ReactNode } from 'react'
 import { IResult } from '../unit/http'
+import { TableRowSelection, ColumnType } from 'antd/lib/table/interface';
+import { Rule } from 'antd/lib/form'
+import { AlertProps } from "antd/lib/alert";
+
+export type ISpan = 1 | 2 | 3 | 4 | 6 | 8 | 12 | 24
+export type  IListOperateActionOpt = any
 
 export interface IDict {
   [key: string]: any
 }
 
-export interface IDataFn {
-  [key: string]: (opt?: any) => Promise<any>
+export interface IFieldsConf {
+  [key: string]: {
+    title?: string,
+    in?: string,
+    dataIndex?: string,
+    inProps?: { [key: string]: any },
+    inSpan?: ISpan,
+    out?: string,
+    outProps?: { [key: string]: any },
+    outSpan?: ISpan,
+    rules?: Rule | Array<{ [key: string]: any }>
+  }
+}
+
+export interface IForm {
+  [key: string]: any
+}
+
+export interface IStatus {
+  submit: boolean,
+  loading: boolean
+}
+
+export interface IErrs {
+  [key: string]: string | string[]
 }
 
 export interface IListAddConfItem {
@@ -19,17 +49,30 @@ export interface IListAddConfItem {
 }
 
 export type IListAddConf = IListAddConfItem | IListAddConfItem[]
-export type IListTableActions = ButtonProps[]
+
+export interface IListFormConfItem {
+  field: string,
+  type?: string,
+  title?: string,
+  conf?: string,
+  span?: ISpan,
+  data?: string,
+  render?: ReactNode | Function,
+  props?: { [key: string]: any },
+  rules?: Rule | Array<{ [key: string]: any }>
+}
+
+export type IListFormConf = Array<string | IListFormConfItem>
+
+export interface IListAction {
+  name: string,
+  type: 'row' | 'batch' | 'all',
+  show?: boolean | string | Function,
+}
 
 export interface IFormStatus {
   submit: boolean,
   loading: boolean
-}
-
-export interface IListOperateActionOpt {
-  value: any[]
-  record: { [key: string]: any }
-  index: number
 }
 
 export type IFields = Array<{
@@ -43,15 +86,24 @@ export type IFields = Array<{
   props?: { [key: string]: any }
 }>
 
-export interface IListFormConf {
-  emptyValSetUrl?: string[]
-  pageTitle: string,
-  fields: IFields
+export interface IListTAbleCol extends ColumnType<any> {
+  field: string,
+  conf?: string,
+  type?: string
 }
 
+// @ts-ignore
 export interface IListTable extends TableProps<any> {
-  dataKey?: string,
+  rowKey?: string,
+  columns: Array<IListTAbleCol | string>,
+  sorterFields?: string[],
+  sorter?: { field: string, val: 'DESC' | 'ASC' },
 }
+
+export interface ITips extends AlertProps {
+  show: boolean | Function
+}
+
 
 export interface IListOperateStatus {
   [key: string]: boolean
@@ -99,21 +151,55 @@ export interface IDetailShowConf {
 
 export default interface IStore {
   dict?: IDict,
-  dataFn?: IDataFn
-  listLoading?: boolean,
+  fieldsConf?: IFieldsConf
+  // 列表
+  listDfForm: IForm
+  listForm: IForm
+  listStatus: IStatus
   listData: IResult,
-  listAddConf?: IListAddConf,
-  listFormConf?: IListFormConf,
-  listTableActions?: IListTableActions,
-  listTable?: IListTable
-  listOperateConf?: IListOperateConf
+  listInitData?: Function
+  listApiFn?: Function
+  listRequestBeforeFn?: Function
+  listRequestAfterFn?: Function
+  listActionsBatchStatus: { name: string, loading: boolean }
+  setListActionsBatchStatus: (name: string, loading: boolean) => void
+  listActionsRowStatus: { name: string, loading: boolean, index: number }
+  setListActionsRowStatus: (name: string, loading: boolean, index: number) => void
+  listRowSelection: TableRowSelection<any>
+  listPage: {
+    isExport?: boolean,
+    isSearch?: boolean,
+    tabs?: Array<{ name: string, value: string | number }>,
+    tabField?: string,
+    breadcrumb?: Array<{ url: string, icon: string, title: string }>
+    title?: string,
+    tips?: ITips,
+    add?: IListAddConf,
+    form?: IListFormConf,
+    formProps?: FormProps,
+    emptyValSetUrl?: string[],
+    table: IListTable,
+    showPaginationTotal?: boolean
+    actions?: IListAction[],
+    actionColProps?: ColumnType<any>,
+    FormAfterNode?: ReactNode,
+    TableBeforeNode?: ReactNode,
+    TableAfterNode?: ReactNode
+  }
 
-  // enableItem?(opt: IListOperateActionOpt): void
-  //
-  // disableItem?(opt: IListOperateActionOpt): void
+  addDfForm: IForm
+  addForm: IForm
+  addStatus: IStatus
+  addErrs: IErrs
+  addData: IResult
+  addInitData?: Function
+  addApiFn?: Function
+  addRequestBeforeFn?: Function
+  addRequestAfterFn?: Function
+  addPage: {
+    title?: string
+  }
 
-  addStatus?: IFormStatus
-  addData?: IResult,
   addFormConf?: IAddFormConf,
   detailLoading?: boolean,
   detailData?: IResult,

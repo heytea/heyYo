@@ -18,7 +18,7 @@
     "build": "node scripts/build.js && npm run tsc-d"
   },
   "peerDependencies": {
-    "antd": "^4.1.0",
+    "antd": "^4.4.0",
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "mobx": "^5.9.4",
@@ -48,7 +48,7 @@
     "@types/store": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
-    "antd": "^4.1.4",
+    "antd": "^4.4.0",
     "axios": "^0.19.2",
     "babel-eslint": "10.1.0",
     "babel-jest": "^24.9.0",
