@@ -9,7 +9,7 @@ import { ConfigContext } from '../../config'
 import Link from '../../display/link'
 import Svg from '../../display/svg'
 import HySelect from '../../form/item/select'
-import LangContent from "../../lang";
+import LangContent from '../../lang'
 
 const Header = observer(function () {
   const { logout, user } = useContext(AuthContext)
@@ -19,7 +19,7 @@ const Header = observer(function () {
   const history = useHistory()
   const { pathname } = useLocation()
 
-  const menuClick = async ({ key }: { key: string }) => {
+  const menuClick = async ({ key }: any) => {
     if (key === 'logout') {
       const outData = await logout()
       if (outData[code] === codeSuccess) {
