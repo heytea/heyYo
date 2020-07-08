@@ -1,8 +1,8 @@
 {
   "name": "@heytea/heyyo",
-  "version": "0.1.29",
+  "version": "1.0.0-beta1",
   "description": "中台前端框架",
-  "author": "dev@heytea.com",
+  "author": "bfe@heytea.com",
   "license": "MIT",
   "repository": "git@github.com:heytea/heyYo.git",
   "main": "dist/index.js",
