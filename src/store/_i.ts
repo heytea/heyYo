@@ -80,7 +80,12 @@ export type IListFormConf = Array<string | IListFormConfItem>
 export interface IListAction {
   name: string,
   type: 'row' | 'batch' | 'all',
+  url?: string | Function,
+  action?: Function,
+  whom?: string,
+  isConfirm?: boolean,
   show?: boolean | string | Function,
+  props?: ButtonProps
 }
 
 export interface IListTAbleCol extends ColumnType<any> {
@@ -91,6 +96,7 @@ export interface IListTAbleCol extends ColumnType<any> {
 
 // @ts-ignore
 export interface IListTable extends TableProps<any> {
+  dataKey?: string,
   rowKey?: string,
   columns: Array<IListTAbleCol | string>,
   sorterFields?: string[],
@@ -98,7 +104,7 @@ export interface IListTable extends TableProps<any> {
 }
 
 export interface ITips extends AlertProps {
-  show: boolean | Function
+  show?: boolean | Function
 }
 
 export interface IBtnConf {
@@ -138,6 +144,103 @@ export interface IDetailShowFieldItem {
 export type IDetailShowFields = Array<string | IDetailShowFieldItem>
 
 
+export interface ISetFormOpt {
+  form: { [key: string]: any }
+  valObj?: { [key: string]: any },
+  isXss?: boolean,
+  trimType?: 'left' | 'right' | true | false,
+  isVerify?: boolean
+}
+
+export interface IUrlSetForm extends ISetFormOpt {
+  dfForm: { [key: string]: any },
+  url: string
+}
+
+export interface iSetErrsOpt {
+  [key: string]: string[] | string
+}
+
+export interface IListPage {
+  isExport?: boolean,
+  isSearch?: boolean,
+  tabs?: Array<{ name: string, value: string | number }>,
+  tabField?: string,
+  breadcrumb?: Array<{ url: string, icon: string, title: string }>
+  title?: string,
+  tips?: ITips,
+  add?: IListAddConf,
+  form?: IListFormConf,
+  formProps?: FormProps,
+  emptyValSetUrl?: string[],
+  table?: IListTable,
+  showPaginationTotal?: boolean
+  actions?: IListAction[],
+  actionColProps?: ColumnType<any>,
+  FormAfterNode?: ReactNode,
+  TableBeforeNode?: ReactNode,
+  TableAfterNode?: ReactNode
+}
+
+export interface IAddPage {
+  title?: string,
+  breadcrumb?: Array<{ url: string, icon: string, title: string }>
+  tips?: ITips,
+  idKey?: string,
+  btnConf?: IBtnConf,
+  FormBeforeNode?: ReactNode,
+  FormAfterNode?: ReactNode,
+  form?: IInFormConf,
+  blocks?: Array<{
+    title?: string,
+    style?: React.CSSProperties,
+    describe?: string,
+    tips?: ITips,
+    props?: FormProps,
+    form: IInFormConf
+  }>
+}
+
+export interface IEditPage {
+  title?: string,
+  breadcrumb?: Array<{ url: string, icon: string, title: string }>
+  tips?: ITips,
+  idKey?: string,
+  btnConf?: IBtnConf,
+  FormBeforeNode?: ReactNode,
+  FormAfterNode?: ReactNode,
+  form?: IInFormConf,
+  blocks?: Array<{
+    title?: string,
+    style?: React.CSSProperties,
+    describe?: string,
+    tips?: ITips,
+    props?: FormProps,
+    form: IInFormConf
+  }>
+}
+
+export interface IDetailPage {
+  title?: string,
+  breadcrumb?: Array<{ url: string, icon: string, title: string }>
+  tips?: ITips,
+  btnConf?: IBtnConf,
+  PageUI?: ReactNode,
+  showConf?: {
+    fields?: IDetailShowFields,
+    blocks?: Array<{
+      fields: IDetailShowFields
+      dataKey?: string,
+      tips?: ITips,
+      title?: string,
+      describe?: string,
+      style?: React.CSSProperties,
+      contentStyle?: React.CSSProperties,
+      show?: boolean | string | Function
+    }>
+  }
+}
+
 export default interface IStore {
   dict?: IDict,
   fieldsConf?: IFieldsConf
@@ -156,26 +259,8 @@ export default interface IStore {
   listActionsRowStatus: { name: string, loading: boolean, index: number }
   setListActionsRowStatus: (name: string, loading: boolean, index: number) => void
   listRowSelection: TableRowSelection<any>
-  listPage: {
-    isExport?: boolean,
-    isSearch?: boolean,
-    tabs?: Array<{ name: string, value: string | number }>,
-    tabField?: string,
-    breadcrumb?: Array<{ url: string, icon: string, title: string }>
-    title?: string,
-    tips?: ITips,
-    add?: IListAddConf,
-    form?: IListFormConf,
-    formProps?: FormProps,
-    emptyValSetUrl?: string[],
-    table: IListTable,
-    showPaginationTotal?: boolean
-    actions?: IListAction[],
-    actionColProps?: ColumnType<any>,
-    FormAfterNode?: ReactNode,
-    TableBeforeNode?: ReactNode,
-    TableAfterNode?: ReactNode
-  }
+  setSelectedRowKeys: (keys: React.Key[]) => void
+  listPage: IListPage
 
   // 添加页
   addDfForm: IForm
@@ -187,24 +272,7 @@ export default interface IStore {
   addApiFn?: Function
   addRequestBeforeFn?: Function
   addRequestAfterFn?: Function
-  addPage: {
-    title?: string,
-    breadcrumb?: Array<{ url: string, icon: string, title: string }>
-    tips?: ITips,
-    idKey?: string,
-    btnConf?: IBtnConf,
-    FormBeforeNode?: ReactNode,
-    FormAfterNode?: ReactNode,
-    form?: IInFormConf,
-    blocks?: Array<{
-      title?: string,
-      style?: React.CSSProperties,
-      describe?: string,
-      tips?: ITips,
-      props?: FormProps,
-      form: IInFormConf
-    }>
-  }
+  addPage: IAddPage,
 
   // 编辑页
   editDfForm: IForm
@@ -216,24 +284,7 @@ export default interface IStore {
   editApiFn?: Function
   editRequestBeforeFn?: Function
   editRequestAfterFn?: Function
-  editPage: {
-    title?: string,
-    breadcrumb?: Array<{ url: string, icon: string, title: string }>
-    tips?: ITips,
-    idKey?: string,
-    btnConf?: IBtnConf,
-    FormBeforeNode?: ReactNode,
-    FormAfterNode?: ReactNode,
-    form?: IInFormConf,
-    blocks?: Array<{
-      title?: string,
-      style?: React.CSSProperties,
-      describe?: string,
-      tips?: ITips,
-      props?: FormProps,
-      form: IInFormConf
-    }>
-  }
+  editPage: IEditPage,
 
   // 详情页
   detailDfForm?: IForm,
@@ -244,26 +295,9 @@ export default interface IStore {
   detailRequestBeforeFn?: Function
   detailRequestAfterFn?: Function
   detailData: IResult,
-  detailPage: {
-    title?: string,
-    breadcrumb?: Array<{ url: string, icon: string, title: string }>
-    tips?: ITips,
-    btnConf?: IBtnConf,
-    PageUI?: ReactNode,
-    showConf?: {
-      fields?: IDetailShowFields,
-      blocks?: Array<{
-        fields: IDetailShowFields
-        dataKey?: string,
-        tips?: ITips,
-        title?: string,
-        describe?: string,
-        style?: React.CSSProperties,
-        contentStyle?: React.CSSProperties,
-        show?: boolean | string | Function
-      }>
-    }
-  }
+  detailPage: IDetailPage,
+
+  setForm: (opt: ISetFormOpt) => void
 
   [key: string]: any
 }

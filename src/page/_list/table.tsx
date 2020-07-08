@@ -33,7 +33,8 @@ const ListTable = (props: IProps) => {
   const { fieldsConf = {} } = store
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
-  const { actions, actionColProps = {}, table: { rowKey = 'id', columns = [], sorterFields, sorter: tableSorter, ...tableProps }, showPaginationTotal = true } = listPage
+  const { actions, actionColProps = {}, table, showPaginationTotal = true } = listPage
+  const { rowKey = 'id', columns = [], sorterFields, sorter: tableSorter, ...tableProps } = table || {}
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title, type: out, props: outProps }
