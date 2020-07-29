@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import Link from '../../display/link'
-import { Button, Modal } from 'antd'
+import { Modal } from 'antd'
 import AuthButton from '../AuthButton';
 const confirm = Modal.confirm
 

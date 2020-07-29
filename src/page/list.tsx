@@ -138,7 +138,7 @@ class List extends Component<IProps> {
   //   </Row>
   //   </div>
   // };
-  
+
   getListAddConfInner = (conf: any) => {
     if (!conf) return null;
     const {Store, name = 'list'} = this.props
@@ -244,7 +244,7 @@ class List extends Component<IProps> {
           <Breadcrumb data={breadcrumb} dfTitle={title && title.split('-') && title.split('-')[0]}/>
           {this.getListAddConfInner(listAddConf)}
         </div>
-        <Divider/> 
+        <Divider/>
         {listTips && <PageTips {...listTips}/>}
         {listPageFormBeforeNode}
         {tabs && tabs.map &&
@@ -270,7 +270,7 @@ class List extends Component<IProps> {
         </EditForm>
         {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}
         {(isSearch || isExport) && <Divider/>}
-        {typeof ListPageTableBeforeNode === 'function' ? () => <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
+        {typeof ListPageTableBeforeNode === 'function' ? <ListPageTableBeforeNode {...Store}/> : ListPageTableBeforeNode}
         {errno !== '' && errno !== codeSuccess ?
           <Content code={errno} msg={errmsg} loading={loading}/>
           :
