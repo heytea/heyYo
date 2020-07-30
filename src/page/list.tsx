@@ -218,7 +218,7 @@ class List extends Component<IProps> {
                                                                 name={name}/>
       }]
     }
-    const { isExport = false, isSearch = true, tabs, tabField } = listFormConf
+    const { isExport = false, isSearch = true, isExportAuth = true, tabs, tabField } = listFormConf
     const listPageFormBeforeNode = Store[`${name}PageFormBeforeNode`] || null
     const ListPageFormAfterNode = Store[`${name}PageFormAfterNode`] || null
     const ListPageTableBeforeNode = Store[`${name}PageTableBeforeNode`] || null
@@ -257,13 +257,18 @@ class List extends Component<IProps> {
                   onSubmit={this.submit}>
           {isSearch &&
           <Button htmlType="submit" type="primary" icon={loading ? '' : 'search'} loading={loading}>查询</Button>}
-          {isExport &&
+          {isExport ? isExportAuth ?
           <AuthButton htmlType="button" loading={exportLoading} type="primary" ghost
             icon={exportLoading ? '' : 'download'}
             style={{marginLeft: '10px'}}
             onClick={this.exportList}>
               导出
-          </AuthButton>
+          </AuthButton> : <Button htmlType="button" loading={exportLoading} type="primary" ghost
+                                      icon={exportLoading ? '' : 'download'}
+                                      style={{marginLeft: '10px'}}
+                                      onClick={this.exportList}>
+              导出
+            </Button> : null
           }
         </EditForm>
         {typeof ListPageFormAfterNode === 'function' ? <ListPageFormAfterNode {...Store}/> : ListPageFormAfterNode}
