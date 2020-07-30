@@ -37,7 +37,6 @@ export default function (props: IProps) {
         window.eval(jsData[data])
         // @ts-ignore
         const C = window[name]
-        console.log('c', typeof C);
         if (typeof C === 'function') {
           setRemoteC(() => C)
         } else {

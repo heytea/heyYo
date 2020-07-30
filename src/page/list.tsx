@@ -43,7 +43,6 @@ class List extends Component<IProps> {
   }
 
   componentDidMount(): void {
-    console.log('componentDidMount4')
     this.fetchData()
     this.setTitle()
     const { Store, location, name = 'list', Auth } = this.props
@@ -146,7 +145,6 @@ class List extends Component<IProps> {
     if (Customized) return <Customized/>;
     let isArray = Object.prototype.toString.call(conf).includes('Array');
     let maps = isArray ? Array.from(conf) : [conf];
-    console.log(maps,'listAddConf1')
     return (
       <div className="add-link">
         {
@@ -224,7 +222,7 @@ class List extends Component<IProps> {
     const listPageFormBeforeNode = Store[`${name}PageFormBeforeNode`] || null
     const ListPageFormAfterNode = Store[`${name}PageFormAfterNode`] || null
     const ListPageTableBeforeNode = Store[`${name}PageTableBeforeNode`] || null
-    const listPageTableAfterNode = Store[`${name}PageTableAfterNode`] || null
+    const ListPageTableAfterNode = Store[`${name}PageTableAfterNode`] || null
     const pagination = {
       showQuickJumper: true,
       onChange: this.pageChange,
@@ -288,7 +286,7 @@ class List extends Component<IProps> {
             columns={[...tableProps.columns, ...columnsOperate]}
           />
         }
-        {listPageTableAfterNode}
+        {typeof ListPageTableAfterNode === 'function' ? <ListPageTableAfterNode {...Store}/> : ListPageTableAfterNode}
         {this.getListBatchOperationsRender(listBatchOperations)}
       </div>
     )

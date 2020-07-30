@@ -19,8 +19,7 @@ interface IProps {
 
 const {RangePicker} = DatePicker
 export default class RangeDate extends Component<IProps> {
-  change = (e: Array<any>, dateStrings: [string, string]) => {
-    console.log(e)
+  change = (_: Array<any>, dateStrings: [string, string]) => {
     const {onChange} = this.props
     const [start, end] = dateStrings;
     onChange && onChange([start, end]);

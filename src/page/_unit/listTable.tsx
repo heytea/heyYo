@@ -82,11 +82,9 @@ export default class extends Component<IProps, IState> {
         data-operate-loading={operate.loading}
         data-selected-row-keys={rowSelection && rowSelection.selectedRowKeys || []}
       >
-        {showPaginationTotal && pagination && pagination.total > 0 ?
-          <>
-          <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(pagination.total / pagination.pageSize)} 页</p>
-          <p>暂无数据</p>
-          </> : null
+        {showPaginationTotal ? pagination && pagination.total > 0 ?
+          <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(pagination.total / pagination.pageSize)} 页</p> : <p>暂无数据</p>
+          : null
         }
         <ListOperate Store={Store} name={name} type="batch"/>
         {/*<div className='u-table-row-selection-btn'>*/}

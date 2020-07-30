@@ -19,7 +19,6 @@ export interface AuthButtonProps extends RouteComponentProps {
 let _myMenu: Array<any> = [];
 // @ts-ignore
 const AuthButton = withRouter(function (props: AuthButtonProps) {
-    console.log(props,'props1')
   const {action} = props
   const [myMenu, setMenu] = useState([]);
   const pathname = useMemo(() => {
@@ -78,7 +77,6 @@ export default class extends Component<AuthButtonWrapProps> {
     const {apiPrivMap = {}, pageTitle} = UI
     const currentTitle = (title || pageTitle || '').trim();
     let action = (`${currentTitle}-${buttonProps.children}` || '').trim();
-    console.log(action,'action')
     if (Object.prototype.toString.call(buttonProps.children) === '[object Object]') {
       action = (`${title || pageTitle}-${buttonProps.children.props.children}` || '').trim();
     }
