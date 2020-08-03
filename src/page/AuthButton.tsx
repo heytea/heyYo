@@ -82,6 +82,9 @@ export default class extends Component<AuthButtonWrapProps> {
     }
     const Env = process.env.REACT_APP_API_ENV
     const Render = buttonProps.render
-    return (Env === 'dev' || apiPrivMap[action]) ? (Render ? <Render {...butProps}/> : <Button {...butProps}/>) : null
+    if (Env === 'dev' || apiPrivMap[action]) {
+      return Render ? <Render {...butProps}/> : <Button {...butProps}/>
+    }
+    return null;
   }
 }

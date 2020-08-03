@@ -4,7 +4,7 @@ import {Table} from 'antd'
 import {TableProps} from 'antd/lib/table/interface'
 import {observer} from 'mobx-react'
 import ListOperate from '../_unit/listOperate'
-
+import AuthButton from '../AuthButton'
 
 // import TableHeadFixed from './tableHeadFixed'
 
@@ -71,11 +71,14 @@ export default class extends Component<IProps, IState> {
     const {data = {}, dataKey = 'data'} = props;
     return data[dataKey] && data[dataKey].slice ? data[dataKey].slice() : (Array.isArray(data) ? data : [])
   };
-
+  onClick = (e: Event, item: any): any => {
+    const {onClick} = item;
+    onClick instanceof Function && onClick(e, this.props);
+  };
   render() {
     const props = this.props
     // const { tableEl, tableScroll } = this.state
-    const {operate = {}, Store, rowKey = 'id', scroll, name, pagination, showPaginationTotal = true, rowSelection} = props
+    const {operate = {}, Store, rowKey = 'id', scroll, name, listTableActions, pagination, showPaginationTotal = true, rowSelection} = props
     return (
       <div
         className='m-list-table'
@@ -87,11 +90,11 @@ export default class extends Component<IProps, IState> {
           : null
         }
         <ListOperate Store={Store} name={name} type="batch"/>
-        {/*<div className='u-table-row-selection-btn'>*/}
-        {/*  {listTableActions && listTableActions.map && listTableActions.map((item, index) =>*/}
-        {/*    <Button key={index}  {...item} >{item.children || '操作'}</Button>*/}
-        {/*  )}*/}
-        {/*</div>*/}
+        <div className='u-table-row-selection-btn'>
+          {listTableActions && listTableActions.map && listTableActions.map((item, index) =>
+            <AuthButton key={index}  {...item} onClick={(e: Event) => this.onClick(e, item)}>{item.children || '操作'}</AuthButton>
+          )}
+        </div>
         <Table
           // ref={ref => this.tableNode = ref}
           bordered

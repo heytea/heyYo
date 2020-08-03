@@ -201,6 +201,7 @@ class List extends Component<IProps> {
     const listForm = Store[`${name}Form`] || {}
     const listData = Store[`${name}Data`] || Object.assign({}, Store.dfDataPage)
     const tableFn = Store[`${name}TableFn`]
+    const listTableActions = Store[`${name}TableActions`]
     const listBatchOperations = Store[`${name}BatchOperations`] || []
     const listTips = Store[`${name}Tips`]
     const breadcrumb = Store[`${name}Breadcrumb`]
@@ -285,6 +286,7 @@ class List extends Component<IProps> {
             onPageSizeChange={this.pageSizeChange}
             onPageChange={this.pageChange}
             onSorter={this.sorter}
+            listTableActions={listTableActions}
             pagination={pagination}
             Store={Store}
             {...tableProps}
