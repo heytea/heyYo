@@ -75,6 +75,7 @@ export default class extends Component<AuthButtonWrapProps> {
     // @ts-ignore
     const {UI = {}, title, ...butProps} = this.props
     const {apiPrivMap = {}, pageTitle} = UI
+    const {auth = true} = buttonProps;
     const currentTitle = (title || pageTitle || '').trim();
     let action = (`${currentTitle}-${buttonProps.children}` || '').trim();
     if (Object.prototype.toString.call(buttonProps.children) === '[object Object]') {
@@ -82,7 +83,7 @@ export default class extends Component<AuthButtonWrapProps> {
     }
     const Env = process.env.REACT_APP_API_ENV
     const Render = buttonProps.render
-    if (Env === 'dev' || apiPrivMap[action]) {
+    if (auth && (Env === 'dev' || apiPrivMap[action])) {
       return Render ? <Render {...butProps}/> : <Button {...butProps}/>
     }
     return null;
