@@ -90,7 +90,7 @@ export default class extends Component<IProps, IState> {
           : null
         }
         <ListOperate Store={Store} name={name} type="batch"/>
-        <div className='u-table-row-selection-btn'>
+        <div className='' style={{margin: '10px 0',display: 'flex', flexFlow: 'row-reverse'}}>
           {listTableActions && listTableActions.map && listTableActions.map((item, index) =>
             <AuthButton key={index}  {...item} onClick={(e: Event) => this.onClick(e, item)}>{item.children || '操作'}</AuthButton>
           )}
