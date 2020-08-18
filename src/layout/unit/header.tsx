@@ -19,7 +19,8 @@ const Header = observer(function () {
   const history = useHistory()
   const { pathname } = useLocation()
 
-  const menuClick = async ({ key }: { key: string }) => {
+  const menuClick = async (info: any) => {
+    const { key = '' } = info || {}
     if (key === 'logout') {
       const outData = await logout()
       if (outData[code] === codeSuccess) {
