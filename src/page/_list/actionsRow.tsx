@@ -33,6 +33,8 @@ export interface IActionProps {
 const Action = observer(({ store, name, props = {}, isConfirm, show = true, action, record, val, whom = '', index, url = '' }: IActionProps) => {
   const [newUrl, setNewUrl] = useState('')
   const [isShow, setIsShow] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const { listActionsRowStatus } = store
   useEffect(() => {
     setNewUrl(typeof url === 'function' ? url(val, record, index) : template(url, { ...record, _index: index }))
   }, [url])
@@ -44,7 +46,10 @@ const Action = observer(({ store, name, props = {}, isConfirm, show = true, acti
     } else if (typeof show === 'string') {
       setIsShow(templateToBoolean(show, { ...record, _index: index }))
     }
-  }, [show, record])
+  }, [show, record, loading]) // 操作实时变化
+  useEffect(() => {
+    setLoading(listActionsRowStatus.index === index && listActionsRowStatus.loading)
+  }, [listActionsRowStatus])
   const execute = async () => {
     if (typeof action !== 'function') {
       console.error('action 必须是一个函数')
@@ -72,8 +77,7 @@ const Action = observer(({ store, name, props = {}, isConfirm, show = true, acti
   if (newUrl) {
     return <Link href={newUrl}><Button {...btnProps} {...props} >{name}</Button></Link>
   } else {
-    const { listActionsRowStatus } = store
-    btnProps.loading = listActionsRowStatus.name === name && listActionsRowStatus.index === index && listActionsRowStatus.loading
+    btnProps.loading = listActionsRowStatus.name === name && loading
     btnProps.onClick = click
     btnProps.type = 'primary'
   }

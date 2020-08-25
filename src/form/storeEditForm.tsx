@@ -41,7 +41,7 @@ const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, chil
   }
   const getFormConf = (form: any[]) => {
     const tmpFieldsConf: any[] = []
-    form.forEach((item: any) => {
+    form?.forEach((item: any) => {
       let fieldItem: { [key: string]: any } = {}
       if (typeof item === 'string') {
         fields[item] && (fieldItem = { field: item, ...(getFieldConf(item)) })

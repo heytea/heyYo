@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx'
-import React from 'react';
-import { IntlShape } from 'react-intl'
+import React from 'react'
 
 export interface IUI {
   mobileWidth: number
@@ -20,6 +19,7 @@ export interface IUI {
   leftMenuMap: { [key: string]: any },
   initDataLoading: boolean,
   isMobile: boolean,
+  langList: { id: string, name: string }[] | string[]
 
   [key: string]: any
 }
