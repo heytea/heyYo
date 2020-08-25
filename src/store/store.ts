@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx'
-import XSS, { FilterXSS } from 'xss'
+import XSS, { FilterXSS, whiteList } from 'xss'
 import { dfDataObj, dfData, dfDataPage } from '../unit/http'
 import IStore, {
   ISetFormOpt,
@@ -12,9 +12,9 @@ import IStore, {
   IEditPage,
   IAddPage
 } from './_i'
-import { TableRowSelection } from "antd/lib/table/interface";
+import { TableRowSelection } from 'antd/lib/table/interface'
 
-export const dfWhiteList: { [key: string]: any } = XSS.whiteList
+export const dfWhiteList: { [key: string]: any } = { ...whiteList }
 dfWhiteList.embed = ['src', 'allowfullscreen', 'quality', 'width', 'height', 'align', 'type', 'allowscriptaccess']
 Object.keys(dfWhiteList).forEach(key => {
   dfWhiteList[key].push('style')
@@ -27,7 +27,7 @@ export default class Store implements IStore {
   // fieldsConf: { [key: string]: { [key: string]: any } } | undefined;
 
   constructor({ whiteList = dfWhiteList } = {}) {
-    this.xss = new XSS.FilterXSS({ whiteList })
+    this.xss = new FilterXSS({ whiteList })
   }
 
   @observable dict = {}
