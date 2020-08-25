@@ -66,6 +66,7 @@ const ListTable = (props: IProps) => {
       arr.push({
         title: '操作',
         fixed: isMobile ? false : 'right',
+        dataIndex: 'id',
         ...actionColProps,
         render: (v: any, record: any, index: number) => (
           <ListActionsRow store={store} items={rowItems} index={index} record={record} val={v} />
