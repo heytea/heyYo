@@ -36,8 +36,8 @@ const ListTable = (props: IProps) => {
   const { actions, actionColProps = {}, table, showPaginationTotal = true } = listPage
   const { rowKey = 'id', columns = [], sorterFields, sorter: tableSorter, ...tableProps } = table || {}
   const getFieldConf = (field: string) => {
-    const { dataIndex = field, title = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
-    const conf: { [key: string]: any } = { dataIndex, title, type: out, props: outProps }
+    const { dataIndex = field, title = '', data = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
+    const conf: { [key: string]: any } = { dataIndex, title, data, type: out, props: outProps }
     if (sorterFields && sorterFields.indexOf(field) >= 0) {
       conf.sorter = true
       conf.sortOrder = listForm._sorterField === field ? sorterMap[listForm._sorterVal] || '' : ''
