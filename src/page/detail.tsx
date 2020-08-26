@@ -27,7 +27,7 @@ const DetailPage = ({ Store: store = {} }: any) => {
 
   const fetchData = async () => {
     store.urlSetDetailForm(location.search)
-    const initDataFn = store.editInitData
+    const initDataFn = store.detailInitData
     typeof initDataFn === 'function' && initDataFn({ location, Auth })
     store.getDetail()
   }

@@ -32,6 +32,7 @@ export interface IFieldsConf {
   [key: string]: {
     title?: string,
     in?: string,
+    data?: string,
     dataIndex?: string,
     inProps?: { [key: string]: any },
     inSpan?: ISpan,
