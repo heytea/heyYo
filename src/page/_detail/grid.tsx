@@ -16,8 +16,8 @@ const DetailGrid = observer(({ store, fields, data }: IProps) => {
   const [rows, setRows]: [any[], Function] = useState([])
   const { fieldsConf = {} } = store
   const getFieldConf = (field: string) => {
-    const { title = '', out = '', outProps, outSpan } = fieldsConf && fieldsConf[field] || {}
-    return { field, title, type: out, props: outProps, span: outSpan }
+    const { title = '', out = '', data = '', outProps, outSpan } = fieldsConf && fieldsConf[field] || {}
+    return { field, title, type: out, data, props: outProps, span: outSpan }
   }
   useEffect(() => {
     const rowArr: Array<any> = [[]]
