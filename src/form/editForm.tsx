@@ -86,7 +86,7 @@ const HyFormItem = observer(function ({ item, labelLen, errs, itemProps, onField
     props.help = help
     props.validateStatus = 'error'
   }
-  if (labelLen) {
+  if (labelLen && !(typeof title === 'undefined' || title === '')) {
     props.label = <ItemLabel label={title} length={labelLen} />
   }
 

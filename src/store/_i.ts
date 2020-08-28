@@ -6,6 +6,7 @@ import { IResult } from '../unit/http'
 import { TableRowSelection, ColumnType } from 'antd/lib/table/interface'
 import { Rule } from 'antd/lib/form'
 import { AlertProps } from 'antd/lib/alert'
+import { ModalProps } from 'antd/lib/modal'
 
 export type ISpan = 1 | 2 | 3 | 4 | 6 | 8 | 12 | 24
 
@@ -242,6 +243,10 @@ export interface IDetailPage {
   }
 }
 
+export interface IEditTableProps extends TableProps<any> {
+  isShowOperate?: boolean
+}
+
 export default interface IStore {
   dict?: IDict,
   fieldsConf?: IFieldsConf
@@ -299,6 +304,11 @@ export default interface IStore {
   detailPage: IDetailPage,
 
   setForm: (opt: ISetFormOpt) => void
+
+  // tableEdit
+  editTableModelProps?: ModalProps,
+  editTableBtnProps?: ButtonProps,
+  editTableProps?: IEditTableProps
 
   [key: string]: any
 }
