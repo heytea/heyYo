@@ -13,11 +13,10 @@ export interface IProps {
 
 export default function (props: IProps) {
   const { name = '', url = '', props: CProps = {} } = props || {}
-  const { config: { remoteJsUrl = '', apiFormat: { code, msg, data }, codeSuccess }, Http: { httpGet } } = useContext(ConfigContext)
+  const { config: { remoteJsUrl = '' } } = useContext(ConfigContext)
   const [RemoteC, setRemoteC] = useState(() => () => <Loading isCenter />)
   const [isLoad, setIsLoad] = useState(true)
   const [errMsg, setErrMsg] = useState('')
-  // const fetchJs = async () => httpGet(url ? url : remoteJsUrl + '/' + name + '.js')
   const fetchJs = () => new Promise(function (resolve) {
     const jsEl = document.createElement('script')
     jsEl.setAttribute('type', 'text/javascript')
