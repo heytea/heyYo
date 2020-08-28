@@ -44,7 +44,7 @@ export default observer(function HyItemType(props: IProps) {
   newProps.name = field
   // }
   if (!Render) {
-    if (!itemMap[type] && type) {
+    if (!itemMap[type] && type && !conf.render) {
       return <RemoteComponent name={type} props={{ ...newProps, onChange: (val: any) => change(val, field) }} />
     }
     return null
