@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useUpdateEffect } from '../unit/hooks'
 import ItemMap from './itemMap'
+import RemoteComponent from "../unit/remoteComponent";
 
 interface IProps {
   loading?: boolean,
@@ -43,6 +44,9 @@ export default observer(function HyItemType(props: IProps) {
   newProps.name = field
   // }
   if (!Render) {
+    if (!itemMap[type] && type) {
+      return <RemoteComponent name={type} props={{ ...newProps, onChange: (val: any) => change(val, field) }} />
+    }
     return null
   }
   return <Render {...newProps} onChange={(val: any) => change(val, field)} />

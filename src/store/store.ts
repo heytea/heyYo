@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx'
-import XSS, { FilterXSS, whiteList } from 'xss'
+import { FilterXSS, whiteList } from 'xss'
 import { dfDataObj, dfData, dfDataPage } from '../unit/http'
 import IStore, {
   ISetFormOpt,

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import itemMap from "./itemMap";
 import template, { isTemplate } from '../unit/template'
+import RemoteComponent from '../unit/remoteComponent'
 
 export interface IProps {
   props: { [key: string]: any }
@@ -28,10 +29,14 @@ const RenderDisplay = ({ type, val, data, store, record = {}, props, index }: IP
     setNewProps(tmpProps)
   }, [props])
   const C = itemMap[type]
+  const dfProps = { value: val, data: store.dict[data], record, index }
   if (!C) {
+    if (type) {
+      return <RemoteComponent name={type} props={{ ...dfProps, ...newProps }} />
+    }
     return typeof val === 'object' ? null : val
   }
-  return <C value={val} data={store.dict[data]} record={record} index={index} {...newProps} />
+  return <C {...dfProps} {...newProps} />
 }
 
 export default observer(RenderDisplay)

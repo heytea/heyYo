@@ -17,7 +17,7 @@ export default function HySelectRemote(props: IProps) {
   // const [idMap, setIdMap] = useState({})
   const [fetching, setFetching] = useState({})
   let lastFetchId = 0
-  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange } = props
+  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, ...args } = props
   const context = useContext(ConfigContext)
   const fetchData = async (opt: { [key: string]: any }) => {
     if (url) {
@@ -70,7 +70,9 @@ export default function HySelectRemote(props: IProps) {
   useEffect(() => initData(), [])
   return (
     <Select
-      {...props}
+      {...args}
+      value={value}
+      labelKey={labelKey}
       data={data}
       notFoundContent={fetching ? <Spin size="small" /> : null}
       filterOption={false}
