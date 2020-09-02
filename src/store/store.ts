@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import { FilterXSS, whiteList } from 'xss'
 import { dfDataObj, dfData, dfDataPage } from '../unit/http'
 import IStore, {
+  ISetTypeFormOpt,
   ISetFormOpt,
   IUrlSetForm,
   iSetErrsOpt,
@@ -31,6 +32,8 @@ export default class Store implements IStore {
   }
 
   @observable dict = {}
+
+  @action setDict = (data: { [key: string]: any }) => this.dict = { ...this.dict, ...data }
 
   // 字段配置
   // fieldsConf: { [key: string]: { [key: string]: any } } = {}
@@ -160,19 +163,19 @@ export default class Store implements IStore {
   }
 
   @action
-  setListForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+  setListForm = ({ valObj = {}, isXss = true, trimType }: ISetTypeFormOpt) => {
     this.setForm({ form: this.listForm, valObj, isXss, trimType })
   }
   @action
-  setDetailForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+  setDetailForm = ({ valObj = {}, isXss = true, trimType }: ISetTypeFormOpt) => {
     this.setForm({ form: this.detailForm, valObj, isXss, trimType })
   }
   @action
-  setAddForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+  setAddForm = ({ valObj = {}, isXss = true, trimType }: ISetTypeFormOpt) => {
     this.setForm({ form: this.addForm, valObj, isXss, trimType })
   }
   @action
-  setEditForm = ({ valObj = {}, isXss = true, trimType }: ISetFormOpt) => {
+  setEditForm = ({ valObj = {}, isXss = true, trimType }: ISetTypeFormOpt) => {
     this.setForm({ form: this.editForm, valObj, isXss, trimType })
   }
   getIsSubmit = ({ errs, form, page }: { errs: iSetErrsOpt, form: { [key: string]: any }, page: { [key: string]: any } }) => {

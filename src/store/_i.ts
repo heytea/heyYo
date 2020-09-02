@@ -135,6 +135,7 @@ export type IInFormConf = Array<string | IInFormConfItem>
 
 export interface IDetailShowFieldItem {
   field: string,
+  title?: string,
   conf?: string,
   type?: IOutFieldType,
   props?: { [key: string]: any },
@@ -146,12 +147,15 @@ export interface IDetailShowFieldItem {
 export type IDetailShowFields = Array<string | IDetailShowFieldItem>
 
 
-export interface ISetFormOpt {
-  form: { [key: string]: any }
+export interface ISetTypeFormOpt {
   valObj?: { [key: string]: any },
   isXss?: boolean,
   trimType?: 'left' | 'right' | true | false,
   isVerify?: boolean
+}
+
+export interface ISetFormOpt extends ISetTypeFormOpt {
+  form: { [key: string]: any }
 }
 
 export interface IUrlSetForm extends ISetFormOpt {
@@ -243,7 +247,7 @@ export interface IDetailPage {
   }
 }
 
-export interface IEditTableProps extends TableProps<any> {
+export interface IEditTableProps extends IListTable {
   isShowOperate?: boolean
 }
 

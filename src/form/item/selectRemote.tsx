@@ -10,6 +10,7 @@ export interface IProps extends ISelectProps {
   apiKey?: string,
   dataKey?: string,
   valInKey?: string,
+  onDataItem?: Function
 }
 
 export default function HySelectRemote(props: IProps) {
@@ -17,7 +18,7 @@ export default function HySelectRemote(props: IProps) {
   // const [idMap, setIdMap] = useState({})
   const [fetching, setFetching] = useState({})
   let lastFetchId = 0
-  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, ...args } = props
+  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, onDataItem, ...args } = props
   const context = useContext(ConfigContext)
   const fetchData = async (opt: { [key: string]: any }) => {
     if (url) {
@@ -65,14 +66,17 @@ export default function HySelectRemote(props: IProps) {
   const handleChange = (val: any) => {
     setFetching(false)
     onChange && onChange(val)
+    onDataItem && onDataItem(data.find((item: any) => (item[valKey] + '') === val))
   }
 
   useEffect(() => initData(), [])
   return (
     <Select
+      placeholder="请搜索"
       {...args}
       value={value}
       labelKey={labelKey}
+      valKey={valKey}
       data={data}
       notFoundContent={fetching ? <Spin size="small" /> : null}
       filterOption={false}

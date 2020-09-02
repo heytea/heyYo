@@ -60,7 +60,7 @@ export default function (props: IProps) {
     } else {
       runJs()
     }
-  }, [name, setC])
+  }, [name])
   return (
     !isLoad ? <Loading isCenter /> : (errMsg ? <div>{errMsg}</div> : <RemoteC {...CProps} />)
   )
