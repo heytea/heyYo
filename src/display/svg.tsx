@@ -20,13 +20,14 @@ export default function Svg(props: HTMLAttributes<HTMLAnchorElement> & { src: st
       const fn = fnMap[src] || (fnMap[src] = new Promise(async function (resolve) {
         if (svgUrl && src) {
           const data = await Http.httpGet(svgUrl + src + '.svg', {}, false, { responseType: 'text', })
+          let xml = typeof data === 'string' ? data : ''
           if (data[code] === codeSuccess) {
-            let xml = data.data || ''
-            if (typeof xml === 'string') {
-              xml = xml.replace(/(<\?xml.*?\?>|<\!--.*?-->[\n\r]*|<!DOCTYPE.*?>)*([\n\r])*/g, '')
-              if (xml.indexOf('<svg') === 0) {
-                resolve(xml)
-              }
+            xml = data.data || ''
+          }
+          if (typeof xml === 'string') {
+            xml = xml.replace(/(<\?xml.*?\?>|<\!--.*?-->[\n\r]*|<!DOCTYPE.*?>)*([\n\r])*/g, '')
+            if (xml.indexOf('<svg') === 0) {
+              resolve(xml)
             }
           }
         }
@@ -47,5 +48,5 @@ export default function Svg(props: HTMLAttributes<HTMLAnchorElement> & { src: st
       isUnmount = true
     }
   }, [src])
-  return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }} />)
+  return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }}/>)
 }
