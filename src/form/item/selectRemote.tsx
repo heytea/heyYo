@@ -11,18 +11,19 @@ export interface IProps extends ISelectProps {
   dataKey?: string,
   valInKey?: string,
   onDataItem?: Function
+  nullData?: Array<{ [key: string]: any }>
 }
 
 export default function HySelectRemote(props: IProps) {
-  const [data, setData] = useState([])
-  // const [idMap, setIdMap] = useState({})
+  const [data, setData]: [Array<{ [key: string]: any }>, Function] = useState([])
+  const [idMap, setIdMap]: [{ [key: string]: any }, Function] = useState({})
   const [fetching, setFetching] = useState({})
   let lastFetchId = 0
-  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, onDataItem, ...args } = props
+  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, onDataItem, nullData = [], ...args } = props
   const context = useContext(ConfigContext)
   const fetchData = async (opt: { [key: string]: any }) => {
     if (url) {
-      setData([])
+      setData(nullData)
       setFetching(true)
       lastFetchId += 1
       const fetchId = lastFetchId
@@ -33,12 +34,12 @@ export default function HySelectRemote(props: IProps) {
       const dataData = await fn(url, opt)
       if (fetchId === lastFetchId) {
         if (dataData[apiFormat.code] === codeSuccess) {
-          setData(dataData[dataKey || apiFormat.data])
-          // const idMap: { [key: string]: any } = {}
-          // data.forEach && data.forEach((item: any) => {
-          //   idMap[item[valKey]] = true
-          // })
-          // setIdMap(idMap)
+          setData([...nullData, ...(dataData[dataKey || apiFormat.data])])
+          const idMap: { [key: string]: any } = {}
+          data.forEach && data.forEach((item: any) => {
+            idMap[item[valKey]] = true
+          })
+          setIdMap(idMap)
         }
         setFetching(false)
       }
@@ -46,13 +47,18 @@ export default function HySelectRemote(props: IProps) {
   }
   const initData = () => {
     if (typeof value !== 'undefined' && value !== '') {
-      const opt: { [key: string]: any } = {}
-      if (mode === 'multiple' || mode === 'tags') {
-        opt[valInKey] = value
+      const item = nullData.find((item: any) => (item[valKey] + '') === value + '')
+      if (!item) {
+        const opt: { [key: string]: any } = {}
+        if (mode === 'multiple' || mode === 'tags') {
+          opt[valInKey] = value
+        } else {
+          opt[valKey] = value
+        }
+        fetchData(opt)
       } else {
-        opt[valKey] = value
+        setData(nullData)
       }
-      fetchData(opt)
     }
   }
   const searchData = debounce(
@@ -70,6 +76,9 @@ export default function HySelectRemote(props: IProps) {
   }
 
   useEffect(() => initData(), [])
+  useEffect(() => {
+    !idMap[value + ''] && initData()
+  }, [value]) // 只能监听 value 值 监听 idMap 会导致死循环
   return (
     <Select
       placeholder="请搜索"
@@ -78,7 +87,7 @@ export default function HySelectRemote(props: IProps) {
       labelKey={labelKey}
       valKey={valKey}
       data={data}
-      notFoundContent={fetching ? <Spin size="small" /> : null}
+      notFoundContent={fetching ? <Spin size="small"/> : null}
       filterOption={false}
       showSearch={true}
       onSearch={searchData}

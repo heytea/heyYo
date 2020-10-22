@@ -138,6 +138,7 @@ const typeProps: { [key: string]: any } = {
     method: 'string',
     apiKey: 'string',
     dataKey: 'string',
+    nullData: 'array',
     valInKey: 'string',
     allowClear: 'boolean',
     autoClearSearchValue: 'boolean',
