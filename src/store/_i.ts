@@ -75,6 +75,7 @@ export interface IListFormConfItem {
   render?: ReactNode | Function,
   props?: { [key: string]: any },
   rules?: Rule | Array<{ [key: string]: any }>
+  isComplex?: boolean
 }
 
 export type IListFormConf = Array<string | IListFormConfItem>

@@ -20,6 +20,7 @@
   "peerDependencies": {
     "antd": "^4.6.1",
     "axios": "^0.18.0",
+    "dayjs": "^1.9.4",
     "lodash": "^4.17.11",
     "mobx": "^5.9.4",
     "mobx-react-lite": "^2.0.6",
@@ -200,6 +201,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
+    "dayjs": "^1.9.4",
     "react-intl": "^4.6.2"
   }
 }

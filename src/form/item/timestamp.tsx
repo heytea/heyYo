@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { DatePicker } from 'antd'
-import moment from 'moment'
+import DatePicker from './datePicker'
+import dayjs from 'dayjs'
 import { datetime } from '../../unit/date'
 
 interface IProps {
@@ -20,7 +20,7 @@ export default class RangeTimeStamp extends Component<IProps> {
     const { format = 'YYYY-MM-DD HH:mm:ss', value = '' } = this.props
     return (
       // @ts-ignore
-      <DatePicker showTime format={format} value={moment(datetime(value), format) || null} onChange={this.change} />
+      <DatePicker showTime format={format} value={dayjs(datetime(value), format) || null} onChange={this.change}/>
     )
   }
 }

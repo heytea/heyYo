@@ -21,7 +21,10 @@ export default observer(function HyItemType(props: IProps) {
     formObj[key] = typeof val === 'undefined' ? '' : val
     onFieldChange && onFieldChange(formObj)
   }
-  const { field, } = conf
+  const onChangeForm = (values: any) => {
+    onChange && onChange(values);
+  }
+  const { field, isComplex = false } = conf
   const value = values[field]
   const itemData = data[conf.data]
   const type = conf.type || 'Default'
@@ -29,25 +32,27 @@ export default observer(function HyItemType(props: IProps) {
   useEffect(() => {
     setRender(() => typeof conf.render === 'function' ? conf.render : itemMap[type])
   }, [type, conf.render])
-  let newProps: { [key: string]: any } = { ...conf.props, value }
+  let newProps: { [key: string]: any } = { ...conf.props, value, }
+  let complexProps = (type === 'rangeDate' || isComplex) ? { field, onChangeForm, loading, values, dict: data } : {}
   if (itemData) {
     newProps.data = itemData
   }
   useUpdateEffect(() => { // 向上传递经过 store 处理的值 主要解决 form.item 拦截的值 与 store 的值不一致的问题
     onChange && onChange(value)
   }, [value])
-  // if (!(Render.prototype && Render.prototype.isReactComponent)) {
+  // if (type === 'rangeDate') {
   //   newProps = { ...newProps, conf, field, onChangeForm: onChange, loading, values, dict: data }
-  //   return <Render {...newProps} {...props} onChange={(val: any) => this.change(val, field)} />
+  //   return <Render {...newProps} {...props} onChange={(val: any) => change(val, field)}/>
   // }
   // if (type === 'input' || type === 'captcha' || type === 'select') {
   newProps.name = field
   // }
   if (!Render) {
     if (!itemMap[type] && conf.type && !conf.render) {
-      return <RemoteComponent name={type} props={{ ...newProps, onChange: (val: any) => change(val, field) }} />
+      return <RemoteComponent
+        name={type} props={{ ...newProps, ...complexProps, onChange: (val: any) => change(val, field) }}/>
     }
     return null
   }
-  return <Render {...newProps} onChange={(val: any) => change(val, field)} />
+  return <Render {...newProps} {...complexProps} onChange={(val: any) => change(val, field)}/>
 })

@@ -173,6 +173,7 @@ module.exports = function (webpackEnv) {
       'antd': 'antd',
       'lodash': 'lodash',
       'moment': 'moment',
+      'dayjs': 'dayjs',
       // 'moment/locale/zh-cn': 'moment.locale',
       'xss': 'xss',
     },

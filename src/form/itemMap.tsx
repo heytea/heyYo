@@ -14,6 +14,7 @@ import Cascader from './item/cascader'
 import Timestamp from './item/timestamp'
 import RangeDate from "./item/rangeDate";
 import React from "react";
+import { observer } from 'mobx-react-lite'
 
 export interface HyRangeDateApProps {
   conf?: { props?: Object, [key: string]: any },
@@ -30,7 +31,7 @@ export const HyRangeDateAp = ({ conf: { props = {} } = {}, field = '', onChangeF
     values[startKey] = val[0]
     values[endKey] = val[1]
     onChangeForm(values)
-  }} />
+  }}/>
 }
 
 const itemMap: { [key: string]: any } = {
@@ -48,6 +49,6 @@ const itemMap: { [key: string]: any } = {
   tree: Tree,
   cascader: Cascader,
   timestamp: Timestamp,
-  rangeDate: HyRangeDateAp
+  rangeDate: observer(HyRangeDateAp)
 }
 export default itemMap

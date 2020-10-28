@@ -38,6 +38,9 @@ export { default as SelectTree } from './form/item/selectTree'
 export { default as TextArea } from './form/item/textArea'
 export { default as Timestamp } from './form/item/timestamp'
 export { default as Tree } from './form/item/tree'
+export { default as DatePicker } from './form/item/datePicker';
+export { default as Calendar } from './form/item/calendar';
+export { default as TimePicker } from './form/item/timePicker';
 
 export { default as EditForm } from './form/editForm'
 export { default as ItemMap } from './form/itemMap'
