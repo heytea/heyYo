@@ -201,7 +201,7 @@ export interface IAddPage {
   blocks?: Array<{
     title?: string,
     style?: React.CSSProperties,
-    describe?: string,
+    describe?: string | ReactNode,
     tips?: ITips,
     props?: FormProps,
     form: IInFormConf
@@ -220,7 +220,7 @@ export interface IEditPage {
   blocks?: Array<{
     title?: string,
     style?: React.CSSProperties,
-    describe?: string,
+    describe?: string | ReactNode,
     tips?: ITips,
     props?: FormProps,
     form: IInFormConf
@@ -240,7 +240,7 @@ export interface IDetailPage {
       dataKey?: string,
       tips?: ITips,
       title?: string,
-      describe?: string,
+      describe?: string | ReactNode,
       style?: React.CSSProperties,
       contentStyle?: React.CSSProperties,
       show?: boolean | string | Function
