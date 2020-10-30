@@ -24,7 +24,14 @@
   }
 }
 
-.ant-btn-primary {
+.ant-btn:hover {
+  .c-svg svg {
+    fill: @primary-color;
+  }
+}
+
+.ant-btn-primary,
+.ant-btn-primary:hover {
   .c-svg svg {
     fill: @text-color-dark;
   }
@@ -35,6 +42,7 @@
     fill: @primary-color;
   }
 }
+
 .ant-btn-dangerous {
   .c-svg svg {
     fill: @error-color;

@@ -11,7 +11,9 @@ import IStore, {
   IListPage,
   IDetailPage,
   IEditPage,
-  IAddPage
+  IAddPage,
+  iDataToCsvDownOpt,
+  IFieldsConf
 } from './_i'
 import { TableRowSelection } from 'antd/lib/table/interface'
 
@@ -24,7 +26,7 @@ const OrderMap: { [key: string]: string } = { ascend: 'ASC', descend: 'DESC', AS
 
 export default class Store implements IStore {
   xss: FilterXSS
-
+  fieldsConf: IFieldsConf = {}
   // fieldsConf: { [key: string]: { [key: string]: any } } | undefined;
 
   constructor({ whiteList = dfWhiteList } = {}) {
@@ -334,6 +336,8 @@ export default class Store implements IStore {
     return { code: 700, msg: e.message, data: '' }
   }
   @action
+  resetList = () => this.listForm = { ...this.listDfForm }
+  @action
   getList = async () => {
     this.listStatus.loading = true
     try {
@@ -349,6 +353,11 @@ export default class Store implements IStore {
     this.listStatus.loading = false
     return this.listData
   }
+  @observable
+  isShowListTable = true
+
+  @action
+  setShowListTable = (bool: boolean) => this.isShowListTable = bool
 
   @action
   add = async () => {
@@ -383,14 +392,40 @@ export default class Store implements IStore {
     this.editStatus.loading = false
     return this.editData
   }
-  downBlob = (blob: any, name: string) => {
+
+  downUri = (uri: string, name: string) => {
     var downloadElement = document.createElement('a')
-    var href = window.URL.createObjectURL(blob)
-    downloadElement.href = href
+    downloadElement.href = uri
     downloadElement.download = name
     document.body.appendChild(downloadElement)
     downloadElement.click()
     document.body.removeChild(downloadElement)
-    window.URL.revokeObjectURL(href)
+  }
+  downBlob = (blob: any, name: string) => {
+    const uri = window.URL.createObjectURL(blob)
+    this.downUri(uri, name)
+    window.URL.revokeObjectURL(uri)
+  }
+
+  dataToCsvDown = ({ data, keys, titleMap = {}, name = this.listPage.title || '' }: iDataToCsvDownOpt = {}) => {
+    const fieldsConf = this?.fieldsConf || {}
+    const downData = typeof data === 'undefined' ? (this.listData.data.data || []) : data
+    const downkeys = typeof keys === 'undefined' ? Object.keys(fieldsConf) : keys
+    let str = ''
+    for (const key of downkeys) {
+      str += (titleMap[key] || fieldsConf[key]?.title || '') + ','
+    }
+    str = str.replace(/,$/, '') + '\n'
+    for (const item of downData) {
+      for (const key of downkeys) {
+        str += (typeof item[key] === 'undefined' ? '' : item[key]) + '\t,'
+      }
+      str = str.replace(/\t,$/, '\n')
+    }
+    const uri = 'data:application/vnd.ms-excel;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    this.downUri(uri, name + '.csv')
+  }
+  exportList = () => {
+    this.dataToCsvDown()
   }
 }

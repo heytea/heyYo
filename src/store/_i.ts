@@ -8,7 +8,7 @@ import { Rule } from 'antd/lib/form'
 import { AlertProps } from 'antd/lib/alert'
 import { ModalProps } from 'antd/lib/modal'
 
-export type ISpan = 1 | 2 | 3 | 4 | 6 | 8 | 12 | 24
+export type ISpan = 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 18 | 24 | number
 
 export interface IDict {
   [key: string]: any
@@ -40,7 +40,8 @@ export interface IFieldsConf {
     out?: string,
     outProps?: { [key: string]: any },
     outSpan?: ISpan,
-    rules?: IRule
+    rules?: IRule,
+    isHtml?: boolean
   }
 }
 
@@ -100,7 +101,6 @@ export interface IListTAbleCol extends ColumnType<any> {
 // @ts-ignore
 export interface IListTable extends TableProps<any> {
   dataKey?: string,
-  rowKey?: string,
   columns: Array<IListTAbleCol | string>,
   sorterFields?: string[],
   sorter?: { field: string, val: 'DESC' | 'ASC' },
@@ -168,9 +168,18 @@ export interface iSetErrsOpt {
   [key: string]: string[] | string
 }
 
+export interface iDataToCsvDownOpt {
+  data?: { [key: string]: any },
+  keys?: string[],
+  titleMap?: { [key: string]: string },
+  name?: string
+}
+
 export interface IListPage {
   isExport?: boolean,
   isSearch?: boolean,
+  isReset?: boolean,
+  isShowListTable?: boolean,
   tabs?: Array<{ name: string, value: string | number }>,
   tabField?: string,
   breadcrumb?: Array<{ url: string, icon: string, title: string }>
@@ -180,6 +189,7 @@ export interface IListPage {
   form?: IListFormConf,
   formProps?: FormProps,
   emptyValSetUrl?: string[],
+  showTableSwitch?: boolean
   table?: IListTable,
   showPaginationTotal?: boolean
   actions?: IListAction[],
@@ -272,6 +282,8 @@ export default interface IStore {
   listRowSelection: TableRowSelection<any>
   setSelectedRowKeys: (keys: React.Key[]) => void
   listPage: IListPage
+  isShowListTable: boolean,
+  setShowListTable: (bool: boolean) => void
 
   // 添加页
   addDfForm: IForm
