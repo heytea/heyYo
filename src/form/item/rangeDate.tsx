@@ -1,9 +1,10 @@
 import React from 'react'
 import DatePicker from './datePicker'
 import { RangePickerProps } from "antd/lib/date-picker";
-import dayjs from 'dayjs'
+import dayjs from '../../unit/day'
 import { datetime } from '../../unit/date'
 import { observer } from "mobx-react-lite";
+import localCn from 'antd/lib/date-picker/locale/zh_CN'
 
 interface IProps {
   start?: string | number,
@@ -15,7 +16,7 @@ interface IProps {
 
 const { RangePicker } = DatePicker
 export default observer(function HyRangeDate(props: RangePickerProps & IProps) {
-  const { format = 'YYYY-MM-DD', onChange, start = '', end = '', showTime = false } = props
+  const { format = 'YYYY-MM-DD', onChange, start = '', end = '', showTime = false, locale = localCn } = props
 
   const change: any = (e: null | Array<any>) => {
     if (onChange) {
@@ -43,36 +44,6 @@ export default observer(function HyRangeDate(props: RangePickerProps & IProps) {
     }
   }
   return (
-    <RangePicker format={format} showTime={showTime} value={value} onChange={change}/>
+    <RangePicker format={format} showTime={showTime} value={value} onChange={change} locale={locale} />
   )
 })
-
-// class RangeDate extends Component<IProps> {
-//   change = (e: Array<any>) => {
-//     const { format = 'YYYY-MM-DD', onChange } = this.props
-//     const start = e[0] ? e[0].format(format) : ''
-//     const end = e[1] ? e[1].format(format) : ''
-//     onChange && onChange([start, end])
-//   }
-//
-//   render() {
-//     const { format = 'YYYY-MM-DD', start = '', end = '', showTime = false } = this.props
-//     const value: Array<any> = [null, null]
-//     if (start) {
-//       const startDate = datetime(start, format)
-//       if (!isNaN(Date.parse(startDate))) {
-//         value[0] = moment(startDate, format)
-//       }
-//     }
-//     if (end) {
-//       const endDate = datetime(end, format)
-//       if (!isNaN(Date.parse(endDate))) {
-//         value[1] = moment(endDate, format)
-//       }
-//     }
-//     return (
-//       // @ts-ignore
-//       <RangePicker format={format} showTime={showTime} value={value} onChange={this.change} />
-//     )
-//   }
-// }

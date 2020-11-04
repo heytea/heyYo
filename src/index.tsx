@@ -3,7 +3,7 @@ import { typeProps } from './display/itemMap'
 import { Auth } from './store/auth'
 import { UI } from './store/ui'
 import { lang } from './lang'
-
+export { isLeapYear,weekday } from './unit/day'
 export const DfAuth = Auth
 export const DfUI = UI
 export const dfLang = lang
@@ -90,6 +90,7 @@ export { default as HTTP } from './unit/http'
 export { default as template } from './unit/template'
 export { isTemplate, templateToBoolean } from './unit/template'
 export { default as validators } from './unit/validators'
+export { default as day } from './unit/day'
 
 export { default as Config } from './config'
 export { ConfigContext } from './config'

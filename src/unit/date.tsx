@@ -18,7 +18,15 @@ export function datetime(date: string | number | Date, format = 'YYYY-MM-DD HH:m
   if (typeof tempDate === 'string' && tempDate.length === 10) {
     tempDate += ' 00:00:00'
   }
-  tempDate = (typeof tempDate === 'string') ? new Date(tempDate.replace(/-/g, '/')) : new Date(tempDate)
+  if ((typeof tempDate === 'string')) {
+    if (/^\d+$/.test(tempDate)) {
+      tempDate = new Date(Number(tempDate))
+    } else {
+      tempDate = new Date(tempDate.replace(/-/g, '/'))
+    }
+  } else {
+    tempDate = new Date(tempDate)
+  }
   if (tempDate instanceof Date && isNaN(tempDate.getTime())) {
     return 'Invalid Date'
   }

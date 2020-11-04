@@ -173,7 +173,7 @@ module.exports = function (webpackEnv) {
       'antd': 'antd',
       'lodash': 'lodash',
       'moment': 'moment',
-      'dayjs': 'dayjs',
+      // 'dayjs': 'dayjs',
       // 'moment/locale/zh-cn': 'moment.locale',
       'xss': 'xss',
     },
@@ -651,7 +651,7 @@ module.exports = function (webpackEnv) {
       // solution that requires the user to opt into importing specific locales.
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
       // isEnvProduction &&
