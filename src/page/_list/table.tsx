@@ -34,11 +34,11 @@ const ListTable = (props: IProps) => {
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
   const { actions, actionColProps = {}, table, showPaginationTotal = true } = listPage
-  const { rowKey = 'id', columns = [], sorterFields, sorter: tableSorter, ...tableProps } = table || {}
+  const { rowKey = 'id', uncontrolled = false, columns = [], sorterFields, sorter: tableSorter, ...tableProps } = table || {}
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '', data = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title, data, type: out, props: outProps }
-    if (sorterFields && sorterFields.indexOf(field) >= 0) {
+    if (!uncontrolled && sorterFields && sorterFields.indexOf(field) >= 0) {
       conf.sorter = true
       conf.sortOrder = listForm._sorterField === field ? sorterMap[listForm._sorterVal] || '' : ''
     }
@@ -110,29 +110,36 @@ const ListTable = (props: IProps) => {
     const queryStr = `?${store.getUrlParamsStr({ name, page: true, sorter: true })}`
     onRoutePush(queryStr)
   }
-  const current = listData.data[apiFormat.currentPage] || 0
+  const current = listData.data[apiFormat.currentPage] || 1
   const total = listData.data[apiFormat.count] || 0
-  const pageSize = listData.data[apiFormat.pageSize] || 0
+  const pageSize = listData.data[apiFormat.pageSize] || 10
+
   const pagination: PaginationProps = {
     showQuickJumper: true,
-    onChange: pageChange,
-    onShowSizeChange: pageSizeChange,
-    current,
     total,
-    pageSize,
     showSizeChanger: true,
     size: 'small'
   }
+  if (!uncontrolled) {
+    pagination.current = current
+    pagination.pageSize = pageSize
+    pagination.onChange = pageChange
+    pagination.onShowSizeChange = pageSizeChange
+  } else {
+    pagination.defaultCurrent = current
+  }
   const change = (_pagination: any, _filters: any, sorter: any) => {
-    const { field, order } = sorter
-    if (field) {
-      const { field: oldField = '', val: OldVal = '' } = tableSorter || {}
-      const orderVal = sorterMap[order]
-      if (oldField !== field || OldVal !== orderVal) {
-        store.urlSetForm({ name, url: location.search })
-        store.setListForm({ valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
-        const queryStr = `?${store.getUrlParamsStr({ name, page: false, sorter: true })}`
-        onRoutePush(queryStr)
+    if (!uncontrolled) {
+      const { field, order } = sorter
+      if (field) {
+        const { field: oldField = '', val: OldVal = '' } = tableSorter || {}
+        const orderVal = sorterMap[order]
+        if (oldField !== field || OldVal !== orderVal) {
+          store.urlSetForm({ name, url: location.search })
+          store.setListForm({ valObj: { _sorterField: field, _sorterVal: orderVal || '' } })
+          const queryStr = `?${store.getUrlParamsStr({ name, page: false, sorter: true })}`
+          onRoutePush(queryStr)
+        }
       }
     }
   }
@@ -160,7 +167,7 @@ const ListTable = (props: IProps) => {
   return (
     <div className='m-list-table'>
       {showPaginationTotal && total > 0 ?
-        <p>符合条件的信息共 {pagination.total} 条 共 {Math.ceil(total / pageSize)} 页</p> :
+        <p>符合条件的信息共 {pagination.total} 条 {!uncontrolled && <>共 {Math.ceil(total / pageSize)} 页</>}</p> :
         <p>暂无数据</p>
       }
       <ListActionsBatch store={store} items={batchItems} />

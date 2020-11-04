@@ -8,6 +8,7 @@ import { AuthContext, UIContext } from '../index'
 import TitleBtn from './_list/titleBtn'
 import StoreEditForm from '../form/storeEditForm'
 import ListTable from './_list/table'
+import ActionBtn from './_unit/actionsBtn'
 import Svg from '../display/svg'
 
 const List = observer(({ Store: store = {}, name = 'list' }: any) => {
@@ -31,8 +32,10 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     add: listAddConf = [],
     FormAfterNode = null,
     TableBeforeNode = null,
-    TableAfterNode = null
+    TableAfterNode = null,
+    btnConf = {}
   } = listPage
+  const { isBack = false, actions: btnActions = [] } = btnConf
 
   const fetchData = async () => {
     store.urlSetListForm(location.search)
@@ -116,6 +119,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
       }
       {isShowListTable && <ListTable store={store} name={name} onRoutePush={routePush} />}
       {typeof TableAfterNode === 'function' ? <TableAfterNode store={store} /> : TableAfterNode}
+      <ActionBtn actions={btnActions} isBack={isBack} />
     </div>
   )
 })

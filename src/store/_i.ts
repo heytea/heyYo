@@ -103,6 +103,7 @@ export interface IListTable extends TableProps<any> {
   dataKey?: string,
   columns: Array<IListTAbleCol | string>,
   sorterFields?: string[],
+  uncontrolled?:boolean,
   sorter?: { field: string, val: 'DESC' | 'ASC' },
 }
 
@@ -196,7 +197,8 @@ export interface IListPage {
   actionColProps?: ColumnType<any>,
   FormAfterNode?: ReactNode,
   TableBeforeNode?: ReactNode,
-  TableAfterNode?: ReactNode
+  TableAfterNode?: ReactNode,
+  btnConf?: IBtnConf,
 }
 
 export interface IAddPage {
