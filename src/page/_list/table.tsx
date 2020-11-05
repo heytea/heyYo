@@ -112,7 +112,7 @@ const ListTable = (props: IProps) => {
   }
   const current = listData.data[apiFormat.currentPage] || 1
   const total = listData.data[apiFormat.count] || 0
-  const pageSize = listData.data[apiFormat.pageSize] || 10
+  const pageSize = listData.data[apiFormat.pageSize] || 20
 
   const pagination: PaginationProps = {
     showQuickJumper: true,
@@ -127,6 +127,7 @@ const ListTable = (props: IProps) => {
     pagination.onShowSizeChange = pageSizeChange
   } else {
     pagination.defaultCurrent = current
+    pagination.defaultPageSize = pageSize
   }
   const change = (_pagination: any, _filters: any, sorter: any) => {
     if (!uncontrolled) {
