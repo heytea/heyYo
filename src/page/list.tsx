@@ -23,6 +23,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     isExport = false,
     isSearch = true,
     isReset = false,
+    queryRoutingType = 'push',
     showTableSwitch = false,
     tabs,
     tabField,
@@ -58,10 +59,14 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     fetchData()
   }, [location.pathname, location.search])
 
-  const routePush = (queryStr: string) => {
+  const routeHandle = (queryStr: string) => {
     if (queryStr !== location.search) {
-      const path = location.pathname
-      history.push(path + queryStr)
+      const path = location.pathname + queryStr
+      if (queryRoutingType === 'push') {
+        history.push(path)
+      } else {
+        history.replace(path)
+      }
     } else {
       fetchData()
     }
@@ -70,13 +75,13 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const submit = () => {
     // todo
     const queryStr = `?${store.getUrlParamsStr({ name })}`
-    routePush(queryStr)
+    routeHandle(queryStr)
   }
 
   const tagChange = (val: any) => {
     const tabChange = store.listTabChange
     tabChange && tabChange(val)
-    routePush(`?${tabField}=${val}`)
+    routeHandle(`?${tabField}=${val}`)
   }
 
   return (
@@ -117,7 +122,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
       {showTableSwitch &&
         <Switch style={{ marginBottom: '20px' }} checkedChildren="隐藏表格" unCheckedChildren="显示表格" checked={isShowListTable} onChange={setShowListTable} />
       }
-      {isShowListTable && <ListTable store={store} name={name} onRoutePush={routePush} />}
+      {isShowListTable && <ListTable store={store} name={name} onRoutePush={routeHandle} />}
       {typeof TableAfterNode === 'function' ? <TableAfterNode store={store} /> : TableAfterNode}
       <ActionBtn actions={btnActions} isBack={isBack} />
     </div>
