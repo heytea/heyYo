@@ -34,7 +34,7 @@ const ListTable = (props: IProps) => {
   const code = listData[apiFormat.code]
   const msg = listData[apiFormat.msg]
   const { actions, actionColProps = {}, table, showPaginationTotal = true } = listPage
-  const { rowKey = 'id', uncontrolled = false, columns = [], sorterFields, sorter: tableSorter, ...tableProps } = table || {}
+  const { rowKey = 'id', uncontrolled = false, defaultPageSize = 20, columns = [], sorterFields, sorter: tableSorter, ...tableProps } = table || {}
   const getFieldConf = (field: string) => {
     const { dataIndex = field, title = '', data = '', out = '', outProps } = fieldsConf && fieldsConf[field] || {}
     const conf: { [key: string]: any } = { dataIndex, title, data, type: out, props: outProps }
@@ -112,7 +112,7 @@ const ListTable = (props: IProps) => {
   }
   const current = listData.data[apiFormat.currentPage] || 1
   const total = listData.data[apiFormat.count] || 0
-  const pageSize = listData.data[apiFormat.pageSize] || 20
+  const pageSize = listData.data[apiFormat.pageSize] || defaultPageSize
 
   const pagination: PaginationProps = {
     showQuickJumper: true,
@@ -127,7 +127,7 @@ const ListTable = (props: IProps) => {
     pagination.onShowSizeChange = pageSizeChange
   } else {
     pagination.defaultCurrent = current
-    pagination.defaultPageSize = pageSize
+    pagination.defaultPageSize = defaultPageSize
   }
   const change = (_pagination: any, _filters: any, sorter: any) => {
     if (!uncontrolled) {

@@ -103,7 +103,8 @@ export interface IListTable extends TableProps<any> {
   dataKey?: string,
   columns: Array<IListTAbleCol | string>,
   sorterFields?: string[],
-  uncontrolled?:boolean,
+  uncontrolled?: boolean,
+  defaultPageSize?: number,
   sorter?: { field: string, val: 'DESC' | 'ASC' },
 }
 
