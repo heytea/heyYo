@@ -182,11 +182,8 @@ export default class Store implements IStore {
   }
   getIsSubmit = ({ errs, form, page }: { errs: iSetErrsOpt, form: { [key: string]: any }, page: { [key: string]: any } }) => {
     let isSubmit = true
-    // 判断能否提交
-    const fieldsConf: any = {}
     const fields = Object.keys(errs)
-    for (let i = 0; i < fields.length; i += 1) {
-      const field = fields[i]
+    for (const field of fields) {
       const err = errs[field]
       if (err?.length > 0) {
         isSubmit = false
@@ -194,27 +191,20 @@ export default class Store implements IStore {
       }
       // 判断空值与必填
       if (typeof form[field] === 'undefined' || form[field] === '') {
-        // @ts-ignore
         const selfFieldsConf = this?.fieldsConf || {}
-        let fieldConf = fieldsConf[field]
-        if (!fieldConf) {
-          page.form?.forEach((fField: string | { [key: string]: any }) => {
-            if (typeof fField === 'string') {
-              fieldsConf[fField] = { field: fField, ...selfFieldsConf[fField] }
-            } else if (fField.field && typeof fField.field === 'string') {
-              fieldsConf[fField.field] = { ...(fField.conf ? selfFieldsConf[fField.conf] : selfFieldsConf[fField.field] || {}), ...fField }
-            }
-          })
-        }
-        fieldConf = fieldsConf[field]
+        let fieldConf: { [key: string]: any } = selfFieldsConf[field]
         const rules = fieldConf?.rules || []
-        if (fieldConf?.type !== 'none') {
-          for (let j = 0; j < rules.length; j += 1) {
-            if (rules[j].required) {
+        const type = fieldConf?.in || fieldConf.type || ''
+        if (type && type !== 'none') {
+          for (const rule of rules) {
+            if (rule.required) {
               isSubmit = false
               break
             }
           }
+        }
+        if (!isSubmit) {
+          break
         }
       }
     }
