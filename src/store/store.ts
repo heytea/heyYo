@@ -193,18 +193,20 @@ export default class Store implements IStore {
       if (typeof form[field] === 'undefined' || form[field] === '') {
         const selfFieldsConf = this?.fieldsConf || {}
         let fieldConf: { [key: string]: any } = selfFieldsConf[field]
-        const rules = fieldConf?.rules || []
-        const type = fieldConf?.in || fieldConf.type || ''
-        if (type && type !== 'none') {
-          for (const rule of rules) {
-            if (rule.required) {
-              isSubmit = false
-              break
+        if (fieldConf) {
+          const rules = fieldConf.rules || []
+          const type = fieldConf.in || fieldConf.type || ''
+          if (type && type !== 'none') {
+            for (const rule of rules) {
+              if (rule.required) {
+                isSubmit = false
+                break
+              }
             }
           }
-        }
-        if (!isSubmit) {
-          break
+          if (!isSubmit) {
+            break
+          }
         }
       }
     }
