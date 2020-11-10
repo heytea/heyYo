@@ -79,15 +79,17 @@ export default function HySelectRemote(props: IProps) {
   useEffect(() => {
     !idMap[value + ''] && initData()
   }, [value]) // 只能监听 value 值 监听 idMap 会导致死循环
+
   return (
     <Select
       placeholder="请搜索"
       {...args}
+      mode={mode}
       value={value}
       labelKey={labelKey}
       valKey={valKey}
       data={data}
-      notFoundContent={fetching ? <Spin size="small"/> : null}
+      notFoundContent={fetching ? <Spin size="small" /> : null}
       filterOption={false}
       showSearch={true}
       onSearch={searchData}

@@ -24,14 +24,15 @@ export interface HyRangeDateApProps {
   values: { [key: string]: any }
 }
 
-export const HyRangeDateAp = ({ conf: { props = {} } = {}, field = '', onChangeForm, values }: HyRangeDateApProps) => {
+export const HyRangeDateAp = ({ field = '', onChangeForm, values, ...args }: HyRangeDateApProps) => {
   const [startKey, endKey] = field.split(',')
+
   // @ts-ignore
-  return <RangeDate {...props} start={values[startKey]} end={values[endKey]} onChange={(val: string[]) => {
+  return <RangeDate {...args} start={values[startKey]} end={values[endKey]} onChange={(val: string[]) => {
     values[startKey] = val[0]
     values[endKey] = val[1]
     onChangeForm(values)
-  }}/>
+  }} />
 }
 
 const itemMap: { [key: string]: any } = {
