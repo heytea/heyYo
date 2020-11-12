@@ -199,6 +199,7 @@ export default class Store implements IStore {
           if (type && type !== 'none') {
             for (const rule of rules) {
               if (rule.required) {
+                console.warn('required field ====>', field);
                 isSubmit = false
                 break
               }

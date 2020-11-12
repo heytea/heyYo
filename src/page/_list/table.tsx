@@ -52,7 +52,7 @@ const ListTable = (props: IProps) => {
       if (typeof item === 'string') {
         fieldsConf[item] && (fieldItem = getFieldConf(item))
       } else if (item.field) {
-        fieldItem = { ...(item.conf ? getFieldConf(item.conf) : getFieldConf(item.field) || {}), ...item }
+        fieldItem = { ...(item.conf ? getFieldConf(item.conf) : getFieldConf(item.field) || {}), ...item, dataIndex: item.field }
       }
       const { type, data, render, props } = fieldItem
       if (type && typeof render !== 'function') {
