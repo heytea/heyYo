@@ -73,16 +73,15 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
     }
     return true
   }
-  if (isSave) {
-    btnActions.push({
-      onClick: onSubmit,
-      htmlType: 'button',
-      type: 'primary',
-      loading,
-      disabled: detailStatus.loading || !submit,
-      children: saveBtnName
-    })
-  }
+  const saveBtn = isSave ? {
+    onClick: onSubmit,
+    htmlType: 'button',
+    type: 'primary',
+    loading,
+    disabled: detailStatus.loading || !submit,
+    children: saveBtnName
+  } : []
+
   useEffect(() => {
     const didMount = store.editDidMount
     typeof didMount === 'function' && didMount({ location, Auth })
@@ -93,6 +92,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
     setPageTitle(pageTitle)
     setDfTitle(pageTitle && pageTitle.split('-') && pageTitle.split('-')[0])
   }, [pageTitle])
+
   return (
     <div className="content m-edit">
       <div className="m-edit-title">
@@ -105,7 +105,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
         <StoreEditForm store={store} name='edit' onSubmit={onSubmit} />
       </Content>
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={btnActions} isBack={isBack} />
+      <ActionBtn actions={[...btnActions, saveBtn]} isBack={isBack} />
     </div>
   )
 }

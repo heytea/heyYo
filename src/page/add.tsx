@@ -65,16 +65,15 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
     }
     return true
   }
-  if (isAdd) {
-    btnActions.push({
-      onClick: onSubmit,
-      htmlType: 'button',
-      type: 'primary',
-      loading,
-      disabled: !submit,
-      children: addBtnName
-    })
-  }
+  const addBtn = isAdd ? {
+    onClick: onSubmit,
+    htmlType: 'button',
+    type: 'primary',
+    loading,
+    disabled: !submit,
+    children: addBtnName
+  } : []
+
   useEffect(() => {
     const didMount = store.addDidMount
     typeof didMount === 'function' && didMount({ location, Auth })
@@ -95,7 +94,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
       {typeof FormBeforeNode === 'function' && <FormBeforeNode store={store} />}
       <StoreEditForm store={store} name='add' onSubmit={onSubmit} />
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={btnActions} isBack={isBack} />
+      <ActionBtn actions={[...btnActions, addBtn]} isBack={isBack} />
     </div>
   )
 }
