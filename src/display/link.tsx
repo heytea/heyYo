@@ -11,6 +11,14 @@ const HyLink = (props: IProps & HTMLAttributes<HTMLAnchorElement>) => {
   if (/^[./]+/.test(href)) {
     return (<Link {...args} to={href}>{children}</Link>)
   }
-  return <a target="_blank" rel="noopener noreferrer" {...args} href={href}>{children}</a>
+  const newProps: { [key: string]: any } = {
+    rel: 'noopener noreferrer',
+    ...args,
+    href,
+  }
+  if (href.indexOf('http') >= 0) {
+    newProps.target = '_blank'
+  }
+  return <a {...newProps}>{children}</a>
 }
 export default HyLink
