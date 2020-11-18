@@ -10,7 +10,7 @@ import StoreEditForm from '../form/storeEditForm'
 import ListTable from './_list/table'
 import ActionBtn from './_unit/actionsBtn'
 import Svg from '../display/svg'
-
+import { useUpdateEffect } from '../unit/hooks'
 const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const UI = useContext(UIContext)
   const Auth = useContext(AuthContext)
@@ -23,6 +23,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     isExport = false,
     isSearch = true,
     isReset = false,
+    isEnterQuery = true,
     queryRoutingType = 'push',
     showTableSwitch = false,
     tabs,
@@ -40,14 +41,15 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
 
   const fetchData = async () => {
     store.urlSetListForm(location.search)
-    const initDataFn = store.listInitData
-    typeof initDataFn === 'function' && initDataFn({ location, Auth })
     store.getList()
   }
 
   useEffect(() => {
+    const initDataFn = store.listInitData
+    typeof initDataFn === 'function' && initDataFn({ location, Auth })
     const didMount = store.listDidMount
     typeof didMount === 'function' && didMount({ location, Auth })
+    isEnterQuery && fetchData()
   }, [])
 
   useEffect(() => {
@@ -55,12 +57,12 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     setDfTitle(pageTitle && pageTitle.split('-') && pageTitle.split('-')[0])
   }, [pageTitle])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     fetchData()
   }, [location.pathname, location.search])
 
   const routeHandle = (queryStr: string) => {
-    if (queryStr !== location.search) {
+    if (queryStr?.replace(/^\?/, '') !== location.search?.replace(/^\?/, '')) {
       const path = location.pathname + queryStr
       if (queryRoutingType === 'push') {
         history.push(path)
@@ -73,7 +75,6 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     store.setSelectedRowKeys([])
   }
   const submit = () => {
-    // todo
     const queryStr = `?${store.getUrlParamsStr({ name })}`
     routeHandle(queryStr)
   }

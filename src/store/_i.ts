@@ -182,6 +182,7 @@ export interface IListPage {
   isSearch?: boolean,
   isReset?: boolean,
   isShowListTable?: boolean,
+  isEnterQuery?: boolean,
   queryRoutingType?: 'push' | 'replace',
   tabs?: Array<{ name: string, value: string | number }>,
   tabField?: string,
