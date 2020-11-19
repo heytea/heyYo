@@ -24,7 +24,7 @@ const DetailPage = ({ Store: store = {} }: any) => {
   const detailCode = detailData[apiFormat.code]
   const detailMsg = detailData[apiFormat.msg]
   const { title: pageTitle, breadcrumb, tips: detailTips, btnConf = {} } = detailPage
-  const { isEdit = true, isBack = true, actions: btnActions = [], editBtnName = '编辑' } = btnConf
+  const { isEdit = true, isBack = true, actions: btnActions = [], editBtnName = '编辑', backUrl = '' } = btnConf
 
   const fetchData = async () => {
     store.urlSetDetailForm(location.search)
@@ -66,7 +66,7 @@ const DetailPage = ({ Store: store = {} }: any) => {
         <Divider />
         {detailTips && <PageTips {...detailTips} />}
         {detailCode === codeSuccess && <DetailContent store={store} data={detailData[apiFormat.data]} />}
-        <ActionBtn loading={loading} actions={btns} isBack={isBack} />
+        <ActionBtn loading={loading} actions={btns} isBack={isBack} backUrl={backUrl} />
       </div>
     </Content>
   )

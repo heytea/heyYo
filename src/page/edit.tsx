@@ -31,7 +31,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
     FormAfterNode = null,
     btnConf = {},
   } = editPage
-  const { isSave = true, isBack = true, actions: btnActions = [], saveBtnName = '保存' } = btnConf
+  const { isSave = true, isBack = true, actions: btnActions = [], saveBtnName = '保存', backUrl = '' } = btnConf
 
   const fetchData = async () => {
     store.urlSetDetailForm(location.search)
@@ -110,7 +110,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
         <StoreEditForm store={store} name='edit' onSubmit={onSubmit} />
       </Content>
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={[...btnActions, saveBtn]} isBack={isBack} />
+      <ActionBtn actions={[...btnActions, saveBtn]} isBack={isBack} backUrl={backUrl} />
     </div>
   )
 }

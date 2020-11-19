@@ -38,7 +38,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     TableAfterNode = null,
     btnConf = {}
   } = listPage
-  const { isBack = false, actions: btnActions = [] } = btnConf
+  const { isBack = false, actions: btnActions = [], backUrl = '' } = btnConf
 
   const fetchData = async () => {
     store.urlSetListForm(location.search)
@@ -132,7 +132,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
       }
       {isShowListTable && <ListTable store={store} name={name} onRoutePush={routeHandle} />}
       {typeof TableAfterNode === 'function' ? <TableAfterNode store={store} /> : TableAfterNode}
-      <ActionBtn actions={btnActions} isBack={isBack} />
+      <ActionBtn actions={btnActions} isBack={isBack} backUrl={backUrl} />
     </div>
   )
 })

@@ -118,6 +118,7 @@ export interface IBtnConf {
   isEdit?: boolean
   isBack?: boolean
   addBtnName?: boolean
+  backUrl?: string,
   actions?: Array<ButtonProps>
 }
 

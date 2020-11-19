@@ -29,7 +29,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
     FormAfterNode = null,
     btnConf = {},
   } = addPage
-  const { isAdd = true, isBack = true, actions: btnActions = [], addBtnName = '添加' } = btnConf
+  const { isAdd = true, isBack = true, actions: btnActions = [], addBtnName = '添加', backUrl = '' } = btnConf
 
   const fetchData = async () => {
     store.urlSetAddForm(location.search)
@@ -100,7 +100,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
       {typeof FormBeforeNode === 'function' && <FormBeforeNode store={store} />}
       <StoreEditForm store={store} name='add' onSubmit={onSubmit} />
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={[...btnActions, addBtn]} isBack={isBack} />
+      <ActionBtn actions={[...btnActions, addBtn]} isBack={isBack} backUrl={backUrl} />
     </div>
   )
 }
