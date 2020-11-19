@@ -32,7 +32,8 @@ const ActionBtn = observer((props: IProps) => {
     <Affix offsetBottom={0} {...affixProps}>
       <div className="m-page-actions">
         <div className="m-page-actions-btn">
-          {actions && actions.map && actions.map((item, index) => { item && <Button className='u-detail-Actions-btn' key={index}  {...item}>{item.children || '操作'}</Button> }
+          {actions && actions.map && actions.map((item, index) =>
+            item ? <Button className='u-detail-Actions-btn' key={index}  {...item}>{item.children || '操作'}</Button> : null
           )}
           {isBack && <Button htmlType="button" onClick={history.goBack}>返回</Button>}
         </div>
