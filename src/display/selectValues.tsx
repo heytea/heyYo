@@ -8,6 +8,7 @@ export interface IProps {
   splitKey?: string,
   labelKey?: string,
   valKey?: string,
+  isTag?: boolean,
 }
 
 // data 支持
@@ -19,7 +20,7 @@ export interface IProps {
 
 
 export default function SelectValues(props: IProps) {
-  const { data, labelKey = 'name', valKey = 'id', splitKey = ',', value = '', vToString = true } = props
+  const { data, labelKey = 'name', valKey = 'id', splitKey = ',', value = '', vToString = true, isTag = true } = props
   const valMap: { [key: string]: any } = {}
   const keyArr = value instanceof Array ? value : (vToString && typeof value === 'string' ? value.split(splitKey) : [value])
   if (keyArr.length < 1) {
@@ -34,24 +35,24 @@ export default function SelectValues(props: IProps) {
   return (
     <>
       {data && typeof data === 'object' && (data instanceof Array ?
-          data.map((item) => { // 数组
-            if (typeof item !== 'object') {
-              return valMap[item] ? <Tag>{item}</Tag> : null
-            }
-            const value = item[valKey || 'id']
-            const label = item[labelKey]
-            return valMap[value] ? <Tag key={value}>{label}</Tag> : null
-          }) :
-          Object.keys(data).map((key) => { // 对像
-            if (typeof data[key] !== 'object') {
-              return valMap[key] ? <Tag key={key}>{data[key]}</Tag> : null
-            } else {
-              const obj = data[key]
-              const value = valKey ? obj[valKey] : key
-              const label = obj[labelKey]
-              return valMap[value] ? <Tag key={value}>{label}</Tag> : null
-            }
-          })
+        data.map((item) => { // 数组
+          if (typeof item !== 'object') {
+            return valMap[item] ? <Tag>{item}</Tag> : null
+          }
+          const value = item[valKey || 'id']
+          const label = item[labelKey]
+          return valMap[value] ? (isTag ? <Tag key={value}>{label}</Tag> : label) : null
+        }) :
+        Object.keys(data).map((key) => { // 对像
+          if (typeof data[key] !== 'object') {
+            return valMap[key] ? (isTag ? <Tag key={key}>{data[key]}</Tag> : data[key]) : null
+          } else {
+            const obj = data[key]
+            const value = valKey ? obj[valKey] : key
+            const label = obj[labelKey]
+            return valMap[value] ? (isTag ? <Tag key={value}>{label}</Tag> : label) : null
+          }
+        })
       )}
     </>
   )
