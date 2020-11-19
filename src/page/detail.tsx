@@ -31,15 +31,15 @@ const DetailPage = ({ Store: store = {} }: any) => {
     typeof initDataFn === 'function' && initDataFn({ location, Auth })
     store.getDetail()
   }
-
-  const editBtn = isEdit ? {
+  const btns = btnActions && btnActions?.length > 0 ? [...btnActions] : []
+  isEdit && btns.push({
     onClick: () => history.push(pathname.replace(/\/detail$/, '/edit') + search),
     htmlType: 'button',
     type: 'primary',
     loading,
     disabled: loading,
     children: editBtnName
-  } : []
+  })
 
   useEffect(() => {
     const didMount = store.editDidMount
@@ -60,7 +60,7 @@ const DetailPage = ({ Store: store = {} }: any) => {
         <Divider />
         {detailTips && <PageTips {...detailTips} />}
         {detailCode === codeSuccess && <DetailContent store={store} data={detailData[apiFormat.data]} />}
-        <ActionBtn actions={isEdit ? [...btnActions, editBtn] : btnActions} isBack={isBack} />
+        <ActionBtn loading={loading} actions={btns} isBack={isBack} />
       </div>
     </Content>
   )
