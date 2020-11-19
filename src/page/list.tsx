@@ -10,7 +10,8 @@ import StoreEditForm from '../form/storeEditForm'
 import ListTable from './_list/table'
 import ActionBtn from './_unit/actionsBtn'
 import Svg from '../display/svg'
-import { useUpdateEffect } from '../unit/hooks'
+import { useUpdateEffect, useUnmount } from '../unit/hooks'
+
 const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const UI = useContext(UIContext)
   const Auth = useContext(AuthContext)
@@ -51,6 +52,12 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     typeof didMount === 'function' && didMount({ location, Auth })
     isEnterQuery && fetchData()
   }, [])
+
+  useUnmount(() => {
+    const unmount = store.listUnmount
+    typeof unmount === 'function' && unmount({ location, Auth })
+  })
+
 
   useEffect(() => {
     setPageTitle(pageTitle)

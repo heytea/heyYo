@@ -8,6 +8,7 @@ import PageTips from './_unit/pageTips'
 import ActionBtn from './_unit/actionsBtn'
 import Content from '../display/content';
 import DetailContent from './_detail/content'
+import { useUnmount } from '../unit/hooks'
 
 const DetailPage = ({ Store: store = {} }: any) => {
   const UI = useContext(UIContext)
@@ -46,6 +47,11 @@ const DetailPage = ({ Store: store = {} }: any) => {
     typeof didMount === 'function' && didMount({ location, Auth })
     fetchData()
   }, [])
+
+  useUnmount(() => {
+    const unmount = store.detailUnmount
+    typeof unmount === 'function' && unmount({ location, Auth })
+  })
 
   useEffect(() => {
     setPageTitle(pageTitle)

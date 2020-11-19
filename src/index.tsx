@@ -3,7 +3,7 @@ import { typeProps } from './display/itemMap'
 import { Auth } from './store/auth'
 import { UI } from './store/ui'
 import { lang } from './lang'
-export { isLeapYear,weekday } from './unit/day'
+export { isLeapYear, weekday } from './unit/day'
 export const DfAuth = Auth
 export const DfUI = UI
 export const dfLang = lang
@@ -85,7 +85,7 @@ export { default as Store } from './store/store'
 export { default as UIContext } from './store/ui'
 
 export { week, datetime } from './unit/date'
-export { useUpdateEffect } from './unit/hooks'
+export { useUpdateEffect, useUnmount } from './unit/hooks'
 export { default as HTTP } from './unit/http'
 export { default as template } from './unit/template'
 export { isTemplate, templateToBoolean } from './unit/template'

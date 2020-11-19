@@ -7,6 +7,7 @@ import { Divider } from 'antd'
 import PageTips from './_unit/pageTips'
 import ActionBtn from './_unit/actionsBtn'
 import StoreEditForm from '../form/storeEditForm'
+import { useUnmount } from '../unit/hooks'
 
 const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
   const UI = useContext(UIContext)
@@ -79,6 +80,11 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
     typeof didMount === 'function' && didMount({ location, Auth })
     fetchData()
   }, [])
+
+  useUnmount(() => {
+    const unmount = store.addUnmount
+    typeof unmount === 'function' && unmount({ location, Auth })
+  })
 
   useEffect(() => {
     setPageTitle(pageTitle)

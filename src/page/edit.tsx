@@ -8,6 +8,7 @@ import PageTips from './_unit/pageTips'
 import ActionBtn from './_unit/actionsBtn'
 import StoreEditForm from '../form/storeEditForm'
 import Content from '../display/content'
+import { useUnmount } from '../unit/hooks'
 
 const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
   const UI = useContext(UIContext)
@@ -87,6 +88,10 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
     typeof didMount === 'function' && didMount({ location, Auth })
     fetchData()
   }, [])
+  useUnmount(() => {
+    const unmount = store.editUnmount
+    typeof unmount === 'function' && unmount({ location, Auth })
+  })
 
   useEffect(() => {
     setPageTitle(pageTitle)

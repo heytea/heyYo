@@ -10,3 +10,16 @@ export function useUpdateEffect(effect: EffectCallback, dependencies?: Dependenc
     }
   }, dependencies)
 }
+
+export function useUnmount(fn: any) {
+  const fnRef = useRef(fn);
+  fnRef.current = fn;
+  useEffect(
+    () => () => {
+      if (fnRef.current && typeof fnRef.current === 'function') {
+        fnRef.current();
+      }
+    },
+    [],
+  );
+};
