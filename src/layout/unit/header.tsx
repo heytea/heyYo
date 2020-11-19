@@ -13,12 +13,16 @@ import LangContent from '../../lang'
 
 const Header = observer(function () {
   const { logout, user } = useContext(AuthContext)
-  const { clearMyMenu, myMenu, site: { name }, lang, langList = [], setLang } = useContext(UIContext)
+  const ui = useContext(UIContext)
+  const {
+    clearMyMenu, myMenu, site: { name }, lang, langList = [], setLang,
+    headerConf: { theme = 'dark', isShowMenu = true, isShowLang = true, menuProps = {}, dropdownProps = {} } = {}
+  } = ui
+
   const { config: { codeSuccess, apiFormat: { code }, topAccountMenu } } = useContext(ConfigContext)
   const langObj = useContext(LangContent)
   const history = useHistory()
   const { pathname } = useLocation()
-
   const menuClick = async (info: any) => {
     const { key = '' } = info || {}
     if (key === 'logout') {
@@ -34,32 +38,34 @@ const Header = observer(function () {
   const tmpArr = pathname.replace(/^\//, '').split('/')
   const top = `/${tmpArr[0]}`
   return (
-    <div id="b-header">
+    <div id="b-header" className={theme}>
       <Link href='/' className="logo">{name}</Link>
-      {!(pathname === '/' || pathname === 'login' || pathname === 'reset') &&
-      <div className="m-top-menu">
-        <Menu
-          theme="dark"
-          selectedKeys={[top]}
-          mode="horizontal"
-        >
-          {myMenu && myMenu.map((item: any) =>
-            <Menu.Item key={item.path}>
-              <Link href={item.path}><Svg src={item.icon} />{item.name}</Link>
-            </Menu.Item>
-          )}
-        </Menu>
-      </div>
+      {isShowMenu && !(pathname === '/' || pathname === 'login' || pathname === 'reset') &&
+        <div className="m-top-menu">
+          <Menu
+            theme={theme}
+            mode="horizontal"
+            {...menuProps}
+            selectedKeys={[top]}
+          >
+            {myMenu && myMenu.map((item: any) =>
+              <Menu.Item key={item.path}>
+                <Link href={item.path}><Svg src={item.icon} />{item.name}</Link>
+              </Menu.Item>
+            )}
+          </Menu>
+        </div>
       }
       <div className="m-top-menu-right">
         {user.id ?
           <div className="m-account">
             <Dropdown overlay={(
-              <Menu theme="dark" onClick={menuClick}>
+              <Menu theme={theme} onClick={menuClick}>
                 {topAccountMenu && topAccountMenu.map((item: any) => <Menu.Item key={item.key}>{item.name}</Menu.Item>)}
                 <Menu.Item key="logout">{langObj.out}</Menu.Item>
               </Menu>
-            )}>
+            )}
+              {...dropdownProps}>
               <p className="avatar">
                 <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
                 {' ' + user.name}
@@ -67,15 +73,15 @@ const Header = observer(function () {
             </Dropdown>
           </div> : null
         }
-        {langList?.length > 0 &&
-        <div className="m-lang">
-          <HySelect
-            style={{ minWidth: 60 }}
-            dropdownMatchSelectWidth={80}
-            showArrow={false}
-            allowClear={false} isNull={false} data={langList} onChange={(lang: string) => setLang(lang)}
-            size="small" value={lang} />
-        </div>}
+        {isShowLang && langList?.length > 0 &&
+          <div className="m-lang">
+            <HySelect
+              style={{ minWidth: 60 }}
+              dropdownMatchSelectWidth={80}
+              showArrow={false}
+              allowClear={false} isNull={false} data={langList} onChange={(lang: string) => setLang(lang)}
+              size="small" value={lang} />
+          </div>}
       </div>
     </div>
   )

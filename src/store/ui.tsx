@@ -1,6 +1,16 @@
 import { observable, action, computed } from 'mobx'
 import React from 'react'
+import { MenuProps } from 'antd/lib/menu'
+import { MenuTheme } from 'antd/lib/menu/MenuContext'
+import { DropDownProps } from 'antd/lib/dropdown/dropdown'
 
+export interface IHeaderConf {
+  theme?: MenuTheme,
+  isShowMenu?: boolean,
+  isShowLang?: boolean,
+  menuProps?: MenuProps,
+  dropdownProps?: DropDownProps | { [key: string]: any }
+}
 export interface IUI {
   mobileWidth: number
   pageTitle: string,
@@ -20,7 +30,7 @@ export interface IUI {
   initDataLoading: boolean,
   isMobile: boolean,
   langList: { id: string, name: string }[] | string[]
-
+  headerConf?: IHeaderConf
   [key: string]: any
 }
 
@@ -42,6 +52,14 @@ export class UI implements IUI {
   @action
   setLang = (v: string) => {
     this.lang = this.langList.indexOf(v) >= 0 ? v : this.dfLang
+  }
+  @observable
+  headerConf: IHeaderConf = {
+    theme: 'dark',
+    isShowMenu: true,
+    isShowLang: true,
+    menuProps: {},
+    dropdownProps: {}
   }
 
   mobileWidth = 720

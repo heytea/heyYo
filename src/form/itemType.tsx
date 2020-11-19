@@ -33,7 +33,7 @@ export default observer(function HyItemType(props: IProps) {
     setRender(() => typeof conf.render === 'function' ? conf.render : itemMap[type])
   }, [type, conf.render])
   let newProps: { [key: string]: any } = { ...conf.props, value, }
-  let complexProps = (type === 'rangeDate' || isComplex) ? { field, onChangeForm, loading, values, dict: data } : {}
+  let complexProps = (type === 'rangeDate' || type === 'rangeTime' || isComplex) ? { field, onChangeForm, loading, values, dict: data } : {}
   if (itemData) {
     newProps.data = itemData
   }
@@ -47,12 +47,13 @@ export default observer(function HyItemType(props: IProps) {
   // if (type === 'input' || type === 'captcha' || type === 'select') {
   newProps.name = field
   // }
+
   if (!Render) {
     if (!itemMap[type] && conf.type && !conf.render) {
       return <RemoteComponent
-        name={type} props={{ ...newProps, ...complexProps, onChange: (val: any) => change(val, field) }}/>
+        name={type} props={{ ...newProps, ...complexProps, onChange: (val: any) => change(val, field) }} />
     }
     return null
   }
-  return <Render {...newProps} {...complexProps} onChange={(val: any) => change(val, field)}/>
+  return <Render {...newProps} {...complexProps} onChange={(val: any) => change(val, field)} />
 })

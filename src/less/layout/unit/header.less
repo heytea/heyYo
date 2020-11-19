@@ -8,8 +8,26 @@
   //background: rgba(@layout-header-background, 0.8);
   z-index: 99;
   padding: 0 @w-right 0 @layout-sider-width;
-  background: @layout-header-background;
+  &.light{
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px 0px;
 
+  }
+  &.dark{
+    background: @layout-header-background;
+    .logo{
+      background: @background-color-base no-repeat;
+      border-bottom: @border-width-base @border-style-base @layout-header-background;
+    }
+    .m-top-menu-right {
+      color: rgba(255, 255, 255, 0.65);
+    }
+    .m-top-menu{
+      svg {
+        fill: @text-color-dark;
+      }
+    }
+  }
+  
   .logo {
     position: absolute;
     top: 0;
@@ -22,8 +40,6 @@
     font-size: @font-size-lg;
     color: @heading-color;
     text-indent: @layout-header-height + @padding-md;
-    border-bottom: @border-width-base @border-style-base @layout-header-background;
-    background: @background-color-base no-repeat;
     //background: @background-color-base url("../../assets/img/logo.png") no-repeat;
     background-size: contain;
     overflow: hidden;
@@ -37,7 +53,6 @@
     right: 0;
     padding-right: 20px;
     z-index: 2;
-    color: rgba(255, 255, 255, 0.65);
     max-width: @w-right;
 
     .m-lang {
@@ -79,10 +94,6 @@
     .c-svg {
       line-height: @font-size-lg;
       margin-right: 4px;
-
-      svg {
-        fill: @text-color-dark;
-      }
     }
   }
 }
