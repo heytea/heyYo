@@ -42,7 +42,7 @@ const DetailPage = ({ Store: store = {} }: any) => {
   })
 
   useEffect(() => {
-    const didMount = store.editDidMount
+    const didMount = store.detailDidMount
     typeof didMount === 'function' && didMount({ location, Auth })
     fetchData()
   }, [])
