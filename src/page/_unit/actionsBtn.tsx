@@ -7,10 +7,11 @@ export interface IProps {
   target?: any
   actions?: Array<{ [key: string]: any }>
   isBack?: boolean
+  loading?: boolean
 }
 
 const ActionBtn = observer((props: IProps) => {
-  const { actions = [], isBack = true, target } = props
+  const { actions = [], isBack = true, target, loading = false } = props
   if (!isBack && actions.length < 1) {
     return null
   }
@@ -28,12 +29,13 @@ const ActionBtn = observer((props: IProps) => {
     const el = affixProps.target()
     el?.dispatchEvent(new Event('resize'));
   }, [affixProps.target])
+
   return (
     <Affix offsetBottom={0} {...affixProps}>
-      <div className="m-page-actions">
+      <div className="m-page-actions" data-loading={loading}>
         <div className="m-page-actions-btn">
           {actions && actions.map && actions.map((item, index) =>
-            item ? <Button className='u-detail-Actions-btn' key={index}  {...item}>{item.children || '操作'}</Button> : null
+            item && <Button className='u-detail-Actions-btn' key={index}  {...item}>{item.children || '操作'}</Button>
           )}
           {isBack && <Button htmlType="button" onClick={history.goBack}>返回</Button>}
         </div>
