@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export default function Datetime(props: IProps) {
-  const { value = new Date(), format = 'YYYY-MM-DD HH:mm:ss', accurate = 'second' } = props
+  const { value = '', format = 'YYYY-MM-DD HH:mm:ss', accurate = 'second' } = props
   if (accurate === 'second' && /\d{10}/.test(value + '')) {
     return datetime(Number(value) * 1000, format)
   }
