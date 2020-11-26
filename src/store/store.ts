@@ -86,17 +86,17 @@ export default class Store implements IStore {
   @observable
   modelDetailVisible = false
 
-  setModelDetailVisible = action((bool = true) => this.modelDetailVisible = bool)
+  setModelDetailVisible = action((bool: boolean = true) => this.modelDetailVisible = bool)
 
   @observable
   modelAddVisible = false
 
-  setModelAddVisible = action((bool = true) => this.modelAddVisible = bool)
+  setModelAddVisible = action((bool: boolean = true) => this.modelAddVisible = bool)
 
   @observable
   modelEditVisible = false
 
-  setModelEditVisible = action((bool = true) => this.modelEditVisible = bool)
+  setModelEditVisible = action((bool: boolean = true) => this.modelEditVisible = bool)
 
   // 添加
   addDfForm = {}
