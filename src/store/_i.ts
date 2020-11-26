@@ -182,6 +182,7 @@ export interface IModalDetail {
   valueColumn?: ColumnType<any>,
   modalProps?: ModalProps,
   tableProps?: TableProps<any>
+  keys?: string[]
 }
 
 export interface IListPage {

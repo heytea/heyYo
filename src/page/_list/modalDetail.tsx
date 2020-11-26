@@ -11,7 +11,7 @@ export interface IProps {
 const ModalDetail = observer((props: IProps) => {
   const { store } = props;
   const { modalDetail, listData, modelDetailVisible, setModelDetailVisible, modelDetailIndex, fieldsConf } = store;
-  const { attrColumn = {}, valueColumn = {}, modalProps = {}, tableProps = {} } = modalDetail || {}
+  const { attrColumn = {}, valueColumn = {}, modalProps = {}, tableProps = {}, keys } = modalDetail || {}
   const data = (listData?.data?.data && listData.data.data[modelDetailIndex]) || {};
   const dataArr: any[] = [];
   const valueRender = (v: any, r: any, i: number) => {
@@ -26,10 +26,11 @@ const ModalDetail = observer((props: IProps) => {
     { title: '值', dataIndex: 'value', key: 'value', render: valueRender, ...valueColumn },
   ];
 
-  Object.keys(data).forEach((key: string, index: number) => {
+  const dataKeys = keys && keys.length > 0 ? keys : Object.keys(data)
+  dataKeys.forEach((key: string, index: number) => {
     const conf = fieldsConf && fieldsConf[key] || {}
     const { title = '', data: dictData = '', out = '', outProps = {} } = conf || {}
-    const item: { [key: string]: any } = { attr: title, value: data[key], index, dictData, out, outProps }
+    const item: { [key: string]: any } = { attr: title || key, value: data[key], index, dictData, out, outProps }
     dataArr.push(item);
   });
   return <Modal
