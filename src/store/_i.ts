@@ -177,6 +177,12 @@ export interface iDataToCsvDownOpt {
   titleMap?: { [key: string]: string },
   name?: string
 }
+export interface IModalDetail {
+  attrColumn?: ColumnType<any>,
+  valueColumn?: ColumnType<any>,
+  modalProps?: ModalProps,
+  tableProps?: TableProps<any>
+}
 
 export interface IListPage {
   isExport?: boolean,
@@ -184,6 +190,9 @@ export interface IListPage {
   isReset?: boolean,
   isShowListTable?: boolean,
   isEnterQuery?: boolean,
+  isModalDetail?: boolean,
+  isModalAdd?: boolean,
+  isModalEdit?: boolean,
   queryRoutingType?: 'push' | 'replace',
   tabs?: Array<{ name: string, value: string | number }>,
   tabField?: string,
@@ -290,6 +299,18 @@ export default interface IStore {
   listPage: IListPage
   isShowListTable: boolean,
   setShowListTable: (bool: boolean) => void
+
+  modalDetail?: IModalDetail
+  modelDetailVisible: boolean,
+  setModelDetailVisible: (bool: boolean) => void
+
+  modalAdd?: IModalDetail
+  modelAddVisible: boolean,
+  setModelAddVisible: (bool: boolean) => void
+
+  modalEdit?: IModalDetail
+  modelEditVisible: boolean,
+  setModelEditVisible: (bool: boolean) => void
 
   // 添加页
   addDfForm: IForm

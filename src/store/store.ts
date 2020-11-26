@@ -78,6 +78,26 @@ export default class Store implements IStore {
   setSelectedRowKeys = (keys: React.Key[]) => {
     this.listRowSelection.selectedRowKeys = keys
   }
+
+  modelDetailIndex = 0
+  @action
+  setModelDetailIndex = (i: number) => this.modelDetailIndex = i
+
+  @observable
+  modelDetailVisible = false
+
+  setModelDetailVisible = action((bool = true) => this.modelDetailVisible = bool)
+
+  @observable
+  modelAddVisible = false
+
+  setModelAddVisible = action((bool = true) => this.modelAddVisible = bool)
+
+  @observable
+  modelEditVisible = false
+
+  setModelEditVisible = action((bool = true) => this.modelEditVisible = bool)
+
   // 添加
   addDfForm = {}
   @observable addForm: IForm = {}

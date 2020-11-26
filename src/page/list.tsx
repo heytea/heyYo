@@ -11,6 +11,7 @@ import ListTable from './_list/table'
 import ActionBtn from './_unit/actionsBtn'
 import Svg from '../display/svg'
 import { useUpdateEffect, useUnmount } from '../unit/hooks'
+import ModalDetail from './_list/modalDetail'
 
 const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const UI = useContext(UIContext)
@@ -25,6 +26,9 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     isSearch = true,
     isReset = false,
     isEnterQuery = true,
+    isModalDetail = false,
+    isModalAdd = false,
+    isModalEdit = false,
     queryRoutingType = 'push',
     showTableSwitch = false,
     tabs,
@@ -133,6 +137,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
       {isShowListTable && <ListTable store={store} name={name} onRoutePush={routeHandle} />}
       {typeof TableAfterNode === 'function' ? <TableAfterNode store={store} /> : TableAfterNode}
       <ActionBtn actions={btnActions} isBack={isBack} backUrl={backUrl} />
+      {isModalDetail && <ModalDetail store={store} />}
     </div>
   )
 })
