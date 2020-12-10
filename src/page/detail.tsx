@@ -23,7 +23,14 @@ const DetailPage = ({ Store: store = {} }: any) => {
   const { loading } = detailStatus
   const detailCode = detailData[apiFormat.code]
   const detailMsg = detailData[apiFormat.msg]
-  const { title: pageTitle, breadcrumb, tips: detailTips, btnConf = {} } = detailPage
+  const {
+    title: pageTitle,
+    breadcrumb,
+    tips: detailTips,
+    btnConf = {},
+    ContentBeforeNode = null,
+    ContentAfterNode = null,
+  } = detailPage
   const { isEdit = true, isBack = true, actions: btnActions = [], editBtnName = '编辑', backUrl = '' } = btnConf
 
   const fetchData = async () => {
@@ -65,8 +72,10 @@ const DetailPage = ({ Store: store = {} }: any) => {
         </div>
         <Divider />
         {detailTips && <PageTips {...detailTips} />}
+        {typeof ContentBeforeNode === 'function' && <ContentBeforeNode store={store} />}
         {detailCode === codeSuccess && <DetailContent store={store} data={detailData[apiFormat.data]} />}
         <ActionBtn loading={loading} actions={btns} isBack={isBack} backUrl={backUrl} />
+        {typeof ContentAfterNode === 'function' && <ContentAfterNode store={store} />}
       </div>
     </Content>
   )

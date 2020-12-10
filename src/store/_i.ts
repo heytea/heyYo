@@ -259,6 +259,8 @@ export interface IDetailPage {
   tips?: ITips,
   btnConf?: IBtnConf,
   PageUI?: ReactNode,
+  ContentBeforeNode?: ReactNode,
+  ContentAfterNode?: ReactNode,
   showConf?: {
     fields?: IDetailShowFields,
     blocks?: Array<{
