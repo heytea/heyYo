@@ -317,6 +317,9 @@ export default interface IStore {
   modelEditVisible: boolean,
   setModelEditVisible: (bool: boolean) => void
 
+  modelListVisible: boolean,
+  setModelListVisible: (bool: boolean) => void
+
   // 添加页
   addDfForm: IForm
   addForm: IForm
