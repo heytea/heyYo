@@ -167,10 +167,10 @@ const ListTable = (props: IProps) => {
   }
   return (
     <div className='m-list-table'>
-      {showPaginationTotal && total > 0 ?
+      {showPaginationTotal && (total > 0 ?
         <p>符合条件的信息共 {pagination.total} 条 {!uncontrolled && <>共 {Math.ceil(total / pageSize)} 页</>}</p> :
         <p>暂无数据</p>
-      }
+      )}
       <ListActionsBatch store={store} items={batchItems} />
       <Table
         bordered

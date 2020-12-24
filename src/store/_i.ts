@@ -186,6 +186,8 @@ export interface IModalDetail {
 }
 
 export interface IListPage {
+  isUrlBindForm?: boolean,
+  isShowTitle?: boolean,
   isExport?: boolean,
   isSearch?: boolean,
   isReset?: boolean,

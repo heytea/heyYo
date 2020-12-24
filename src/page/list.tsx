@@ -22,6 +22,8 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const { setPageTitle } = UI
   const { listStatus, listPage, listForm, isShowListTable, setShowListTable } = store
   const {
+    isUrlBindForm = true,
+    isShowTitle = true,
     isExport = false,
     isSearch = true,
     isReset = false,
@@ -45,7 +47,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const { isBack = false, actions: btnActions = [], backUrl = '' } = btnConf
 
   const fetchData = async () => {
-    store.urlSetListForm(location.search)
+    isUrlBindForm && store.urlSetListForm(location.search)
     store.getList()
   }
 
@@ -86,8 +88,13 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     store.setSelectedRowKeys([])
   }
   const submit = () => {
-    const queryStr = `?${store.getUrlParamsStr({ name })}`
-    routeHandle(queryStr)
+    if (isUrlBindForm) {
+      const queryStr = `?${store.getUrlParamsStr({ name })}`
+      routeHandle(queryStr)
+    } else {
+      fetchData()
+    }
+
   }
 
   const tagChange = (val: any) => {
@@ -98,11 +105,15 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
 
   return (
     <div className="m-list" data-url={location.pathname + location.search}>
-      <div className="m-list-title">
-        <Breadcrumb data={breadcrumb} dfTitle={dfTitle} />
-        <TitleBtn addConf={listAddConf} />
-      </div>
-      <Divider />
+      {isShowTitle &&
+        <>
+          <div className="m-list-title">
+            <Breadcrumb data={breadcrumb} dfTitle={dfTitle} />
+            <TitleBtn addConf={listAddConf} />
+          </div>
+          <Divider />
+        </>
+      }
       {listTips && <PageTips {...listTips} />}
       {tabs && tabs.map &&
         <Tabs activeKey={listForm[tabField] + ''} onChange={tagChange}>
