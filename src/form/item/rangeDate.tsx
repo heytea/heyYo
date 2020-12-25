@@ -16,7 +16,7 @@ interface IProps {
 
 const { RangePicker } = DatePicker
 export default observer(function HyRangeDate(props: RangePickerProps & IProps) {
-  const { format = 'YYYY-MM-DD', onChange, start = '', end = '', showTime = false, locale = localCn } = props
+  const { format = 'YYYY-MM-DD', onChange, start = '', end = '', showTime = false, locale = localCn, ...args } = props
 
   const change: any = (e: null | Array<any>) => {
     if (onChange) {
@@ -44,6 +44,7 @@ export default observer(function HyRangeDate(props: RangePickerProps & IProps) {
     }
   }
   return (
-    <RangePicker format={format} showTime={showTime} value={value} onChange={change} locale={locale} />
+    // @ts-ignore
+    <RangePicker {...args} format={format} showTime={showTime} value={value} onChange={change} locale={locale} />
   )
 })
