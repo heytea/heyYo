@@ -30,7 +30,7 @@ export default observer(function HyItemType(props: IProps) {
   const type = conf.type || 'Default'
   const [Render, setRender]: [any, Function] = useState(null)
   useEffect(() => {
-    setRender(() => typeof conf.render === 'function' ? conf.render : itemMap[type])
+    setRender(() => conf.render ? conf.render : itemMap[type])
   }, [type, conf.render])
   let newProps: { [key: string]: any } = { ...conf.props, value, }
   let complexProps = (type === 'rangeDate' || type === 'rangeTime' || isComplex) ? { field, onChangeForm, loading, values, dict: data } : {}
@@ -40,13 +40,7 @@ export default observer(function HyItemType(props: IProps) {
   useUpdateEffect(() => { // 向上传递经过 store 处理的值 主要解决 form.item 拦截的值 与 store 的值不一致的问题
     onChange && onChange(value)
   }, [value])
-  // if (type === 'rangeDate') {
-  //   newProps = { ...newProps, conf, field, onChangeForm: onChange, loading, values, dict: data }
-  //   return <Render {...newProps} {...props} onChange={(val: any) => change(val, field)}/>
-  // }
-  // if (type === 'input' || type === 'captcha' || type === 'select') {
   newProps.name = field
-  // }
 
   if (!Render) {
     if (!itemMap[type] && conf.type && !conf.render) {
