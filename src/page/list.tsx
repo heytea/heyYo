@@ -111,7 +111,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
         <>
           <div className="m-list-title">
             <Breadcrumb data={breadcrumb} dfTitle={dfTitle} />
-            <TitleBtn addConf={listAddConf} isModalAdd={ } />
+            <TitleBtn addConf={listAddConf} />
           </div>
           <Divider />
         </>

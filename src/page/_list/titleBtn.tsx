@@ -13,13 +13,16 @@ const ListTitleBtn = observer(function ({ addConf }: any) {
     <div className="add-link">
       <Row>
         {maps.map((conf) => {
+          const href = conf.url ? (typeof conf.url === 'function' ? conf.url() : conf.url) : ''
           return (
             conf.name &&
             <Col key={conf.name} span={24 / maps.length}>
-              <Link
+              {href ? <Link
                 href={conf.url ? (typeof conf.url === 'function' ? conf.url() : conf.url) : 'javascript:;'}>
                 <Button type="primary" {...conf.props}>{conf.name}</Button>
-              </Link>
+              </Link> :
+                <Button type="primary" {...conf.props}>{conf.name}</Button>
+              }
             </Col>
           )
         })}
