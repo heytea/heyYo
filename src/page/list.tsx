@@ -12,6 +12,8 @@ import ActionBtn from './_unit/actionsBtn'
 import Svg from '../display/svg'
 import { useUpdateEffect, useUnmount } from '../unit/hooks'
 import ModalDetail from './_list/modalDetail'
+import ModalEdit from './_list/modalEdit'
+import ModalAdd from './_list/modalAdd'
 
 const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const UI = useContext(UIContext)
@@ -109,7 +111,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
         <>
           <div className="m-list-title">
             <Breadcrumb data={breadcrumb} dfTitle={dfTitle} />
-            <TitleBtn addConf={listAddConf} />
+            <TitleBtn addConf={listAddConf} isModalAdd={ } />
           </div>
           <Divider />
         </>
@@ -149,6 +151,8 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
       {typeof TableAfterNode === 'function' ? <TableAfterNode store={store} /> : TableAfterNode}
       <ActionBtn actions={btnActions} isBack={isBack} backUrl={backUrl} />
       {isModalDetail && <ModalDetail store={store} />}
+      {isModalEdit && <ModalEdit store={store} />}
+      {isModalAdd && <ModalAdd store={store} />}
     </div>
   )
 })
