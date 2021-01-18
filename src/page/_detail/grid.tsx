@@ -68,13 +68,16 @@ const DetailGrid = observer(({ store, fields, data }: IProps) => {
               tmpData = tmpData[tmpField]
             }
             const value = tmpData
+            const Render = item.render
             return (
               <Col key={colIndex} span={isMobile ? 24 : item.span || 12}>
                 <div className="u-col-content" style={item.style}>
                   {item.title && <span className="u-col-title">{item.title}:</span>}
-                  {typeof item.render === 'function' ? item.render(value, data, index) :
-                    <RenderDisplay type={item.type} record={data} props={item.props} data={item.data} val={value}
-                                   store={store} />
+                  {typeof Render === 'function' ?
+                    item.render(value, data, index) :
+                    (Render ? <Render value={value} data={data} index={index} /> :
+                      <RenderDisplay type={item.type} record={data} props={item.props} data={item.data} val={value} store={store} />
+                    )
                   }
                 </div>
               </Col>

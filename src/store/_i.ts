@@ -178,6 +178,7 @@ export interface iDataToCsvDownOpt {
   name?: string
 }
 export interface IModalDetail {
+  type?: 'table' | 'grid'
   attrColumn?: ColumnType<any>,
   valueColumn?: ColumnType<any>,
   modalProps?: ModalProps,

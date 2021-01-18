@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Modal, Table } from 'antd';
 import IStore from '../../store/_i';
 import RenderDisplay from '../../display/renderDisplay'
+import DetailContent from '../_detail/content'
 
 export interface IProps {
   store: IStore
@@ -10,9 +11,31 @@ export interface IProps {
 
 const ModalDetail = observer((props: IProps) => {
   const { store } = props;
-  const { modalDetail, listData, modelDetailVisible, setModelDetailVisible, modelDetailIndex, fieldsConf } = store;
-  const { attrColumn = {}, valueColumn = {}, modalProps = {}, tableProps = {}, keys } = modalDetail || {}
+  const { modalDetail, listData, modelDetailVisible, setModelDetailVisible, modelDetailIndex, } = store;
+  const { type = 'table', modalProps = {}, } = modalDetail || {}
   const data = (listData?.data?.data && listData.data.data[modelDetailIndex]) || {};
+
+  return <Modal
+    title='详情'
+    width={800}
+    visible={modelDetailVisible}
+    cancelButtonProps={{ style: { display: 'none' } }}
+    onOk={() => setModelDetailVisible(false)}
+    onCancel={() => setModelDetailVisible(false)}
+    {...modalProps}
+  >
+    {type === 'table' ?
+      <RenderTable store={store} data={data} /> :
+      <DetailContent store={store} data={data} />
+    }
+
+  </Modal>;
+});
+
+const RenderTable = observer((props: { data: any, store: any }) => {
+  const { store, data } = props;
+  const { modalDetail, fieldsConf } = store;
+  const { attrColumn = {}, valueColumn = {}, tableProps = {}, keys } = modalDetail || {}
   const dataArr: any[] = [];
   const valueRender = (v: any, r: any, i: number) => {
     const { out, dictData, outProps } = r
@@ -33,24 +56,14 @@ const ModalDetail = observer((props: IProps) => {
     const item: { [key: string]: any } = { attr: title || key, value: data[key], index, dictData, out, outProps }
     dataArr.push(item);
   });
-  return <Modal
-    title='详情'
-    width={800}
-    visible={modelDetailVisible}
-    cancelButtonProps={{ style: { display: 'none' } }}
-    onOk={() => setModelDetailVisible(false)}
-    onCancel={() => setModelDetailVisible(false)}
-    {...modalProps}
-  >
-    <Table
-      size="small"
-      rowKey="attr"
-      dataSource={dataArr}
-      columns={columns}
-      pagination={false}
-      {...tableProps}
-    />
-  </Modal>;
-});
+  return <Table
+    size="small"
+    rowKey="attr"
+    dataSource={dataArr}
+    columns={columns}
+    pagination={false}
+    {...tableProps}
+  />
+})
 
 export default ModalDetail;
