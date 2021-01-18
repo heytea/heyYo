@@ -74,10 +74,8 @@ const DetailGrid = observer(({ store, fields, data }: IProps) => {
                 <div className="u-col-content" style={item.style}>
                   {item.title && <span className="u-col-title">{item.title}:</span>}
                   {typeof Render === 'function' ?
-                    item.render(value, data, index) :
-                    (Render ? <Render value={value} data={data} index={index} /> :
-                      <RenderDisplay type={item.type} record={data} props={item.props} data={item.data} val={value} store={store} />
-                    )
+                    Render(value, data, index) :
+                    <RenderDisplay type={item.type} render={Render} record={data} props={item.props} data={item.data} val={value} store={store} />
                   }
                 </div>
               </Col>

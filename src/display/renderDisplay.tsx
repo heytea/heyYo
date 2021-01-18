@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import itemMap from "./itemMap";
 import template, { isTemplate } from '../unit/template'
@@ -11,10 +11,11 @@ export interface IProps {
   val: any,
   index?: number,
   type: string,
-  data: string
+  data: string,
+  render?: ReactNode
 }
 
-const RenderDisplay = ({ type, val, data, store, record = {}, props, index }: IProps) => {
+const RenderDisplay = ({ type, val, data, store, record = {}, props, index, render }: IProps) => {
   const [newProps, setNewProps] = useState({})
   useEffect(() => {
     const tmpProps = {}
@@ -28,7 +29,7 @@ const RenderDisplay = ({ type, val, data, store, record = {}, props, index }: IP
     })
     setNewProps(tmpProps)
   }, [props])
-  const C = itemMap[type]
+  const C = render ? render : itemMap[type]
   const dfProps = { value: val, data: store.dict[data], record, index }
   if (!C) {
     if (type) {
