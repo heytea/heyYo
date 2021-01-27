@@ -77,7 +77,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   }, [location.pathname, location.search])
 
   const routeHandle = (queryStr: string) => {
-    if (queryStr?.replace(/^\?/, '') !== location.search?.replace(/^\?/, '')) {
+    if (isUrlBindForm && queryStr?.replace(/^\?/, '') !== location.search?.replace(/^\?/, '')) {
       const path = location.pathname + queryStr
       if (queryRoutingType === 'push') {
         history.push(path)
