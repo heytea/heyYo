@@ -102,7 +102,14 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
   const tagChange = (val: any) => {
     const tabChange = store.listTabChange
     tabChange && tabChange(val)
-    routeHandle(`?${tabField}=${val}`)
+    if (isUrlBindForm) {
+      routeHandle(`?${tabField}=${val}`)
+    } else {
+      const valObj = { ...store.listDfForm }
+      valObj[tabField] = val
+      store.setListForm({ valObj })
+      store.getList()
+    }
   }
 
   return (
