@@ -10,7 +10,7 @@ import PageTips from "../page/_unit/pageTips";
 
 const ruleKeys = Object.keys(ruleMap)
 
-const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, children = null }: any) {
+const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, children = null, onChange: onFormChange }: any) {
   const [fieldsConf, setFieldsConf]: [any[], Function] = useState([])
   const [blocksConf, setBlocksConf]: [any[], Function] = useState([])
   const lang = useContext(LangContext)
@@ -24,6 +24,7 @@ const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, chil
   const { formProps = {} } = page
   const onChange = (valObj: { [key: string]: any }) => {
     store.setForm({ form, valObj })
+    onFormChange && onFormChange(form)
   }
   const fieldsChange = (fields: any) => {
     const errsObj: { [key: string]: string[] | string } = {}
@@ -88,26 +89,26 @@ const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, chil
   return (
     <div>
       {fieldsConf.length > 0 &&
-      <EditFrom
-        onFieldsChange={fieldsChange}
-        data={store.dict}
-        layout={layout}
-        {...formProps}
-        values={form}
-        errs={errs}
-        fields={fieldsConf}
-        loading={status.loading}
-        onChange={onChange}
-        onFinish={onSubmit}
-      >
-        {children}
-      </EditFrom>}
+        <EditFrom
+          onFieldsChange={fieldsChange}
+          data={store.dict}
+          layout={layout}
+          {...formProps}
+          values={form}
+          errs={errs}
+          fields={fieldsConf}
+          loading={status.loading}
+          onChange={onChange}
+          onFinish={onSubmit}
+        >
+          {children}
+        </EditFrom>}
       {blocksConf.length > 0 && blocksConf.map((item: any, index: number) =>
         <div className="m-blocks-form" key={index} style={item.style || {}}>
           {item.title && <h3 className="title">{item.title}
             {item.describe && <span className="describe">
               {typeof item.describe === 'function' ? item.describe() : item.describe}
-              </span>}
+            </span>}
           </h3>}
           {item.tips && <PageTips {...item.tips} />}
           <div className="u-block-form">
