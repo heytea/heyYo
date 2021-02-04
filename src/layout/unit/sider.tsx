@@ -23,6 +23,7 @@ const Sider = observer(function () {
     const tmpKeys = selectedKeys.concat(openKeys)
     const tmpMap: { [key: string]: any } = {}
     tmpKeys.forEach((item) => tmpMap[item] = 1)
+    selectedKeys.push(pathname + search)
     setSelectedKeys(selectedKeys)
     setOpenKeys(Object.keys(tmpMap))
   }
@@ -34,9 +35,9 @@ const Sider = observer(function () {
   const isMobile = mobileWidth > clientWidth
   return <div className="b-sider">
     <Menu theme="dark" selectedKeys={selectedKeys} openKeys={openKeys}
-          onOpenChange={(keys) => setOpenKeys(keys)}
-          mode="inline"
-          inlineCollapsed={isMobile}>
+      onOpenChange={(keys) => setOpenKeys(keys)}
+      mode="inline"
+      inlineCollapsed={isMobile}>
       {menu.map((item: any) => displayMenu(item, isMobile))}
     </Menu>
   </div>
