@@ -305,13 +305,20 @@ export default class Store implements IStore {
     const searchParams = new URLSearchParams()
     Object.keys(form).forEach((field: string) => {
       const value = form[field]
-      if (
-        (sorter === true && ['_sorterField', '_sorterVal'].indexOf(field) >= 0) ||
-        (page === true && ['page', 'pageSize', 'currentPage'].indexOf(field) >= 0) ||
-        !(typeof value === 'undefined' || (value === '' && emptyValSetUrl.indexOf(field) < 0))
-      ) {
+      if (['_sorterField', '_sorterVal'].indexOf(field) >= 0) {
+        sorter === true && searchParams.set(field, value);
+      } else if (['page', 'pageSize', 'currentPage'].indexOf(field) >= 0) {
+        page === true && searchParams.set(field, value);
+      } else if (!(typeof value === 'undefined' || (value === '' && emptyValSetUrl.indexOf(field) < 0))) {
         searchParams.set(field, value);
       }
+      // if (
+      //   (sorter === true && ['_sorterField', '_sorterVal'].indexOf(field) >= 0) ||
+      //   (page === true && ['page', 'pageSize', 'currentPage'].indexOf(field) >= 0) ||
+      //   !(typeof value === 'undefined' || (value === '' && emptyValSetUrl.indexOf(field) < 0))
+      // ) {
+      //   searchParams.set(field, value);
+      // }
     })
     return searchParams.toString()
   }

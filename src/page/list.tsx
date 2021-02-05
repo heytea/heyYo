@@ -90,6 +90,7 @@ const List = observer(({ Store: store = {}, name = 'list' }: any) => {
     store.setSelectedRowKeys([])
   }
   const submit = () => {
+    store.setListForm({ valObj: { page: 1 } })
     if (isUrlBindForm) {
       const queryStr = `?${store.getUrlParamsStr({ name })}`
       routeHandle(queryStr)
