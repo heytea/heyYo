@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { MenuProps } from 'antd/lib/menu'
 import { MenuTheme } from 'antd/lib/menu/MenuContext'
 import { DropDownProps } from 'antd/lib/dropdown/dropdown'
@@ -10,6 +10,9 @@ export interface IHeaderConf {
   isShowLang?: boolean,
   menuProps?: MenuProps,
   dropdownProps?: DropDownProps | { [key: string]: any }
+  menuBeforeNode?: ReactNode,
+  menuAfterNode?: ReactNode,
+  rightNode?: ReactNode,
 }
 export interface IUI {
   mobileWidth: number

@@ -14,11 +14,8 @@ import LangContent from '../../lang'
 const Header = observer(function () {
   const { logout, user } = useContext(AuthContext)
   const ui = useContext(UIContext)
-  const {
-    clearMyMenu, myMenu, site: { name }, lang, langList = [], setLang,
-    headerConf: { theme = 'dark', isShowMenu = true, isShowLang = true, menuProps = {}, dropdownProps = {} } = {}
-  } = ui
-
+  const { clearMyMenu, myMenu, site: { name }, lang, langList = [], setLang, headerConf = {} } = ui
+  const { menuBeforeNode: MenuBefore, menuAfterNode: MenuAfter, rightNode: RightNode, theme = 'dark', isShowMenu = true, isShowLang = true, menuProps = {}, dropdownProps = {} } = headerConf
   const { config: { codeSuccess, apiFormat: { code }, topAccountMenu } } = useContext(ConfigContext)
   const langObj = useContext(LangContent)
   const history = useHistory()
@@ -40,6 +37,7 @@ const Header = observer(function () {
   return (
     <div id="b-header" className={theme}>
       <Link href='/' className="logo">{name}</Link>
+      {['object', 'function'].indexOf(typeof MenuBefore) > -1 && <MenuBefore />}
       {isShowMenu && !(pathname === '/' || pathname === 'login' || pathname === 'reset') &&
         <div className="m-top-menu">
           <Menu
@@ -56,7 +54,9 @@ const Header = observer(function () {
           </Menu>
         </div>
       }
+      {['object', 'function'].indexOf(typeof MenuAfter) > -1 && <MenuAfter />}
       <div className="m-top-menu-right">
+        {['object', 'function'].indexOf(typeof RightNode) > -1 && <RightNode />}
         {user.id ?
           <div className="m-account">
             <Dropdown overlay={(
