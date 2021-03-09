@@ -7,6 +7,7 @@ import { TableRowSelection, ColumnType } from 'antd/lib/table/interface'
 import { Rule } from 'antd/lib/form'
 import { AlertProps } from 'antd/lib/alert'
 import { ModalProps } from 'antd/lib/modal'
+import { LabelTooltipType } from 'antd/lib/form/FormItemLabel'
 
 export type ISpan = 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 18 | 24 | number
 
@@ -37,6 +38,7 @@ export interface IFieldsConf {
     dataIndex?: string,
     inProps?: { [key: string]: any },
     inSpan?: ISpan,
+    inTip?: LabelTooltipType // form item label 提示信息
     out?: string,
     outProps?: { [key: string]: any },
     outSpan?: ISpan,
@@ -71,6 +73,7 @@ export interface IListFormConfItem {
   type?: string,
   title?: string,
   conf?: string,
+  tip?: LabelTooltipType
   span?: ISpan,
   data?: string,
   render?: ReactNode | Function,
@@ -130,6 +133,7 @@ export interface IInFormConfItem {
   span?: ISpan,
   data?: string,
   title?: string
+  tip?: LabelTooltipType
   props?: { [key: string]: any },
   rules?: IRule
   render?: ReactNode | Function

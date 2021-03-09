@@ -37,8 +37,8 @@ const StoreEditForm = observer(function ({ store, pageType, name, onSubmit, chil
     store.setErrs(name, errsObj)
   }
   const getFieldConf = (field: string) => {
-    const { dependencies = [], rules = [], in: type = '', inProps = {}, inSpan, data = '', title = '' } = fields && fields[field] || {}
-    return { type, dependencies, rules: pageType === 'list' ? [] : rules, props: inProps, span: inSpan, data, title }
+    const { dependencies = [], rules = [], in: type = '', inProps = {}, inTip, inSpan, data = '', title = '' } = fields && fields[field] || {}
+    return { type, dependencies, rules: pageType === 'list' ? [] : rules, tip: inTip, props: inProps, span: inSpan, data, title }
   }
   const getFormConf = (form: any[]) => {
     const tmpFieldsConf: any[] = []
