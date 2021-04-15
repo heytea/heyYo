@@ -10,7 +10,8 @@ export interface IProps extends ISelectProps {
   apiKey?: string,
   dataKey?: string,
   valInKey?: string,
-  onDataItem?: Function
+  onDataItem?: Function,
+  reqData?: Record<string, any>,
   nullData?: Array<{ [key: string]: any }>
 }
 
@@ -19,7 +20,7 @@ export default function HySelectRemote(props: IProps) {
   const [idMap, setIdMap]: [{ [key: string]: any }, Function] = useState({})
   const [fetching, setFetching] = useState(false)
   let lastFetchId = 0
-  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, onDataItem, nullData = [], ...args } = props
+  const { valKey = 'id', url, method = 'get', dataKey = 'data', value, valInKey = 'idIn', mode, apiKey, labelKey = 'name', onChange, onDataItem, nullData = [], reqData = {}, ...args } = props
   const context = useContext(ConfigContext)
   const fetchData = async (opt: { [key: string]: any }) => {
     if (url) {
@@ -31,7 +32,7 @@ export default function HySelectRemote(props: IProps) {
       const { apiFormat, codeSuccess } = config
       // @ts-ignore
       const fn = method ? Http[`http${method}`] || Http.httpGet : Http.httpGet
-      const dataData = await fn(url, opt)
+      const dataData = await fn(url, { ...reqData, ...opt })
       if (fetchId === lastFetchId) {
         if (dataData[apiFormat.code] === codeSuccess) {
           setData([...nullData, ...(dataData[dataKey || apiFormat.data])])
