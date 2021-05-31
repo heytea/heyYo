@@ -28,7 +28,7 @@ const RenderDisplay = ({ type, val, data, store, record = {}, props, index, rend
       }
     })
     setNewProps(tmpProps)
-  }, [props])
+  }, [props, record, index])
   const C = render ? render : itemMap[type]
   const dfProps = { value: val, data: store.dict[data], record, index }
   if (!C) {
