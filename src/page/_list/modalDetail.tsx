@@ -40,7 +40,7 @@ const RenderTable = observer((props: { data: any, store: any }) => {
   const valueRender = (v: any, r: any, i: number) => {
     const { out, dictData, outProps } = r
     if (out) {
-      return <RenderDisplay type={out} data={dictData} props={outProps} store={store} val={v} record={r} index={i} />
+      return <RenderDisplay type={out} data={dictData} props={outProps} store={store} val={v} record={data} index={i} />
     }
     return v
   }
