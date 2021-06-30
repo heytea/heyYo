@@ -65,7 +65,7 @@ const DetailPage = ({ Store: store = {} }: any) => {
     setDfTitle(pageTitle && pageTitle.split('-') && pageTitle.split('-')[0])
   }, [pageTitle])
   return (
-    <Content code={detailCode} msg={detailMsg} loading={loading}>
+    <Content code={detailCode} msg={detailMsg} data={detailData[apiFormat.data]} loading={loading}>
       <div className="content m-detail">
         <div className="m-add-title">
           <Breadcrumb data={breadcrumb} dfTitle={dfTitle} />

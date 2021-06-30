@@ -106,7 +106,7 @@ const EditPage = ({ Store: store = {}, name = 'edit' }: any) => {
       <Divider />
       {editTips && <PageTips {...editTips} />}
       {typeof FormBeforeNode === 'function' && <FormBeforeNode store={store} />}
-      <Content loading={detailStatus.loading} code={detailCode} msg={detailMsg}>
+      <Content loading={detailStatus.loading} code={detailCode} msg={detailMsg} data={detailData[apiFormat.data]}>
         <StoreEditForm store={store} name='edit' onSubmit={onSubmit} />
       </Content>
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}

@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from 'react'
+import React, { isValidElement, ReactNode, useContext } from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { Spin } from 'antd'
@@ -10,6 +10,7 @@ import LangContent from '../lang'
 interface IProps {
   code?: number | string,
   msg?: string | object
+  data?: any,
   loading?: boolean
   children?: ReactNode
 }
@@ -18,7 +19,7 @@ function Content(props: IProps) {
   const Auth = useContext(AuthContext)
   const lang = useContext(LangContent)
   const { pathname, search } = useLocation()
-  const { config: { codeSuccess, codeUnauthorized } } = useContext(ConfigContext)
+  const { config: { codeSuccess, codeUnauthorized, errsMap = {} } } = useContext(ConfigContext)
   const errArr: string[] = []
   const { code = '', msg = '', loading = false, children = null } = props
   if (typeof msg === 'object') {
@@ -38,6 +39,13 @@ function Content(props: IProps) {
     }
     return (<Redirect to="/login" />)
   }
+  const ErrC = errsMap[code]
+  if (ErrC) {
+    if (isValidElement(ErrC)) {
+      return <div className="m-error">{ErrC}</div>
+    }
+    return <div className="m-error"><ErrC {...props} /></div>
+  }
   return (
     <Spin spinning={loading} delay={400} tip="loading……">
       {code !== codeSuccess && code !== '' ?
@@ -45,7 +53,7 @@ function Content(props: IProps) {
           <h2>{lang.page_error}：{code}</h2>
           <h4>{lang.error_message}：</h4>
           {errArr.map((item, index) => (
-            <p key={index} dangerouslySetInnerHTML={{ __html: item }} />
+            <p key={index}>{item}</p>
           ))}
           <p>{lang.contact_admin}</p>
         </div> :

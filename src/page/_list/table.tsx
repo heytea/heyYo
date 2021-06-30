@@ -145,7 +145,7 @@ const ListTable = (props: IProps) => {
     }
   }
   if (code !== '' && code !== codeSuccess) {
-    return <Content code={code} msg={msg} loading={loading} />
+    return <Content code={code} msg={msg} loading={loading} data={listData.data} />
   }
   const computeProps: { [key: string]: any } = {}
   if (isShowRow) {
