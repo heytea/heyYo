@@ -45,7 +45,7 @@ function Content(props: IProps) {
           <h2>{lang.page_error}：{code}</h2>
           <h4>{lang.error_message}：</h4>
           {errArr.map((item, index) => (
-            <p key={index}>{item}</p>
+            <p key={index} dangerouslySetInnerHTML={{ __html: item }} />
           ))}
           <p>{lang.contact_admin}</p>
         </div> :

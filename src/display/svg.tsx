@@ -48,5 +48,5 @@ export default function Svg(props: HTMLAttributes<HTMLAnchorElement> & { src: st
       isUnmount = true
     }
   }, [src])
-  return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }}/>)
+  return (<span {...args} className={`c-svg ${className || ''}`} dangerouslySetInnerHTML={{ __html: svgXml }} />)
 }
