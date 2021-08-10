@@ -57,7 +57,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
       addDfForm && store.setAddForm({ valObj: addDfForm })
       const idKeyVal = addForm[idKey] || (data && data[idKey]) || ''
       if (!idKeyVal) {
-        history.goBack()
+        history.length > 1 && history.goBack()
       } else {
         const detailPathname = pathname.replace(/\/add$/, '/detail')
         const detailSearch = `?${idKey}=${idKeyVal}${search.replace('?', '&')}`
@@ -100,7 +100,7 @@ const AddPage = ({ Store: store = {}, name = 'add' }: any) => {
       {typeof FormBeforeNode === 'function' && <FormBeforeNode store={store} />}
       <StoreEditForm store={store} name='add' onSubmit={onSubmit} />
       {typeof FormAfterNode === 'function' && <FormAfterNode store={store} />}
-      <ActionBtn actions={[...btnActions, addBtn]} isBack={isBack} backUrl={backUrl} />
+      <ActionBtn actions={isAdd ? [...btnActions, addBtn] : btnActions} isBack={isBack} backUrl={backUrl} />
     </div>
   )
 }

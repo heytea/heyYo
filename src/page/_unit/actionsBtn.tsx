@@ -40,6 +40,9 @@ const ActionBtn = observer((props: IProps) => {
       history.replace('/')
     }
   }
+  if (actions?.length < 1 && !isBack) {
+    return null
+  }
   return (
     <Affix offsetBottom={0} {...affixProps}>
       <div className="m-page-actions" data-loading={loading}>
